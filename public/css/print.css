@@ -1,0 +1,59 @@
+@font-face {
+  font-family: 'PPSupplyMono';
+  src: url('../fonts/subset-PPSupplyMono-Regular.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'PPSupplySans';
+  src: url('../fonts/subset-PPSupplySans-Regular.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+}
+
+/* Print-specific styles */
+body {
+  font-family: 'PPSupplyMono', sans-serif;
+  font-size: 12pt;
+  line-height: 1.4;
+  color: #000;
+  background-color: #fff;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'PPSupplySans', sans-serif;
+  font-weight: normal;
+}
+
+h1 { font-size: 24pt; }
+h2 { font-size: 20pt; }
+h3 { font-size: 16pt; }
+h4 { font-size: 14pt; }
+
+a {
+  color: #0055cc;
+  text-decoration: none;
+}
+
+header {
+  display: none;
+}
+
+@page {
+  margin-top: 3em; /* Add margin to the bottom of each page */
+}
+
+@page {
+  @top-left {  
+    content: "Gorazd Guštin | +39 333 46 88 472 | gorazd@qua.si | https://qua.si";  
+    font-family: 'PPSupplyMono', sans-serif;
+    font-size: 12pt;
+    color: #333; 
+    border-bottom: 1px solid #ddd;
+  }
+}
+
+footer {
+  display: none;
+}

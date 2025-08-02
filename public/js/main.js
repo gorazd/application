@@ -55,6 +55,11 @@ window.navigation.addEventListener("navigate", (event) => {
     async handler() {
       const response = await fetch(toUrl.pathname);
       const data = await response.text();
+      // Extract <title> from the fetched HTML
+      const titleMatch = data.match(/<title>(.*?)<\/title>/i);
+      if (titleMatch && titleMatch[1]) {
+        document.title = titleMatch[1];
+      }
       document.startViewTransition(() => {
         document.body.innerHTML = data;
         document.documentElement.scrollTop = 0;

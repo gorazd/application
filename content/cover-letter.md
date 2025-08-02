@@ -1,6 +1,7 @@
 ---
 layout: layouts/base.njk
 title: Cover Letter for UX/UI Designer at Bending Spoons
+description: With over a decade of experience shaping user-centric mobile applications from concept to launch, I was immediately drawn to the UX/UI Designer opening.
 ---
 
 # Dear Bending Spoons,

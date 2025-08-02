@@ -31,6 +31,7 @@ html.dark {
   src: url('../fonts/subset-PPSupplyMono-Regular.woff2') format('woff2');
   font-weight: normal;
   font-style: normal;
+  font-display: swap;
 }
 
 @font-face {
@@ -38,6 +39,7 @@ html.dark {
   src: url('../fonts/subset-PPSupplySans-Regular.woff2') format('woff2');
   font-weight: normal;
   font-style: normal;
+  font-display: swap;
 }
 
 body {
@@ -75,6 +77,11 @@ h4 {
 
 a {
   color: var(--link-color);
+}
+
+ul {
+  list-style: disc;
+  padding-left: calc(var(--spacing-unit) * 2);
 }
 
 header {

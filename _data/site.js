@@ -1,4 +1,4 @@
 export default {
-  title: "My Personal Site",
-  author: "Your Name"
+  title: "Gorazd Guštin",
+  author: "Gorazd Guštin"
 };

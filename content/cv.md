@@ -1,9 +1,15 @@
 ---
 layout: layouts/base.njk
 title: CV
+description: A results-driven UX/UI Designer with over 10 years of experience in crafting intuitive and engaging user experiences for mobile and desktop applications.
 ---
 
 # Curriculum Vitae
+
+* [Professional Summary](#professional-summary)
+* [Skills](#skills)
+* [Experience](#experience)
+* [Education](#education)
 
 ## Professional Summary
 

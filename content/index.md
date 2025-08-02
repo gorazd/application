@@ -1,6 +1,7 @@
 ---
 layout: layouts/base.njk
 title: Welcome
+description: Welcome to the job application.
 ---
 
 # Welcome

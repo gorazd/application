@@ -3,11 +3,11 @@
   --font-body: 'PPSupplyMono', sans-serif;
   --font-sans: 'PPSupplySans', sans-serif;
 
-  --background-color: #fff;
+  --background-color: #e3e5e2;
   --text-color: #333;
   --link-color: #0055cc;
   --border-color: #ccc;
-  --link-hover-bg: #f0f0f0;
+  --link-hover-bg: #93eca8;
 
   --spacing-unit: 1rem;
 
@@ -25,7 +25,7 @@ html.dark {
   --text-color: #f0f0f0;
   --link-color: #8ab4f8;
   --border-color: #444;
-  --link-hover-bg: #333;
+  --link-hover-bg: #414141;
 }
 
 @font-face {
@@ -51,7 +51,7 @@ body {
   margin: calc(var(--spacing-unit) * 2);
   background-color: var(--background-color);
   color: var(--text-color);
-  transition: background-color 0.5s, color 0s;
+  transition: background-color 0.15s, color 0s;
 }
 
 p {
@@ -96,6 +96,17 @@ ul {
   padding-left: var(--spacing-unit);
 }
 
+em {
+  font-style: normal;
+  text-decoration: underline double;
+  text-decoration-color: var(--link-hover-bg);
+}
+
+strong {
+  font-style: normal;
+  background-color: var(--link-hover-bg);
+}
+
 header {
   display: flex;
   justify-content: space-between;
@@ -129,9 +140,10 @@ nav a {
   transition: background-color 0.2s;
 }
 
-nav a:hover {
+nav a:hover,
+nav a.active {
   background-color: var(--link-hover-bg);
-  text-decoration: underline;
+  text-decoration: none;
 }
 
 .button {
@@ -164,7 +176,7 @@ footer {
 
 @media screen and (max-width: 600px) {
   body {
-    margin: calc(var(--spacing-unit) / 2);
+    margin: var(--spacing-unit) calc(var(--spacing-unit) / 2);
   }
   header {
     margin-bottom: 0;

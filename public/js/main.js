@@ -1,4 +1,15 @@
 
+function updateActiveNav() {
+  const navLinks = document.querySelectorAll('header nav a');
+  navLinks.forEach(link => {
+    if (link.getAttribute('href') === window.location.pathname) {
+      link.classList.add('active');
+    } else {
+      link.classList.remove('active');
+    }
+  });
+}
+
 function initThemeAndPrint() {
   const themeToggle = document.getElementById('theme-toggle');
   const sunIcon = themeToggle?.querySelector('.feather-sun');
@@ -33,7 +44,7 @@ function initThemeAndPrint() {
     };
   }
 
-  // Set initial theme based on user's preference or system setting
+  // Set initial theme 
   const savedTheme = localStorage.getItem('theme');
   const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
   if (savedTheme) {
@@ -45,7 +56,10 @@ function initThemeAndPrint() {
   }
 }
 
-document.addEventListener('DOMContentLoaded', initThemeAndPrint);
+document.addEventListener('DOMContentLoaded', () => {
+  initThemeAndPrint();
+  updateActiveNav();
+});
 
 if (window.navigation) {
   window.navigation.addEventListener("navigate", (event) => {
@@ -64,11 +78,13 @@ if (window.navigation) {
           document.startViewTransition(() => {
             document.querySelector('main').innerHTML = doc.querySelector('main').innerHTML;
             document.documentElement.scrollTop = 0;
+            updateActiveNav();
           });
         } else {
           // Fallback for browsers without View Transitions API
           document.querySelector('main').innerHTML = doc.querySelector('main').innerHTML;
           document.documentElement.scrollTop = 0;
+          updateActiveNav();
         }
       },
     });

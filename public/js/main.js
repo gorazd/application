@@ -47,25 +47,30 @@ function initThemeAndPrint() {
 
 document.addEventListener('DOMContentLoaded', initThemeAndPrint);
 
+if (window.navigation) {
+  window.navigation.addEventListener("navigate", (event) => {
+    const toUrl = new URL(event.destination.url);
+    if (location.origin !== toUrl.origin) return;
+    event.intercept({
+      async handler() {
+        const response = await fetch(toUrl.pathname);
+        const data = await response.text();
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(data, 'text/html');
 
-window.navigation.addEventListener("navigate", (event) => {
-  const toUrl = new URL(event.destination.url);
-  if (location.origin !== toUrl.origin) return;
-  event.intercept({
-    async handler() {
-      const response = await fetch(toUrl.pathname);
-      const data = await response.text();
-      // Extract <title> from the fetched HTML
-      const titleMatch = data.match(/<title>(.*?)<\/title>/i);
-      if (titleMatch && titleMatch[1]) {
-        document.title = titleMatch[1];
-      }
-      document.startViewTransition(() => {
-        document.body.innerHTML = data;
-        document.documentElement.scrollTop = 0;
-        // Re-initialize theme and print button after transition
-        initThemeAndPrint();
-      });
-    },
+        document.title = doc.title;
+
+        if (typeof document.startViewTransition === 'function') {
+          document.startViewTransition(() => {
+            document.querySelector('main').innerHTML = doc.querySelector('main').innerHTML;
+            document.documentElement.scrollTop = 0;
+          });
+        } else {
+          // Fallback for browsers without View Transitions API
+          document.querySelector('main').innerHTML = doc.querySelector('main').innerHTML;
+          document.documentElement.scrollTop = 0;
+        }
+      },
+    });
   });
-});
+}

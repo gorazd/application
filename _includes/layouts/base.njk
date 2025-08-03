@@ -12,6 +12,15 @@
   <style>{% getBundle "css" %}</style>
   {%- cssprint %}{% include "public/css/print.css" %}{% endcssprint %}
   <style media="print">{% getBundle "cssprint" %}</style>
+  <script>
+    (function() {
+      const theme = localStorage.getItem('theme');
+      const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+      if (theme === 'dark' || (!theme && prefersDark)) {
+        document.documentElement.classList.add('dark');
+      }
+    })();
+  </script>
 </head>
 <body>
   <header>

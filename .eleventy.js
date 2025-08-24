@@ -1,3 +1,4 @@
+import { minify } from 'html-minifier-terser';
 
 export default function(eleventyConfig) {
   eleventyConfig.addBundle("css");
@@ -11,6 +12,20 @@ export default function(eleventyConfig) {
 
   eleventyConfig.addWatchTarget("public/dist/");
   eleventyConfig.ignores.add("public/js/");
+
+  eleventyConfig.addTransform("htmlmin", async function(content) {
+    if ( this.page.outputPath && this.page.outputPath.endsWith(".html") ) {
+      let minified = await minify(content, {
+        useShortDoctype: true,
+        removeComments: true,
+        collapseWhitespace: true,
+        minifyCSS: true,
+        minifyJS: true,
+      });
+      return minified;
+    }
+    return content;
+  });
 
   return {
     dir: {

@@ -1,8 +1,8 @@
-import { gsap } from "/node_modules/gsap/index.js";
-import { Draggable } from "/node_modules/gsap/Draggable.js";
-import { Flip } from "/node_modules/gsap/Flip.js";
-import { ScrollTrigger } from "/node_modules/gsap/ScrollTrigger.js";
-import { ScrollToPlugin } from "/node_modules/gsap/ScrollToPlugin.js";
+import { gsap } from "gsap";
+import { Draggable } from "gsap/Draggable";
+import { Flip } from "gsap/Flip";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { ScrollToPlugin } from "gsap/ScrollToPlugin";
 
 gsap.registerPlugin(Draggable, Flip, ScrollTrigger, ScrollToPlugin);
 

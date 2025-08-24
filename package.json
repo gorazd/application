@@ -4,8 +4,9 @@
   "description": "A job application.",
   "main": "index.js",
   "scripts": {
-    "start": "eleventy --serve",
-    "build": "eleventy"
+    "start": "npm run build:js -- --watch & eleventy --serve",
+    "build": "ELEVENTY_ENV=production npm run build:js && eleventy",
+    "build:js": "node build-js.js"
   },
   "repository": {
     "type": "git",
@@ -21,8 +22,8 @@
   "type": "module",
   "devDependencies": {
     "@11ty/eleventy": "^3.1.2",
-    "@11ty/eleventy-plugin-vite": "^7.0.0",
+    "esbuild": "^0.25.9",
     "gsap": "^3.13.0",
-    "vite": "^7.0.6"
+    "html-minifier-terser": "^7.2.0"
   }
 }

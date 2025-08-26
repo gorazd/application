@@ -4,7 +4,9 @@ import { Flip } from "gsap/Flip";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ScrollToPlugin } from "gsap/ScrollToPlugin";
 
-gsap.registerPlugin(Draggable, Flip, ScrollTrigger, ScrollToPlugin);
+// Plugins are registered from the main entry (`main.js`) to avoid double
+// registration when modules are loaded separately or when the bundle and
+// module imports coexist during development.
 
 export function exampleAnimation() {
   // Check if elements with class 'animate-me' exist before animating

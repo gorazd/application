@@ -1,4 +1,49 @@
 
+import { gsap } from "gsap";
+import { Draggable } from "gsap/Draggable";
+import { Flip } from "gsap/Flip";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { ScrollToPlugin } from "gsap/ScrollToPlugin";
+
+// Ensure the global `window.gsap` references the same gsap instance we
+// imported. If other code or a different bundle set a different gsap on
+// `window`, plugin registration can attach to the wrong instance which
+// results in runtime getter/type errors.
+if (typeof window !== 'undefined') {
+  if (!window.gsap) {
+    window.gsap = gsap;
+  } else if (window.gsap !== gsap) {
+    // If there's already a different gsap instance on window, prefer the
+    // imported module and overwrite it so plugins register on the active
+    // instance used by this module.
+    // eslint-disable-next-line no-console
+    console.warn('Overwriting window.gsap with imported gsap to avoid multiple instances.');
+    window.gsap = gsap;
+  }
+}
+
+// Register plugins on the (now unified) gsap instance.
+gsap.registerPlugin(Draggable, Flip, ScrollTrigger, ScrollToPlugin);
+
+// Runtime debug: expose some gsap/plugin diagnostics in the console so we can
+// detect duplicate instances or missing plugin hooks when reproducing the
+// TypeError in the browser.
+try {
+  const runtimeInfo = {
+    importedGsap: gsap,
+    windowGsap: typeof window !== 'undefined' ? window.gsap : undefined,
+    sameInstance: typeof window !== 'undefined' ? window.gsap === gsap : undefined,
+    // show plugin keys and a small sample of plugin objects for debugging
+    registeredPluginKeys: Object.keys((gsap && gsap._plugins) || {}).slice(0, 50),
+    registeredPluginSample: Object.entries((gsap && gsap._plugins) || {}).slice(0, 5).map(([k, v]) => ({ k, hasGet: !!(v && v.get) }))
+  };
+  // eslint-disable-next-line no-console
+  console.info('GSAP runtime info:', runtimeInfo);
+} catch (err) {
+  // eslint-disable-next-line no-console
+  console.warn('Error while reading GSAP runtime info', err);
+}
+
 function updateActiveNav() {
   const navLinks = document.querySelectorAll('header nav a');
   navLinks.forEach(link => {
@@ -59,6 +104,7 @@ function initThemeAndPrint() {
 document.addEventListener('DOMContentLoaded', () => {
   initThemeAndPrint();
   updateActiveNav();
+  initSmoothScrolling();
   // Dynamically import animations.js as a module to avoid import syntax error
   import("./animations.js").then(({ exampleAnimation }) => {
     exampleAnimation();
@@ -209,6 +255,7 @@ if (window.navigation) {
             document.querySelector('main').innerHTML = doc.querySelector('main').innerHTML;
             document.documentElement.scrollTop = 0;
             updateActiveNav();
+            initSmoothScrolling();
             // Re-run animations after content update
             import("./animations.js").then(({ exampleAnimation }) => {
               exampleAnimation();
@@ -219,12 +266,133 @@ if (window.navigation) {
           document.querySelector('main').innerHTML = doc.querySelector('main').innerHTML;
           document.documentElement.scrollTop = 0;
           updateActiveNav();
+          initSmoothScrolling();
           // Re-run animations after content update
           import("./animations.js").then(({ exampleAnimation }) => {
             exampleAnimation();
           });
         }
       },
+    });
+  });
+}
+
+function initSmoothScrolling() {
+  const anchorLinks = document.querySelectorAll('a[href^="#"]');
+
+  // Safe scroll helper: prefer ScrollToPlugin if it's healthy, otherwise
+  // animate window scrolling via a numeric tween and onUpdate, or fall
+  // back to native smooth scrolling.
+  function safeScrollTo(targetY, duration = 1) {
+    try {
+      const plugins = gsap && gsap._plugins;
+      const hasScrollTo = !!(plugins && plugins.scrollTo && typeof plugins.scrollTo.get === 'function');
+      if (hasScrollTo) {
+        gsap.to(window, {
+          duration,
+          scrollTo: { y: targetY },
+          ease: 'power2.inOut'
+        });
+        return;
+      }
+    } catch (e) {
+      // continue to fallback
+    }
+
+    // Fallback: animate a numeric proxy and update window scroll manually
+    try {
+      const startY = window.scrollY || document.documentElement.scrollTop || 0;
+      const obj = { y: startY };
+      gsap.to(obj, {
+        duration,
+        y: targetY,
+        ease: 'elastic.out',
+        onUpdate: () => window.scrollTo(0, Math.round(obj.y))
+      });
+      return;
+    } catch (err) {
+      // Final fallback: native smooth scroll
+      try {
+        window.scrollTo({ top: targetY, behavior: 'smooth' });
+      } catch (e) {
+        // last-resort immediate jump
+        window.scrollTo(0, targetY);
+      }
+    }
+  }
+
+  anchorLinks.forEach(link => {
+    link.addEventListener('click', function(e) {
+      console.log('Anchor link clicked:', this.getAttribute('href'));
+      e.preventDefault();
+      const targetId = this.getAttribute('href');
+
+      // If href is exactly '#' or empty, scroll to top
+      if (!targetId || targetId === '#') {
+        safeScrollTo(0, 1);
+        return;
+      }
+
+      // Try querySelector first (works for standard id selectors),
+      // fall back to getElementById in case the selector contains
+      // characters that make querySelector unhappy.
+      let targetElement = null;
+      try {
+        targetElement = document.querySelector(targetId);
+      } catch (err) {
+        // ignore invalid selector
+      }
+      if (!targetElement) {
+        const name = targetId.replace(/^#/, '');
+        // Try id first
+        targetElement = document.getElementById(name);
+        if (!targetElement) {
+          // Then try a named anchor ([name="..."]) — useful for <a name="..."> anchors
+          try {
+            targetElement = document.querySelector('[name="' + name.replace(/"/g, '\\"') + '"]');
+          } catch (err) {
+            // querySelector failed (rare), fall back to getElementsByName
+            const els = document.getElementsByName(name);
+            targetElement = els && els.length ? els[0] : null;
+          }
+          // As a last resort also check getElementsByName if querySelector returned null
+          if (!targetElement) {
+            const els2 = document.getElementsByName(name);
+            targetElement = els2 && els2.length ? els2[0] : null;
+          }
+        }
+      }
+
+      if (targetElement) {
+        // Calculate numeric scroll target to avoid issues when passing
+        // element references to ScrollToPlugin in some environments.
+        // If the screen is <=768px use the header height as offset so
+        // content isn't hidden under a fixed header; otherwise use 10px.
+        const offsetY = (function() {
+          try {
+            if (window.matchMedia && window.matchMedia('(max-width: 768px)').matches) {
+              const headerEl = document.querySelector('header');
+              return headerEl ? headerEl.offsetHeight : 0;
+            }
+          } catch (e) {
+            // ignore and fall back to default
+          }
+          return 10;
+        })();
+        const rect = targetElement.getBoundingClientRect();
+        const targetY = Math.max(0, rect.top + window.pageYOffset - offsetY);
+
+        // Debug info
+        // eslint-disable-next-line no-console
+        console.info('Smooth scroll target resolved:', { targetElement, name, rectTop: rect.top, pageYOffset: window.pageYOffset, targetY });
+
+        safeScrollTo(targetY, 1);
+      } else {
+        // Debug - target not found
+        // eslint-disable-next-line no-console
+        console.warn('Smooth scroll: target not found for', targetId, '(falling back to top)');
+        safeScrollTo(0, 1);
+      }
     });
   });
 }

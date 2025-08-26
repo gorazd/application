@@ -1,24 +1,26 @@
 ---
 layout: layouts/base.njk
-title: Gorazd Guštin - UX/UI Designer
-description: A passionate UX/UI Designer with over a decade of experience, seeking to contribute to Bending Spoons' success.
+title: Gorazd Guštin - Front-End Designer & Developer
+description: A creative front-end designer and developer with a passion for building beautiful and intuitive user experiences.
 ---
 
 # Gorazd Guštin
 
-## UX/UI Designer
+## Front-End Designer & Developer
 
-With over a decade of experience shaping user-centric mobile applications, I am a passionate UX/UI designer with a proven track record of delivering intuitive and engaging user experiences. My background in front-end development allows me to bridge the gap between design and engineering, ensuring seamless and efficient implementation.
+I am a creative front-end designer and developer with a passion for building beautiful and intuitive user experiences. With a strong foundation in both design principles and front-end technologies, I specialize in bridging the gap between design and development to create products that are both visually stunning and highly functional.
 
-I am particularly drawn to Bending Spoons' innovative approach to acquiring and scaling digital products. I am confident that my skills in data-driven design, user research, and creating scalable design systems would be a valuable asset to your team.
+My approach is rooted in a deep understanding of user-centric design. I believe that the best digital experiences are created when thoughtful UX/UI is combined with clean, efficient, and scalable code. I am proficient in modern front-end technologies and I am always eager to learn and adapt to new challenges.
 
-This website serves as a small token of my interest in the UX/UI Designer position at Bending Spoons. Here you can find my cover letter, CV, and portfolio.
+I am particularly excited by Bending Spoons' reputation for innovation and excellence. I am confident that my unique blend of design and development skills would allow me to make a significant contribution to your team.
+
+This website, which I designed and built from scratch, is a small demonstration of my abilities. Here you can find my portfolio, cover letter, and CV.
 
 ## About Me
 
-### My Design Philosophy
+### My Design & Development Philosophy
 
-[Tell me a little bit about your design philosophy. What are the principles that guide your work? What do you believe makes a great user experience?]
+[Tell me a little bit about your design and development philosophy. How do you approach the process of creating a new digital product? What are your core principles?]
 
 ### My Passions Outside of Work
 

@@ -72,11 +72,12 @@ function initThemeAndPrint() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+  console.log("DOM fully loaded and parsed");
   initThemeAndPrint();
   updateActiveNav();
   initSmoothScrolling();
-  import("./animations.js").then(({ exampleAnimation }) => {
-    exampleAnimation();
+  import("./animations.js").then(({ animations }) => {
+    animations();
   });
 
   const body = document.querySelector('body');
@@ -199,8 +200,8 @@ if (window.navigation) {
             document.documentElement.scrollTop = 0;
             updateActiveNav();
             initSmoothScrolling();
-            import("./animations.js").then(({ exampleAnimation }) => {
-              exampleAnimation();
+            import("./animations.js").then(({ animations }) => {
+              animations();
             });
           });
         } else {
@@ -208,8 +209,8 @@ if (window.navigation) {
           document.documentElement.scrollTop = 0;
           updateActiveNav();
           initSmoothScrolling();
-          import("./animations.js").then(({ exampleAnimation }) => {
-            exampleAnimation();
+          import("./animations.js").then(({ animations }) => {
+            animations();
           });
         }
       },
@@ -218,6 +219,7 @@ if (window.navigation) {
 }
 
 function initSmoothScrolling() {
+  console.log("Initializing smooth scrolling...");
   const anchorLinks = document.querySelectorAll('a[href^="#"]');
 
   function safeScrollTo(targetY, duration = 1) {

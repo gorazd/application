@@ -9,42 +9,86 @@ description: A results-driven UX/UI Designer with over 10 years of experience in
 * [Professional Summary](#professional-summary)
 * [Skills](#skills)
 * [Experience](#experience)
+* [Teaching](#teaching)
 * [Education](#education)
 
 ## <a name="professional-summary"></a>Professional Summary
 
-A results-driven UX/UI Designer with over 10 years of experience in crafting intuitive and engaging user experiences for mobile and desktop applications. Proven ability to lead design projects from concept to launch, collaborating effectively with cross-functional teams of product managers, engineers, and stakeholders. Expertise in user research, data-driven design, and creating scalable design systems. Seeking to leverage my skills to contribute to Bending Spoons' success in a demanding, high-growth environment.
+A results-driven Front-End Designer with over 10 years of experience, crafting intuitive and engaging  experiences for mobile and desktop applications. Developing projects from concept to launch, collaborating effectively with cross-functional teams of product managers, engineers, and designers. 
 
 ## <a name="skills"></a>Skills
 
-*   **UX/UI Design:** User Research, User Flows, Wireframing, Prototyping, Interaction Design, Visual Design, Usability Testing
-*   **Design Tools:** Figma, Sketch, Adobe XD, Illustrator, Photoshop
-*   **Prototyping Tools:** InVision, Marvel, Framer
-*   **Front-End:** HTML, CSS, JavaScript (React)
-*   **Analytics:** Google Analytics, Mixpanel, Hotjar
-*   **Languages:** Italian (Native), English (Proficient)
+*   **Front-End:** HTML, CSS, JavaScript
+*   **Front-End Libraries:** GSAP, ThreeJS
+*   **UX/UI Design:** Wireframing, Prototyping, Interaction Design, User Research, User Flows, Visual Design, Usability Testing
+*   **Design Tools:** Photoshop, After Effects, Figma, Sketch, Illustrator, Blender, InDesign, Qgis
+*   **Prototyping Tools:** Framer, HTML and JS
+*   **Analytics:** Google Analytics
+*   **Languages:** Slovenian (Native), Italian (Proficient), English (Proficient), German (Proficient)
 
-## <a name="experience"></a>Experience
+## <a name="experience"></a>Professional Experience
 
-### Senior UX/UI Designer | TechSolutions Inc. | Milan, Italy | 2018 – Present
-*   Led the redesign of the company's flagship mobile banking app, resulting in a 30% increase in user satisfaction and a 15% rise in daily active users.
-*   Drove the adoption of a data-driven design process, using analytics and user feedback to inform design iterations.
-*   Mentored junior designers and established a collaborative design culture within the team.
-*   Streamlined the design-to-development handoff process, reducing implementation time by 25%.
+### **2009-Present | QUASI**  
+*Founder & Front-end Designer*  
+Progettazione e sviluppo siti internet (Website design and development)
 
-### UX/UI Designer | Innovatech | Rome, Italy | 2015 – 2018
-*   Designed and launched a new e-commerce platform, which generated over €1M in revenue in its first year.
-*   Conducted extensive A/B testing to optimize the user journey, increasing conversion rates by 10%.
-*   Created a comprehensive design system that was adopted across the entire product portfolio.
-*   Facilitated workshops with stakeholders to align on project goals and define user personas.
+### **2006-2009 | Qwentes Italia**  
+*Designer & Flash Developer*  
+Design and coding of projects in HTML, CSS, and JavaScript. Responsible for Flash projects based on corporate CMS. 
 
-### Junior UX/UI Designer | Creative Agency | Florence, Italy | 2013 – 2015
-*   Worked on a variety of client projects, from marketing websites to mobile applications.
-*   Assisted senior designers in creating wireframes, mockups, and prototypes.
-*   Gained experience in user research and usability testing.
+### **2005 | Art Design, Ljubljana**  
+Designing and developing various web projects.
+
+### **2004 | BMW, Ljubljana**  
+Designing and maintaining the Mini website.
+
+
+## <a name="teaching"></a>Teaching
+
+
+### **2015-2024 | Senior Faculty Member**
+SPD Scuola Politecnica di Design, Milano
+
+Teaching responsibilities across multiple Master's programs in digital design, web technologies, and creative industries. Curriculum development spanning from foundational computer design to front-end developement.
+
+#### Core Programs:
+- Master Web & Digital Design (2015-2024)
+- Master Visual & Web Design (2016-2023)
+- Master Industrial & Product Design (2017-2018)
+- Master Event and Exhibition Design MEED (2023-2024)
+
+#### Subject Areas & Expertise:
+- **Front-end Technologies** (9 years continuous) - HTML, CSS, JavaScript, Git workflow, responsive design, accessibility principles
+- Computer Design (4 years)
+- E-Commerce Design & Development (4 years)
+- SEO & SEM Workshops (3 years)
+- Animation & Prototyping Tools
+- Portfolio Design Workshop
+- Short Film Workshop
+
+### Teaching Methodology:
+- Hands-on coding approach with practical exercises
+- Individual and group collaborative projects
+- Assessment through practical coding assignments and comprehensive final projects
+
+**Professional Background:**
+SPD Master's Graduate (Web Design, 2005) | Industry experience in interactive web development with Flash technologies | Teaching career spanning from Flash development (2008) to modern front-end technologies
 
 ## <a name="education"></a>Education
 
-**Master's in Interaction Design** | Politecnico di Milano | Milan, Italy | 2013
+### Universities:
 
-*Certified Usability Analyst (CUA) – Human Factors International*
+#### **Scuola Politecnica di Design, Milano**
+  2005-2006 - *Master in Web Design*
+
+#### **Istituto e Academia per Multimedia, Ljubljana**
+  2003-2005 - *Multimedia*
+
+### Professional Development:
+- 2016 | OFFF, Barcelona
+- 2012 | OFFF, Barcelona
+- 2011 | OFFF, Barcelona
+- 2010 | OFFF, Paris
+- 2009 | OFFF, Lisbon
+- 2009 | DrupalCon, Paris
+- 2008 | Flash on the Beach, Brighton (Papervision 3D Workshop)

@@ -75,6 +75,12 @@ h6 {
   margin-bottom: var(--spacing-unit);
 }
 
+li p,
+li h3,
+li h4 {
+  margin: 0;
+}
+
 h1 {
   font-size: var(--font-size-xxl);
 }

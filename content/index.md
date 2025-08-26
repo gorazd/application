@@ -14,8 +14,22 @@ I am particularly drawn to Bending Spoons' innovative approach to acquiring and 
 
 This website serves as a small token of my interest in the UX/UI Designer position at Bending Spoons. Here you can find my cover letter, CV, and portfolio.
 
+## About Me
+
+### My Design Philosophy
+
+[Tell me a little bit about your design philosophy. What are the principles that guide your work? What do you believe makes a great user experience?]
+
+### My Passions Outside of Work
+
+[What are you passionate about outside of work? Any hobbies or interests that you'd like to share? This is a great way to show your personality.]
+
+### Why Bending Spoons?
+
+[You can also add a small section here about why you are specifically interested in Bending Spoons. This can be a more personal take than what's in your cover letter.]
+
 ## Quick Links
 
-- [View my CV](/cv/) - My professional experience and qualifications
-- [Read my Cover Letter](/cover-letter/) - Introduction and motivation
 - [Browse my Portfolio](/portfolio/) - Showcase of my work
+- [Read my Cover Letter](/cover-letter/) - Introduction and motivation
+- [View my CV](/cv/) - My professional experience and qualifications

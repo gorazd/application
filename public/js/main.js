@@ -188,8 +188,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
 if (window.navigation) {
   window.navigation.addEventListener("navigate", (event) => {
-    const toUrl = new URL(event.destination.url);
+    const toUrl = new URL(event.destination.url, location.href);
     if (location.origin !== toUrl.origin) return;
+    // If only the hash/fragment changes on the same page, don't intercept —
+    // let the browser perform native in-page navigation (no view transition).
+    if (toUrl.pathname === location.pathname && toUrl.hash && toUrl.hash !== location.hash) {
+      return;
+    }
     event.intercept({
       async handler() {
         const response = await fetch(toUrl.pathname);

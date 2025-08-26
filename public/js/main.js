@@ -106,8 +106,8 @@ document.addEventListener('DOMContentLoaded', () => {
   updateActiveNav();
   initSmoothScrolling();
   // Dynamically import animations.js as a module to avoid import syntax error
-  import("./animations.js").then(({ exampleAnimation }) => {
-    exampleAnimation();
+  import("./animations.js").then(({ animations }) => {
+    animations();
   });
 
   // === Enhanced Mobile Hamburger & Sliding Nav ===
@@ -257,8 +257,8 @@ if (window.navigation) {
             updateActiveNav();
             initSmoothScrolling();
             // Re-run animations after content update
-            import("./animations.js").then(({ exampleAnimation }) => {
-              exampleAnimation();
+            import("./animations.js").then(({ animations }) => {
+              animations();
             });
           });
         } else {
@@ -268,8 +268,8 @@ if (window.navigation) {
           updateActiveNav();
           initSmoothScrolling();
           // Re-run animations after content update
-          import("./animations.js").then(({ exampleAnimation }) => {
-            exampleAnimation();
+          import("./animations.js").then(({ animations }) => {
+            animations();
           });
         }
       },
@@ -306,7 +306,7 @@ function initSmoothScrolling() {
       gsap.to(obj, {
         duration,
         y: targetY,
-        ease: 'elastic.out',
+        ease: 'power2.out',
         onUpdate: () => window.scrollTo(0, Math.round(obj.y))
       });
       return;

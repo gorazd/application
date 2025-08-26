@@ -11,11 +11,11 @@ description: A results-driven UX/UI Designer with over 10 years of experience in
 * [Experience](#experience)
 * [Education](#education)
 
-## Professional Summary
+## <a name="professional-summary"></a>Professional Summary
 
 A results-driven UX/UI Designer with over 10 years of experience in crafting intuitive and engaging user experiences for mobile and desktop applications. Proven ability to lead design projects from concept to launch, collaborating effectively with cross-functional teams of product managers, engineers, and stakeholders. Expertise in user research, data-driven design, and creating scalable design systems. Seeking to leverage my skills to contribute to Bending Spoons' success in a demanding, high-growth environment.
 
-## Skills
+## <a name="skills"></a>Skills
 
 *   **UX/UI Design:** User Research, User Flows, Wireframing, Prototyping, Interaction Design, Visual Design, Usability Testing
 *   **Design Tools:** Figma, Sketch, Adobe XD, Illustrator, Photoshop
@@ -24,7 +24,7 @@ A results-driven UX/UI Designer with over 10 years of experience in crafting int
 *   **Analytics:** Google Analytics, Mixpanel, Hotjar
 *   **Languages:** Italian (Native), English (Proficient)
 
-## Experience
+## <a name="experience"></a>Experience
 
 ### Senior UX/UI Designer | TechSolutions Inc. | Milan, Italy | 2018 – Present
 *   Led the redesign of the company's flagship mobile banking app, resulting in a 30% increase in user satisfaction and a 15% rise in daily active users.
@@ -43,7 +43,7 @@ A results-driven UX/UI Designer with over 10 years of experience in crafting int
 *   Assisted senior designers in creating wireframes, mockups, and prototypes.
 *   Gained experience in user research and usability testing.
 
-## Education
+## <a name="education"></a>Education
 
 **Master's in Interaction Design** | Politecnico di Milano | Milan, Italy | 2013
 

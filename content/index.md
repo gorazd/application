@@ -18,15 +18,15 @@ This website, which I designed and built from scratch, is a small demonstration 
 
 ## About Me
 
-### My Design & Development Philosophy
+### Guiding Principles
 
 [Tell me a little bit about your design and development philosophy. How do you approach the process of creating a new digital product? What are your core principles?]
 
-### My Passions Outside of Work
+### Beyond the Pixels
 
 [What are you passionate about outside of work? Any hobbies or interests that you'd like to share? This is a great way to show your personality.]
 
-### Why Bending Spoons?
+### The Bending Spoons Connection
 
 [You can also add a small section here about why you are specifically interested in Bending Spoons. This can be a more personal take than what's in your cover letter.]
 

@@ -4,13 +4,44 @@ title: Portfolio
 description: A selection of my work as a UX/UI Designer.
 ---
 
+<section>
+
 # Portfolio
 
-- [Project 1: Project Title](#project-1)
-- [Project 2: Project Title](#project-2)
-- [Project 3: Project Title](#project-3)
+</section>
 
----
+<section style="position: sticky; top: 0;">
+
+<div class="portfolio">
+  <a href="#project-1" class="portfolio__card">
+    <img src="/images/coltelli-giapponesi.png" alt="Coltelli Giapponesi project preview" class="portfolio__image">
+    <div class="portfolio__content">
+      <h3 class="portfolio__title">Coltelli Giapponesi</h3>
+      <p class="portfolio__description">A comprehensive UX/UI design project</p>
+    </div>
+  </a>
+  
+  <a href="#project-2" class="portfolio__card">
+    <img src="/images/coltelli-giapponesi.png" alt="Coltelli Giapponesi project preview" class="portfolio__image">
+    <div class="portfolio__content">
+      <h3 class="portfolio__title">Project 2: Project Title</h3>
+      <p class="portfolio__description">Brief description of the second project</p>
+    </div>
+  </a>
+  
+  <a href="#project-3" class="portfolio__card">
+    <img src="/images/coltelli-giapponesi.png" alt="Coltelli Giapponesi project preview" class="portfolio__image">
+    <div class="portfolio__content">
+      <h3 class="portfolio__title">Project 3: Project Title</h3>
+      <p class="portfolio__description">Brief description of the third project</p>
+    </div>
+  </a>
+</div>
+</div>
+
+</section>
+
+<section>
 
 ## <a name="project-1"></a>Project 1: [Project Title]
 
@@ -41,7 +72,9 @@ description: A selection of my work as a UX/UI Designer.
 
 [Include screenshots, mockups, and prototypes here.]
 
----
+</section>
+
+<section>
 
 ## <a name="project-2"></a>Project 2: [Project Title]
 
@@ -72,7 +105,9 @@ description: A selection of my work as a UX/UI Designer.
 
 [Include screenshots, mockups, and prototypes here.]
 
----
+</section>
+
+<section>
 
 ## <a name="project-3"></a>Project 3: [Project Title]
 
@@ -103,4 +138,4 @@ description: A selection of my work as a UX/UI Designer.
 
 [Include screenshots, mockups, and prototypes here.]
 
----
+</section>

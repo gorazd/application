@@ -73,6 +73,11 @@ h6 {
   font-weight: normal;
   margin-top: var(--spacing-unit);
   margin-bottom: var(--spacing-unit);
+  line-height: 1;
+}
+
+h5 {
+  font-family: var(--font-mono);
 }
 
 li p,
@@ -129,6 +134,10 @@ header {
 main {
   padding: calc(var(--spacing-unit) / 2);
   view-transition-name: main;
+}
+
+section {
+  padding: 0 0 var(--spacing-unit) 0;
 }
 
 nav ul {

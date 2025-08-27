@@ -4,9 +4,13 @@ title: Gorazd Guštin - Front-End Designer & Developer
 description: A creative front-end designer and developer with a passion for building beautiful and intuitive user experiences.
 ---
 
-# Gorazd Guštin
+<section>
 
-## Front-End Designer & Developer
+##### FRONT-END DESIGNER & DEVELOPER
+# Gorazd Guštin
+</section>
+
+<section>
 
 I am a creative front-end designer and developer with a passion for building beautiful and intuitive user experiences. With a strong foundation in both design principles and front-end technologies, I specialize in bridging the gap between design and development to create products that are both visually stunning and highly functional.
 
@@ -15,6 +19,10 @@ My approach is rooted in a deep understanding of user-centric design. I believe 
 I am particularly excited by Bending Spoons' reputation for innovation and excellence. I am confident that my unique blend of design and development skills would allow me to make a significant contribution to your team.
 
 This website, which I designed and built from scratch, is a small demonstration of my abilities. Here you can find my portfolio, cover letter, and CV.
+
+</section>
+
+<section>
 
 ## About Me
 
@@ -29,9 +37,13 @@ This website, which I designed and built from scratch, is a small demonstration 
 ### The Bending Spoons Connection
 
 [You can also add a small section here about why you are specifically interested in Bending Spoons. This can be a more personal take than what's in your cover letter.]
+</section>
+
+<section>
 
 ## Quick Links
 
 - [Browse my Portfolio](/portfolio/) - Showcase of my work
 - [Read my Cover Letter](/cover-letter/) - Introduction and motivation
 - [View my CV](/cv/) - My professional experience and qualifications
+</section>

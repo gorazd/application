@@ -4,7 +4,13 @@ title: CV
 description: A results-driven UX/UI Designer with over 10 years of experience in crafting intuitive and engaging user experiences for mobile and desktop applications.
 ---
 
+<section>
+
 # Curriculum Vitae
+
+</section>
+
+<section>
 
 * [Professional Summary](#professional-summary)
 * [Skills](#skills)
@@ -12,9 +18,17 @@ description: A results-driven UX/UI Designer with over 10 years of experience in
 * [Teaching](#teaching)
 * [Education](#education)
 
+</section>
+
+<section>
+
 ## <a name="professional-summary"></a>Professional Summary
 
 A results-driven Front-End Designer with over 10 years of experience, crafting intuitive and engaging  experiences for mobile and desktop applications. Developing projects from concept to launch, collaborating effectively with cross-functional teams of product managers, engineers, and designers. 
+
+</section> 
+
+<section>
 
 ## <a name="skills"></a>Skills
 
@@ -25,6 +39,10 @@ A results-driven Front-End Designer with over 10 years of experience, crafting i
 *   **Prototyping Tools:** Framer, HTML and JS
 *   **Analytics:** Google Analytics
 *   **Languages:** Slovenian (Native), Italian (Proficient), English (Proficient), German (Proficient)
+
+</section>
+
+<section>
 
 ## <a name="experience"></a>Professional Experience
 
@@ -42,12 +60,16 @@ Designing and developing various web projects.
 ### **2004 | BMW, Ljubljana**  
 Designing and maintaining the Mini website.
 
+</section>
+
+
+<section>
 
 ## <a name="teaching"></a>Teaching
 
 
-### **2015-2024 | Senior Faculty Member**
-SPD Scuola Politecnica di Design, Milano
+### **2015-2024 | SPD Scuola Politecnica di Design, Milano**
+Senior Faculty Member
 
 Teaching responsibilities across multiple Master's programs in digital design, web technologies, and creative industries. Curriculum development spanning from foundational computer design to front-end developement.
 
@@ -74,6 +96,10 @@ Teaching responsibilities across multiple Master's programs in digital design, w
 **Professional Background:**
 SPD Master's Graduate (Web Design, 2005) | Industry experience in interactive web development with Flash technologies | Teaching career spanning from Flash development (2008) to modern front-end technologies
 
+</section>
+
+<section>
+
 ## <a name="education"></a>Education
 
 ### Universities:
@@ -92,3 +118,5 @@ SPD Master's Graduate (Web Design, 2005) | Industry experience in interactive we
 - 2009 | OFFF, Lisbon
 - 2009 | DrupalCon, Paris
 - 2008 | Flash on the Beach, Brighton (Papervision 3D Workshop)
+
+</section>

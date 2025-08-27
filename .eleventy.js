@@ -6,7 +6,8 @@ export default function(eleventyConfig) {
   // Set custom directories for input, output, includes, and data
   eleventyConfig.addPassthroughCopy({
     "public/css": "/css",
-    "public/fonts": "/fonts"
+    "public/fonts": "/fonts",
+    "public/images": "/images"
   });
 
   eleventyConfig.ignores.add("public/js/");

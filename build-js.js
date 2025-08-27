@@ -22,7 +22,9 @@ const buildOptions = {
   treeShaking: true,
   legalComments: 'none',
   mainFields: ['module', 'main'],
-  conditions: ['import', 'module', 'default']
+  conditions: ['import', 'module', 'default'],
+  // Preserve console.* statements in production builds
+  drop: isProd ? [] : [],
 };
 
 async function build() {

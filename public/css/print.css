@@ -52,16 +52,6 @@ header {
     border-bottom: 1px solid #ddd;
     padding-bottom: 0.5em;
     margin-bottom: 2em;
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    background: white;
-    z-index: 999;
-  }
-  
-  body {
-    margin-top: 3em; /* Make space for fixed header */
   }
 }
 

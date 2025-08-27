@@ -6,11 +6,9 @@ export default function(eleventyConfig) {
   // Set custom directories for input, output, includes, and data
   eleventyConfig.addPassthroughCopy({
     "public/css": "/css",
-    "public/fonts": "/fonts",
-    "public/dist": "/"
+    "public/fonts": "/fonts"
   });
 
-  eleventyConfig.addWatchTarget("public/dist/");
   eleventyConfig.ignores.add("public/js/");
 
   eleventyConfig.addTransform("htmlmin", async function(content) {

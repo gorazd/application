@@ -5,8 +5,9 @@
   "main": "index.js",
   "scripts": {
     "start": "npm run build:js -- --watch & eleventy --serve",
-    "build": "ELEVENTY_ENV=production npm run build:js && eleventy",
-    "build:js": "node build-js.js"
+    "build": "npm run build:js:prod && eleventy",
+    "build:js": "node build-js.js",
+    "build:js:prod": "ELEVENTY_ENV=production node build-js.js"
   },
   "repository": {
     "type": "git",

@@ -6,7 +6,9 @@ description: A results-driven UX/UI Designer with over 10 years of experience in
 
 <section>
 
-# Curriculum Vitae
+<p class="title">Curriculum Vitae</p>
+
+# Biographical & Professional Summary
 
 </section>
 
@@ -48,7 +50,7 @@ A results-driven Front-End Designer with over 10 years of experience, crafting i
 
 ### **2009-Present | QUASI**  
 *Founder & Front-end Designer*  
-Progettazione e sviluppo siti internet (Website design and development)
+Website design and development focused on performance and accessibility
 
 ### **2006-2009 | Qwentes Italia**  
 *Designer & Flash Developer*  

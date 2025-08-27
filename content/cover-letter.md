@@ -4,6 +4,8 @@ title: Cover Letter for UX/UI Designer at Bending Spoons
 description: With over a decade of experience shaping user-centric mobile applications from concept to launch, I was immediately drawn to the UX/UI Designer opening.
 ---
 
+<p class="title">To whom it may concern</p>
+
 # Dear Bending Spoons,
 
 *Milano, 02.08.2025*

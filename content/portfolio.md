@@ -5,12 +5,13 @@ description: A selection of my work as a UX/UI Designer.
 ---
 
 <section>
+<p class="title">A short presentation of</p>
 
-# Portfolio
+# Selected Works
 
 </section>
 
-<section style="position: sticky; top: 0;">
+<section>
 
 <div class="portfolio">
   <a href="#project-1" class="portfolio__card">
@@ -24,7 +25,7 @@ description: A selection of my work as a UX/UI Designer.
   <a href="#project-2" class="portfolio__card">
     <img src="/images/coltelli-giapponesi.png" alt="Coltelli Giapponesi project preview" class="portfolio__image">
     <div class="portfolio__content">
-      <h3 class="portfolio__title">Project 2: Project Title</h3>
+      <h3 class="portfolio__title">Project</h3>
       <p class="portfolio__description">Brief description of the second project</p>
     </div>
   </a>
@@ -32,7 +33,7 @@ description: A selection of my work as a UX/UI Designer.
   <a href="#project-3" class="portfolio__card">
     <img src="/images/coltelli-giapponesi.png" alt="Coltelli Giapponesi project preview" class="portfolio__image">
     <div class="portfolio__content">
-      <h3 class="portfolio__title">Project 3: Project Title</h3>
+      <h3 class="portfolio__title">Project</h3>
       <p class="portfolio__description">Brief description of the third project</p>
     </div>
   </a>

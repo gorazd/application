@@ -10,7 +10,7 @@ description: A results-driven UX/UI Designer with over 10 years of experience in
 
 </section>
 
-<section>
+<section class="cv-navigation">
 
 * [Professional Summary](#professional-summary)
 * [Skills](#skills)

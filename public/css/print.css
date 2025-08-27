@@ -36,24 +36,37 @@ a {
   text-decoration: none;
 }
 
+/* Hide website header but create print header */
 header {
   display: none;
 }
 
-@page {
-  margin-top: 3em; /* Add margin to the bottom of each page */
-}
-
-@page {
-  @top-left {  
-    content: "Gorazd Guštin | +39 333 46 88 472 | gorazd@qua.si | https://qua.si";  
+/* Print header that works in Safari */
+@media print {
+  body::before {
+    content: "Gorazd Guštin | +39 333 46 88 472 | gorazd@qua.si | https://qua.si";
+    display: block;
     font-family: 'PPSupplyMono', sans-serif;
     font-size: 12pt;
-    color: #333; 
+    color: #333;
     border-bottom: 1px solid #ddd;
+    padding-bottom: 0.5em;
+    margin-bottom: 2em;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    background: white;
+    z-index: 999;
+  }
+  
+  body {
+    margin-top: 3em; /* Make space for fixed header */
   }
 }
 
+.cv-navigation,
+.portfolio,
 footer {
   display: none;
 }

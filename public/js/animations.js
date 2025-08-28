@@ -41,8 +41,10 @@ export function animations() {
     console.warn("Typewriter effect NOT applied.");
   }
   
-  // Add signature drawing animation with ScrollTrigger
-  animateSignature();
+  // Add signature drawing animation with ScrollTrigger only if signature element exists
+  if (document.querySelector('#signature')) {
+    animateSignature();
+  }
 }
 
 function animateSignature() {

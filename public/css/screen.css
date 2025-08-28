@@ -12,6 +12,7 @@
   --link-color: #0055cc;
   --border-color: #ccc;
   --link-hover-bg: #93eca8;
+  --text-em: 147, 236, 168;
 
   --spacing-unit: 1rem;
 
@@ -30,6 +31,7 @@ html.dark {
   --link-color: #8ab4f8;
   --border-color: #444;
   --link-hover-bg: #f000c1;
+  --text-em: 240, 0, 193;
 }
 
 @font-face {
@@ -62,6 +64,7 @@ p {
   margin-top: var(--spacing-unit);
   margin-bottom: var(--spacing-unit);
   line-height: 1.35;
+  max-width: 80ch;
 }
 
 h1,
@@ -93,7 +96,15 @@ h6 {
   margin-top: var(--spacing-unit);
   margin-bottom: var(--spacing-unit);
   line-height: 1.3;
-  opacity: .6;
+  
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  max-width: 60ch;
+}
+
+li {
+  max-width: 80ch;
 }
 
 li p,
@@ -129,13 +140,16 @@ ul {
 
 em {
   font-style: normal;
-  text-decoration: underline double;
+  /* text-decoration: underline double; */
   text-decoration-color: var(--link-hover-bg);
+  font-weight: 400;
+  background-color:  rgba(var(--text-em), .25);
 }
 
 strong {
   font-style: normal;
-  background-color: var(--link-hover-bg);
+  font-weight: 400;
+  background-color:  rgba(var(--text-em), .75);
 }
 
 header {
@@ -194,7 +208,9 @@ nav a.active {
 }
 
 @media (hover: hover) {
-
+  a:hover {
+    text-decoration: underline double;
+  }
   nav a:hover,
   nav a.active {
     color: var(--text-color);

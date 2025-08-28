@@ -1,7 +1,7 @@
 ---
 layout: layouts/base.njk
 title: CV
-description: A results-driven UX/UI Designer with over 10 years of experience in crafting intuitive and engaging user experiences for mobile and desktop applications.
+description: Results-driven Front-End Designer with 10+ years of experience creating intuitive and engaging experiences for mobile and desktop applications. Developing projects from start to finish and collaborating effectively with various teams.
 ---
 
 <section>
@@ -26,7 +26,7 @@ description: A results-driven UX/UI Designer with over 10 years of experience in
 
 ## <span id="professional-summary"></span>Professional Summary
 
-A results-driven Front-End Designer with over 10 years of experience, crafting intuitive and engaging  experiences for mobile and desktop applications. Developing projects from concept to launch, collaborating effectively with cross-functional teams of product managers, engineers, and designers. 
+Results-driven Front-End Designer with 10+ years of experience creating intuitive and engaging experiences for mobile and desktop applications. Developing projects from start to finish and collaborating effectively with various teams.
 
 </section> 
 
@@ -50,7 +50,7 @@ A results-driven Front-End Designer with over 10 years of experience, crafting i
 
 ### **2009-Present | QUASI**  
 *Founder & Front-end Designer*  
-Website design and development focused on performance and accessibility
+Website design and development with a focus on performance and accessibility.
 
 ### **2006-2009 | Qwentes Italia**  
 *Designer & Flash Developer*  
@@ -60,11 +60,9 @@ Design and coding of projects in HTML, CSS, and JavaScript. Responsible for Flas
 Designing and developing various web projects.
 
 ### **2004 | BMW, Ljubljana**  
-Designing and maintaining the Mini website.
+Designing and maintaining the BMW Mini website.
 
 </section>
-
-
 <section>
 
 ## <span id="teaching"></span>Teaching
@@ -73,7 +71,7 @@ Designing and maintaining the Mini website.
 ### **2015-2024 | SPD Scuola Politecnica di Design, Milano**
 Senior Faculty Member
 
-Teaching responsibilities across multiple Master's programs in digital design, web technologies, and creative industries. Curriculum development spanning from foundational computer design to front-end developement.
+Teaching responsibilities for digital design, web technologies, and creative industries. Curriculum development from computer design to front-end development.
 
 #### Core Programs:
 - Master Web & Digital Design (2015-2024)

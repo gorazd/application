@@ -14,7 +14,7 @@ description: A selection of my work as a UX/UI Designer.
 
 <div class="portfolio">
   <a href="#project-1" class="portfolio__card">
-    <img src="/images/coltelli-giapponesi.jpg" alt="Coltelli Giapponesi project preview" class="portfolio__image">
+    <img src="/images/coltelli-giapponesi.jpg" alt="Coltelli Giapponesi symbol" class="portfolio__image">
     <div class="portfolio__content">
       <h3 class="portfolio__title">Coltelli Giapponesi</h3>
   <p class="portfolio__description">E-commerce website for Japanese knives. Modern, content-rich, and optimized for performance and SEO.</p>
@@ -22,7 +22,7 @@ description: A selection of my work as a UX/UI Designer.
   </a>
   
   <a href="#project-2" class="portfolio__card">
-    <img src="/images/tempesta-gallery.png" alt="Coltelli Giapponesi project preview" class="portfolio__image">
+    <img src="/images/tempesta-gallery.png" alt="Tempesta Gallery emblem" class="portfolio__image">
     <div class="portfolio__content">
       <h3 class="portfolio__title">Tempesta Gallery</h3>
   <p class="portfolio__description">Multilingual gallery platform showcasing artists and exhibitions. Visually-driven, accessible, and optimized for multilingual SEO.</p>
@@ -30,7 +30,7 @@ description: A selection of my work as a UX/UI Designer.
   </a>
   
   <a href="#project-3" class="portfolio__card">
-    <img src="/images/federico-boriani.png" alt="Coltelli Giapponesi project preview" class="portfolio__image">
+    <img src="/images/federico-boriani.png" alt="Federico Boriani Studio logo" class="portfolio__image">
     <div class="portfolio__content">
       <h3 class="portfolio__title">Federico Boriani</h3>
   <p class="portfolio__description">Studio website highlighting UX methodology and information architecture. Modular components, performance-focused, and client-facing resources.</p>
@@ -122,7 +122,7 @@ The final website is a fast, accessible, and visually appealing platform that in
 
 **Date:** 07.2025
 
-**URL:** [federicoboriani.it/](https://federicoboriani.it/)
+**URL:** [federicoboriani.it](https://federicoboriani.it/)
 
 ### The Challenge
 

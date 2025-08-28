@@ -8,7 +8,7 @@ description: With over a decade of experience shaping user-centric mobile applic
 
 # Dear Bending Spoons,
 
-*Milano, 28.08.2025*
+*Milan, 28.08.2025*
 
 **Subject: Application for the Product Manager Position**
 

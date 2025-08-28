@@ -264,6 +264,10 @@ footer {
   font-size: 0.9em;
 }
 
+footer p {
+  max-width: none;
+}
+
 /* view transitions */
 @keyframes fade-in {
   from {

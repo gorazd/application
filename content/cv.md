@@ -34,8 +34,8 @@ Results-driven Front-End Designer with 10+ years of experience creating intuitiv
 
 ## <span id="skills"></span>Skills
 
-*   **Front-End:** HTML, CSS, JavaScript
-*   **Front-End Libraries:** GSAP, ThreeJS
+*   **Front-end:** HTML, CSS, JavaScript
+*   **Front-end Libraries:** GSAP, ThreeJS
 *   **UX/UI Design:** Wireframing, Prototyping, Interaction Design, User Research, User Flows, Visual Design, Usability Testing
 *   **Design Tools:** Photoshop, After Effects, Figma, Sketch, Illustrator, Blender, InDesign, Qgis
 *   **Prototyping Tools:** Framer, HTML and JS

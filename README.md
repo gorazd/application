@@ -116,8 +116,7 @@ SOFTWARE.
 
 ## Author
 
-**Gorazd Guštin** - Front-End Designer & Developer
+**Gorazd Guštin** - Front-end Designer & Developer
 
-- Website: [Your website]
-- Email: [Your email]
-- LinkedIn: [Your LinkedIn]
+- Website: https://qua.si
+- Email: gorazd@qua.si

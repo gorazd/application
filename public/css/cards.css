@@ -68,8 +68,7 @@
   flex-grow: 1;
 }
 
-/* Responsive adjustments */
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
   .portfolio {
     display: flex;
     flex-flow: row wrap;
@@ -78,7 +77,8 @@
   }
 
   .portfolio__card {
-    box-shadow: 0 2px 2px var(--link-hover-bg);
+    border-color: var(--link-color);
+    box-shadow: 0 2px 2px var(--link-color);
   }
 
   .portfolio__content {

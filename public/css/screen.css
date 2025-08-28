@@ -82,7 +82,7 @@ h6 {
 .title {
   font-family: var(--font-mono);
   margin-top: var(--spacing-unit);
-  margin-bottom: var(--spacing-unit);
+  margin-bottom: calc(-1 * var(--spacing-unit));
   line-height: 1;
   text-transform: uppercase;
 }

@@ -1,7 +1,7 @@
 ---
 layout: layouts/base.njk
 title: Portfolio
-description: A selection of my work as a UX/UI Designer.
+description: A selection of my work as a Developer and Designer.
 ---
 
 <section>

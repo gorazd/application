@@ -1,6 +1,6 @@
 ---
 layout: layouts/base.njk
-title: Cover Letter for UX/UI Designer at Bending Spoons
+title: Cover Letter for Product Manager at Bending Spoons
 description: With over a decade of experience shaping user-centric mobile applications from concept to launch, I was immediately drawn to the UX/UI Designer opening.
 ---
 
@@ -10,7 +10,7 @@ description: With over a decade of experience shaping user-centric mobile applic
 
 *Milano, 28.08.2025*
 
-**Subject: Application for the UX/UI Designer Position**
+**Subject: Application for the Product Manager Position**
 
 Dear Hiring Team at Bending Spoons,
 

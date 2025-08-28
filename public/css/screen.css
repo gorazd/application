@@ -75,6 +75,8 @@ h6 {
   margin-top: var(--spacing-unit);
   margin-bottom: var(--spacing-unit);
   line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 .title {

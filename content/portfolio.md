@@ -44,7 +44,7 @@ description: A selection of my work as a UX/UI Designer.
 
 <section>
 
-## <a name="project-1"></a>Project 1: [Project Title]
+## <span id="project-1"></span>Project 1: [Project Title]
 
 **Client:** [Client Name]
 **Date:** [Month, Year]
@@ -77,7 +77,7 @@ description: A selection of my work as a UX/UI Designer.
 
 <section>
 
-## <a name="project-2"></a>Project 2: [Project Title]
+## <span id="project-2"></span>Project 2: [Project Title]
 
 **Client:** [Client Name]
 **Date:** [Month, Year]
@@ -110,7 +110,7 @@ description: A selection of my work as a UX/UI Designer.
 
 <section>
 
-## <a name="project-3"></a>Project 3: [Project Title]
+## <span id="project-3"></span>Project 3: [Project Title]
 
 **Client:** [Client Name]
 **Date:** [Month, Year]

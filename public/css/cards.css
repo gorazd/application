@@ -50,7 +50,7 @@
 }
 
 .portfolio__title {
-  margin: 0 0 var(--spacing-unit) 0;
+  margin: 0;
   font-family: var(--font-sans);
   font-size: var(--font-size-md);
   font-weight: 600;
@@ -74,15 +74,21 @@
     display: flex;
     flex-flow: row wrap;
     gap: var(--spacing-unit);
-    padding: var(--spacing-unit) 0;
+    padding: 0;
   }
-  
+
+  .portfolio__card {
+    box-shadow: 0 2px 2px var(--link-hover-bg);
+  }
+
   .portfolio__content {
-    padding: var(--spacing-unit);
+    padding:  calc(var(--spacing-unit) / 2);
   }
   
   .portfolio__title{
+    font-family: var(--font-mono);
     font-size: var(--font-size-base);
+    text-transform: uppercase;
     margin: 0;
   }
 

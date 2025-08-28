@@ -24,7 +24,7 @@ description: A results-driven UX/UI Designer with over 10 years of experience in
 
 <section>
 
-## <a name="professional-summary"></a>Professional Summary
+## <span id="professional-summary"></span>Professional Summary
 
 A results-driven Front-End Designer with over 10 years of experience, crafting intuitive and engaging  experiences for mobile and desktop applications. Developing projects from concept to launch, collaborating effectively with cross-functional teams of product managers, engineers, and designers. 
 
@@ -32,7 +32,7 @@ A results-driven Front-End Designer with over 10 years of experience, crafting i
 
 <section>
 
-## <a name="skills"></a>Skills
+## <span id="skills"></span>Skills
 
 *   **Front-End:** HTML, CSS, JavaScript
 *   **Front-End Libraries:** GSAP, ThreeJS
@@ -46,7 +46,7 @@ A results-driven Front-End Designer with over 10 years of experience, crafting i
 
 <section>
 
-## <a name="experience"></a>Professional Experience
+## <span id="experience"></span>Professional Experience
 
 ### **2009-Present | QUASI**  
 *Founder & Front-end Designer*  
@@ -67,7 +67,7 @@ Designing and maintaining the Mini website.
 
 <section>
 
-## <a name="teaching"></a>Teaching
+## <span id="teaching"></span>Teaching
 
 
 ### **2015-2024 | SPD Scuola Politecnica di Design, Milano**
@@ -102,7 +102,7 @@ SPD Master's Graduate (Web Design, 2005) | Industry experience in interactive we
 
 <section>
 
-## <a name="education"></a>Education
+## <span id="education"></span>Education
 
 ### Universities:
 

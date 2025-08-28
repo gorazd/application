@@ -13,6 +13,9 @@ export function animations() {
   // Add typewriter effect to introduction text using SplitText
   const introElement = document.querySelector('.title');
   if (introElement) {
+    // Make the element visible (it's hidden in CSS initially)
+    gsap.set(introElement, { opacity: 1 });
+    
     // Split the text into characters
     const splitText = new SplitText(introElement, { type: "chars" });
     

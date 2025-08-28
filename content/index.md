@@ -9,7 +9,7 @@ description: A creative front-end designer and developer with a passion for buil
 <p class="title">Front-End Designer & Developer</p>
 
 # Gorazd Guštin
-<p class="introduction">This website was <strong>designed and built from scratch</strong>, and it's a little sample of what I can do. You can find my <a href="#">latest works</a>, <a href="/cover-letter/">cover letter</a>, and <a href="/cv/">CV</a>.</p>
+<p class="introduction">This website was <strong>designed and built from scratch</strong>, and it's a little sample of what I can do. You can find my <a href="/portfolio/">latest works</a>, <a href="/cover-letter/">cover letter</a>, and <a href="/cv/">CV</a>.</p>
 </section>
 
 
@@ -18,7 +18,7 @@ description: A creative front-end designer and developer with a passion for buil
 
 ### Guiding Principles
 
-To grow, I learn, update, expand, and edit my identity. Starting with a solid design I subject everything to human review. I don't vibe code but use the AI as a pair programmer, or a powerful tool in my engineering toolkit.
+To grow, I learn, update, expand, and edit my identity. Starting with a solid design I subject everything to human review. When writing code I don't vibe code but use the AI as a pair programmer, or a powerful tool in my engineering toolkit.
 
 </section>
 <section>

@@ -5,6 +5,7 @@ import { Draggable } from "gsap/Draggable";
 import { Flip } from "gsap/Flip";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ScrollToPlugin } from "gsap/ScrollToPlugin";
+import { SplitText } from "gsap/SplitText";
 
 if (typeof window !== 'undefined') {
   if (!window.gsap) {
@@ -14,7 +15,7 @@ if (typeof window !== 'undefined') {
   }
 }
 
-gsap.registerPlugin(Draggable, Flip, ScrollTrigger, ScrollToPlugin);
+gsap.registerPlugin(Draggable, Flip, ScrollTrigger, ScrollToPlugin, SplitText);
 
 function updateActiveNav() {
   const navLinks = document.querySelectorAll('header nav a');

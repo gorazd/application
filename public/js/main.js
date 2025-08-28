@@ -180,45 +180,110 @@ document.addEventListener('DOMContentLoaded', () => {
   closeMenu();
 });
 
-if (window.navigation) {
-  window.navigation.addEventListener("navigate", (event) => {
-    const toUrl = new URL(event.destination.url, location.href);
-    if (location.origin !== toUrl.origin) return;
-    if (toUrl.pathname === location.pathname && toUrl.hash && toUrl.hash !== location.hash) {
-      return;
+// Detect Safari
+function isSafari() {
+  return /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+}
+
+// Cross-browser navigation handling
+function initSinglePageNavigation() {
+  // Handle clicks on internal links
+  document.addEventListener('click', (event) => {
+    const link = event.target.closest('a');
+    if (!link) return;
+    
+    const href = link.getAttribute('href');
+    if (!href || href.startsWith('#') || href.startsWith('http') || href.startsWith('mailto:') || href.startsWith('tel:')) {
+      return; // Skip hash links, external links, email, phone
     }
-    event.intercept({
-      async handler() {
-        const response = await fetch(toUrl.pathname);
-        const data = await response.text();
-        const parser = new DOMParser();
-        const doc = parser.parseFromString(data, 'text/html');
-
-        document.title = doc.title;
-
-        if (typeof document.startViewTransition === 'function') {
-          document.startViewTransition(() => {
-            document.querySelector('main').innerHTML = doc.querySelector('main').innerHTML;
-            document.documentElement.scrollTop = 0;
-            updateActiveNav();
-            initSmoothScrolling();
-            import("./animations.js").then(({ animations }) => {
-              animations();
-            });
-          });
-        } else {
-          document.querySelector('main').innerHTML = doc.querySelector('main').innerHTML;
-          document.documentElement.scrollTop = 0;
-          updateActiveNav();
-          initSmoothScrolling();
-          import("./animations.js").then(({ animations }) => {
-            animations();
-          });
-        }
-      },
-    });
+    
+    const url = new URL(href, location.href);
+    if (url.origin !== location.origin) return; // Skip external links
+    
+    event.preventDefault();
+    navigateToPage(url.pathname);
+  });
+  
+  // Handle browser back/forward buttons
+  window.addEventListener('popstate', (event) => {
+    navigateToPage(location.pathname, false);
   });
 }
+
+async function navigateToPage(pathname, pushState = true) {
+  try {
+    const response = await fetch(pathname);
+    const data = await response.text();
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(data, 'text/html');
+
+    document.title = doc.title;
+    
+    if (pushState) {
+      history.pushState(null, '', pathname);
+    }
+
+    // Use View Transitions API if available, otherwise fallback to custom animation
+    if (typeof document.startViewTransition === 'function') {
+      document.startViewTransition(() => {
+        updatePageContent(doc);
+      });
+    } else {
+      // Custom transition for Safari and other browsers
+      await customPageTransition(doc);
+    }
+  } catch (error) {
+    console.error('Navigation failed:', error);
+    // Fall back to regular navigation
+    window.location.href = pathname;
+  }
+}
+
+function updatePageContent(doc) {
+  document.querySelector('main').innerHTML = doc.querySelector('main').innerHTML;
+  document.documentElement.scrollTop = 0;
+  updateActiveNav();
+  initSmoothScrolling();
+  import("./animations.js").then(({ animations }) => {
+    animations();
+  });
+}
+
+async function customPageTransition(doc) {
+  const main = document.querySelector('main');
+  
+  // Fade out current content
+  main.style.opacity = '0';
+  main.style.transform = 'translateY(-80px)';
+  main.style.transition = 'opacity 180ms cubic-bezier(0.4, 0, 1, 1), transform 180ms cubic-bezier(0.4, 0, 1, 1)';
+  
+  // Wait for fade out
+  await new Promise(resolve => setTimeout(resolve, 180));
+  
+  // Update content
+  updatePageContent(doc);
+  
+  // Fade in new content
+  main.style.opacity = '0';
+  main.style.transform = 'translateY(10px)';
+  
+  // Trigger reflow
+  main.offsetHeight;
+  
+  main.style.transition = 'opacity 320ms cubic-bezier(0, 0, 0.6, 1) 90ms, transform 320ms cubic-bezier(0, 0, 0.6, 1) 90ms';
+  main.style.opacity = '1';
+  main.style.transform = 'translateY(0)';
+  
+  // Clean up styles after animation
+  setTimeout(() => {
+    main.style.transition = '';
+    main.style.transform = '';
+    main.style.opacity = '';
+  }, 500);
+}
+
+// Initialize navigation handling
+initSinglePageNavigation();
 
 function initSmoothScrolling() {
   console.log("Initializing smooth scrolling...");

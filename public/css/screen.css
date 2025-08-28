@@ -168,6 +168,8 @@ header {
 main {
   padding: calc(var(--spacing-unit) / 2);
   view-transition-name: main;
+  /* Fallback transition for browsers without View Transitions API */
+  transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
 }
 
 section {

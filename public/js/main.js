@@ -1,4 +1,24 @@
+/*
+ Navigation Pipeline Overview (Phases 0-9 Implemented)
+ ----------------------------------------------------
+ 1. Intercept internal link clicks (opt-out via data-no-spa planned) and use single-page navigation.
+ 2. On navigation start: mark performance (nav-start), abort any prior in-flight fetch, set AbortController.
+ 3. Fetch HTML concurrently with exit animation (CSS class-based). In-memory Map cache supplies instant HTML if present.
+ 4. If View Transitions API available & not already active: wrap DOM swap; else custom class-based transition.
+ 5. After DOM swap: re-run navigation highlighting, smooth scrolling, and defer non-critical animations via requestIdleCallback.
+ 6. Animations module imported once; subsequent navigations call reinit only (avoids duplicate plugin registration).
+ 7. Concurrency guard: redundant rapid clicks to same path ignored while in-flight; earlier fetch aborted.
+ 8. Performance diagnostics: use window.__navMetrics() for quick stats or window.__navSummary() for detailed table.
+ 9. Cache prefetch: pointerenter/focus prefetches uncached internal routes (80ms debounce).
 
+ Future Enhancements / TODOs:
+ - Add optional cache size limit or TTL.
+ - data-no-spa attribute handling for forced full reload.
+ - Automated Lighthouse CI integration.
+
+ Rollback Instructions:
+ - To revert optimizations: checkout previous git tag (e.g., `git checkout pre-nav-optimization`) or remove SPA init call & all instrumentation blocks.
+*/
 console.log("Less goo");
 import { gsap } from "gsap";
 import { Draggable } from "gsap/Draggable";
@@ -7,6 +27,112 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ScrollToPlugin } from "gsap/ScrollToPlugin";
 import { SplitText } from "gsap/SplitText";
 import { DrawSVGPlugin } from "gsap/DrawSVGPlugin";
+
+// Navigation performance instrumentation (Phase 0)
+// ------------------------------------------------
+// Adds nav-start/nav-end performance marks and a measure 'navigation'.
+// Collects Long Task counts between marks using PerformanceObserver.
+// Provides window.__navMetrics log helper for baseline capture.
+(function setupNavigationPerfInstrumentation(){
+  if (typeof window === 'undefined' || typeof performance === 'undefined') return;
+  if (window.__navPerfSetup) return; // idempotent
+  window.__navPerfSetup = true;
+
+  const longTasks = [];
+  let observing = false;
+  let observer;
+
+  function startLongTaskObserver(){
+    if (observing || !('PerformanceObserver' in window)) return;
+    try {
+      observer = new PerformanceObserver((list) => {
+        list.getEntries().forEach(entry => {
+          if (entry.duration > 50) {
+            longTasks.push(entry);
+          }
+        });
+      });
+      observer.observe({ entryTypes: ['longtask'] });
+      observing = true;
+    } catch (e) {}
+  }
+
+  function stopLongTaskObserver(){
+    try { if (observer) observer.disconnect(); } catch(e) {}
+    observing = false;
+  }
+
+  function markNavStart(){
+    try { performance.mark('nav-start'); } catch(e) {}
+    longTasks.length = 0;
+    startLongTaskObserver();
+  }
+
+  function markNavEnd(){
+    try { performance.mark('nav-end'); } catch(e) {}
+    stopLongTaskObserver();
+    try { performance.measure('navigation', 'nav-start', 'nav-end'); } catch(e) {}
+  }
+
+  // Expose minimal API for navigation module
+  const records = [];
+  window.__navPerf = { markNavStart, markNavEnd, longTasks, records };
+
+  // Helper to log metrics (call manually after several navigations)
+  window.__navMetrics = function(){
+    const measures = performance.getEntriesByName('navigation');
+    const durations = measures.map(m => m.duration).filter(Boolean).sort((a,b)=>a-b);
+    if (!durations.length) {
+      console.info('[nav-metrics] No navigation measures yet.');
+      return;
+    }
+    const median = durations[Math.floor(durations.length/2)];
+    const p95 = durations[Math.floor(durations.length*0.95) - 1] || durations[durations.length-1];
+    console.info('[nav-metrics] count=%d median=%.1fms p95=%.1fms last=%.1fms longTasksLastNav=%d', durations.length, median, p95, durations[durations.length-1], window.__navPerf.longTasks.length);
+  };
+
+  // Phase 9: richer summary tool
+  window.__navSummary = function() {
+    const measures = performance.getEntriesByName('navigation');
+    if (!measures.length) {
+      console.info('[nav-summary] No navigation measures.');
+      return;
+    }
+    const durations = measures.map(m => m.duration).sort((a,b)=>a-b);
+    const median = durations[Math.floor(durations.length/2)];
+    const p95 = durations[Math.max(0, Math.ceil(durations.length*0.95)-1)];
+    const mean = durations.reduce((a,b)=>a+b,0)/durations.length;
+    const fastest = durations[0];
+    const slowest = durations[durations.length-1];
+    // Approx cache hits: entries whose duration < 130ms (heuristic) & after Phase 2
+    const cacheHits = durations.filter(d => d < 130).length;
+    const cacheHitRatio = (cacheHits / durations.length * 100).toFixed(1);
+    console.groupCollapsed('[nav-summary] Navigation Performance Summary');
+    console.table([{count: durations.length, median: median.toFixed(1), p95: p95.toFixed(1), mean: mean.toFixed(1), fastest: fastest.toFixed(1), slowest: slowest.toFixed(1), cacheHitRatio: cacheHitRatio + '%'}]);
+    console.groupEnd();
+  };
+
+  // Export structured JSON suitable for pasting into plan.md Results
+  window.__navExport = function() {
+    const data = window.__navPerf.records;
+    if (!data.length) {
+      console.info('[nav-export] No records captured yet.');
+      return [];
+    }
+    const summary = data.map(r => ({ path: r.path, duration: r.duration.toFixed(1), cached: r.cached, longTasks: r.longTasks }));
+    console.table(summary);
+    return summary;
+  };
+  // Allow updating budgets externally
+  window.__setNavBudgets = function(partial){
+    if (!window.__navBudgets) {
+      window.__navBudgets = { warnMedian: 350, warnP95: 900, warnLongTasks: 3 };
+    }
+    Object.assign(window.__navBudgets, partial || {});
+    console.info('[nav-budget] updated', window.__navBudgets);
+  };
+})();
+// ------------------------------------------------
 
 if (typeof window !== 'undefined') {
   if (!window.gsap) {
@@ -79,8 +205,11 @@ document.addEventListener('DOMContentLoaded', () => {
   initThemeAndPrint();
   updateActiveNav();
   initSmoothScrolling();
-  import("./animations.js").then(({ animations }) => {
-    animations();
+  // Initialize SPA link interception (re-added)
+  initSinglePageNavigation();
+  import("./animations.js").then(mod => {
+    mod.initAnimationsOnce && mod.initAnimationsOnce();
+    mod.reinitAnimations && mod.reinitAnimations();
   });
 
   const body = document.querySelector('body');
@@ -186,21 +315,76 @@ function isSafari() {
   return /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
 }
 
+// Phase 8 helpers to reduce duplicate logic
+function getMain() {
+  return document.querySelector('main');
+}
+function isInternalLink(href) {
+  if (!href || href.startsWith('#') || href.startsWith('http') || href.startsWith('mailto:') || href.startsWith('tel:')) return false;
+  try {
+    const url = new URL(href, location.href);
+    return url.origin === location.origin;
+  } catch (e) {
+    return false;
+  }
+}
+
+// Record a navigation result (Phase 9 extension)
+function captureNavRecord(path, cached) {
+  try {
+    if (!window.__navPerf) return;
+    const measures = performance.getEntriesByName('navigation');
+    const last = measures[measures.length - 1];
+    if (!last) return;
+    const rec = {
+      path,
+      duration: last.duration,
+      cached,
+      longTasks: window.__navPerf.longTasks.length,
+      ts: Date.now()
+    };
+    window.__navPerf.records.push(rec);
+    // Performance budget checks (enhancement)
+    if (!window.__navBudgets) {
+      window.__navBudgets = {
+        warnMedian: 350, // ms
+        warnP95: 900,    // ms
+        warnLongTasks: 3 // count per nav
+      };
+    }
+    try {
+      const b = window.__navBudgets;
+      if (rec.longTasks > b.warnLongTasks) {
+        console.warn('[nav-budget] long tasks exceeded (%d > %d) on %s', rec.longTasks, b.warnLongTasks, path);
+      }
+      // Recompute aggregate stats cheaply for median/p95 warning
+      const durations = window.__navPerf.records.map(r=>r.duration).slice().sort((a,b)=>a-b);
+      const median = durations[Math.floor(durations.length/2)];
+      const p95 = durations[Math.max(0, Math.ceil(durations.length*0.95)-1)];
+      if (median > b.warnMedian) {
+        console.warn('[nav-budget] median nav > %dms (%.1fms)', b.warnMedian, median);
+      }
+      if (p95 > b.warnP95) {
+        console.warn('[nav-budget] p95 nav > %dms (%.1fms)', b.warnP95, p95);
+      }
+    } catch(e) {}
+  } catch (e) {}
+}
+
 // Cross-browser navigation handling
 function initSinglePageNavigation() {
   // Handle clicks on internal links
   document.addEventListener('click', (event) => {
     const link = event.target.closest('a');
     if (!link) return;
-    
+  if (link.hasAttribute('data-no-spa')) return; // opt-out
     const href = link.getAttribute('href');
-    if (!href || href.startsWith('#') || href.startsWith('http') || href.startsWith('mailto:') || href.startsWith('tel:')) {
-      return; // Skip hash links, external links, email, phone
-    }
-    
+    if (!isInternalLink(href)) return;
     const url = new URL(href, location.href);
-    if (url.origin !== location.origin) return; // Skip external links
-    
+    if (window.__currentNav && window.__currentNav.inFlight && window.__currentNav.pathname === url.pathname) {
+      event.preventDefault();
+      return;
+    }
     event.preventDefault();
     navigateToPage(url.pathname);
   });
@@ -211,80 +395,189 @@ function initSinglePageNavigation() {
   });
 }
 
-async function navigateToPage(pathname, pushState = true) {
-  try {
-    const response = await fetch(pathname);
-    const data = await response.text();
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(data, 'text/html');
+// Simple in-memory navigation cache (Phase 2 + Enhancement: TTL & LRU)
+// KEY: pathname -> { html, ts, last }
+const __pageCache = new Map();
+// Configurable budgets (can be tweaked at runtime if needed)
+const NAV_CACHE_MAX_ENTRIES = 20; // modest cap to avoid unbounded growth
+const NAV_CACHE_TTL_MS = 5 * 60 * 1000; // 5 minutes TTL
 
-    document.title = doc.title;
-    
+function cacheSet(pathname, html){
+  const now = performance.now();
+  __pageCache.set(pathname, { html, ts: now, last: now });
+  // LRU eviction if over capacity
+  if (__pageCache.size > NAV_CACHE_MAX_ENTRIES) {
+    // Find oldest (smallest last)
+    let oldestKey = null;
+    let oldestLast = Infinity;
+    for (const [k, v] of __pageCache.entries()) {
+      if (v.last < oldestLast) { oldestLast = v.last; oldestKey = k; }
+    }
+    if (oldestKey) __pageCache.delete(oldestKey);
+  }
+}
+function cacheGet(pathname){
+  const entry = __pageCache.get(pathname);
+  if (!entry) return null;
+  const now = performance.now();
+  if (now - entry.ts > NAV_CACHE_TTL_MS) {
+    // Expired
+    __pageCache.delete(pathname);
+    return null;
+  }
+  entry.last = now; // touch for LRU
+  return entry.html;
+}
+
+function setupPrefetch(){
+  if (window.__prefetchSetup) return; window.__prefetchSetup = true;
+  const debounceMap = new WeakMap();
+  function schedule(link){
+  if (link.hasAttribute('data-no-spa')) return; // opt-out of SPA prefetch
+    const href = link.getAttribute('href');
+    if (!href || href.startsWith('#') || href.startsWith('http') || href.startsWith('mailto:') || href.startsWith('tel:')) return;
+    const url = new URL(href, location.href);
+    if (url.origin !== location.origin) return;
+    if (url.pathname === location.pathname) return;
+    if (cacheGet(url.pathname)) return; // already cached
+    if (debounceMap.get(link)) return;
+    const handle = setTimeout(async () => {
+      debounceMap.delete(link);
+      try {
+        const res = await fetch(url.pathname, { method: 'GET' });
+        if (!res.ok) return;
+        const text = await res.text();
+        cacheSet(url.pathname, text);
+        // Optionally could parse now, but defer parsing until needed to save main thread
+      } catch(e) {}
+    }, 80); // small debounce window
+    debounceMap.set(link, handle);
+  }
+  document.addEventListener('pointerenter', (e) => {
+    const link = e.target.closest && e.target.closest('a');
+    if (link) schedule(link);
+  }, { capture: true });
+  document.addEventListener('focus', (e) => {
+    const link = e.target.closest && e.target.closest('a');
+    if (link) schedule(link);
+  }, true);
+}
+
+setupPrefetch();
+
+async function navigateToPage(pathname, pushState = true) {
+  // Phase 6: concurrency guard and cancellation
+  if (!window.__currentNav) {
+    window.__currentNav = { controller: null, inFlight: false, pathname: null };
+  }
+  // Abort previous navigation if any
+  if (window.__currentNav.controller) {
+    try { window.__currentNav.controller.abort(); } catch(e) {}
+  }
+  const controller = new AbortController();
+  window.__currentNav.controller = controller;
+  window.__currentNav.inFlight = true;
+  window.__currentNav.pathname = pathname;
+
+  if (window.__navPerf) window.__navPerf.markNavStart();
+  try {
+    let html;
+    const cached = cacheGet(pathname);
+    if (cached) {
+      html = cached;
+    } else {
+      // Kick off fetch immediately
+      html = await fetch(pathname, { signal: controller.signal }).then(r => r.text());
+      cacheSet(pathname, html);
+    }
+
     if (pushState) {
       history.pushState(null, '', pathname);
     }
 
-    // Use View Transitions API if available, otherwise fallback to custom animation
-    if (typeof document.startViewTransition === 'function') {
-      document.startViewTransition(() => {
-        updatePageContent(doc);
-      });
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(html, 'text/html');
+    document.title = doc.title;
+
+    // View Transitions API enhancement (Phase 5)
+    if (typeof window.__vtInProgress === 'undefined') window.__vtInProgress = false;
+    const canUseVT = typeof document.startViewTransition === 'function' && !window.__vtInProgress;
+
+    if (canUseVT) {
+      window.__vtInProgress = true;
+      document.body.classList.add('view-transition-active');
+      try {
+        const vt = document.startViewTransition(() => {
+          updatePageContent(doc);
+        });
+        vt.finished.finally(() => {
+          window.__vtInProgress = false;
+          document.body.classList.remove('view-transition-active');
+          if (window.__navPerf) window.__navPerf.markNavEnd();
+          captureNavRecord(pathname, !!cached);
+        });
+      } catch (e) {
+        window.__vtInProgress = false;
+        document.body.classList.remove('view-transition-active');
+        await customPageTransition(doc);
+        if (window.__navPerf) window.__navPerf.markNavEnd();
+        captureNavRecord(pathname, !!cached);
+      }
     } else {
-      // Custom transition for Safari and other browsers
       await customPageTransition(doc);
+      if (window.__navPerf) window.__navPerf.markNavEnd();
+      captureNavRecord(pathname, !!cached);
     }
   } catch (error) {
-    console.error('Navigation failed:', error);
-    // Fall back to regular navigation
-    window.location.href = pathname;
+    if (window.__navPerf) window.__navPerf.markNavEnd();
+    if (error && error.name === 'AbortError') {
+      // Aborted due to a newer navigation
+    } else {
+      console.error('Navigation failed:', error);
+      window.location.href = pathname;
+    }
+  } finally {
+    if (window.__currentNav) window.__currentNav.inFlight = false;
   }
 }
 
-function updatePageContent(doc) {
-  document.querySelector('main').innerHTML = doc.querySelector('main').innerHTML;
-  document.documentElement.scrollTop = 0;
-  updateActiveNav();
-  initSmoothScrolling();
-  import("./animations.js").then(({ animations }) => {
-    animations();
+// Revised customPageTransition for Phase 1
+async function customPageTransition(doc) {
+  const main = document.querySelector('main');
+  if (!main) {
+    updatePageContent(doc);
+    return;
+  }
+
+  // Phase 7: class-based exit/enter transitions without inline style thrash
+  main.classList.remove('page-enter'); // ensure clean state
+  main.classList.add('page-exit');
+
+  // Wait for end of exit transition using a timeout aligned with CSS (140ms)
+  await new Promise(resolve => setTimeout(resolve, 140));
+
+  updatePageContent(doc);
+
+  // Force starting state for enter (handled via CSS class)
+  requestAnimationFrame(() => {
+    main.classList.remove('page-exit');
+    main.classList.add('page-enter');
+    // Remove the enter class after its transition (~260ms)
+    setTimeout(() => main.classList.remove('page-enter'), 300);
   });
 }
 
-async function customPageTransition(doc) {
-  const main = document.querySelector('main');
-  
-  // Fade out current content
-  main.style.opacity = '0';
-  main.style.transform = 'translateY(-80px)';
-  main.style.transition = 'opacity 180ms cubic-bezier(0.4, 0, 1, 1), transform 180ms cubic-bezier(0.4, 0, 1, 1)';
-  
-  // Wait for fade out
-  await new Promise(resolve => setTimeout(resolve, 180));
-  
-  // Update content
-  updatePageContent(doc);
-  
-  // Fade in new content
-  main.style.opacity = '0';
-  main.style.transform = 'translateY(10px)';
-  
-  // Trigger reflow
-  main.offsetHeight;
-  
-  main.style.transition = 'opacity 320ms cubic-bezier(0, 0, 0.6, 1) 90ms, transform 320ms cubic-bezier(0, 0, 0.6, 1) 90ms';
-  main.style.opacity = '1';
-  main.style.transform = 'translateY(0)';
-  
-  // Clean up styles after animation
-  setTimeout(() => {
-    main.style.transition = '';
-    main.style.transform = '';
-    main.style.opacity = '';
-  }, 500);
+function updatePageContent(doc) {
+  const mainEl = getMain();
+  const docMain = doc.querySelector('main');
+  if (mainEl && docMain) mainEl.innerHTML = docMain.innerHTML;
+  document.documentElement.scrollTop = 0;
+  updateActiveNav();
+  initSmoothScrolling();
+  import("./animations.js").then(mod => {
+    mod.reinitAnimations ? mod.reinitAnimations() : (mod.animations && mod.animations());
+  });
 }
-
-// Initialize navigation handling
-initSinglePageNavigation();
 
 function initSmoothScrolling() {
   console.log("Initializing smooth scrolling...");

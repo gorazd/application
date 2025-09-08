@@ -477,3 +477,19 @@ footer p {
   animation-delay: 90ms;
   animation-fill-mode: both;
 }
+
+/* Phase 7: Class-based page transitions (fallback / non-ViewTransition browsers) */
+main.page-exit {
+  opacity: 0;
+  transform: translateY(-60px);
+  transition: opacity 140ms cubic-bezier(0.4,0,1,1), transform 140ms cubic-bezier(0.4,0,1,1);
+}
+main.page-enter {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 260ms cubic-bezier(0,0,0.6,1), transform 260ms cubic-bezier(0,0,0.6,1);
+}
+body.view-transition-active main {
+  /* Optional styling hook while native view transition active */
+  will-change: opacity, transform;
+}

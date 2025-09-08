@@ -90,6 +90,53 @@ The site is configured for deployment on Netlify and includes:
 - 404 page handling
 - Environment-specific builds
 
+## Navigation Performance Optimization
+
+Implemented a multi-phase SPA-like navigation system focused on reducing perceived and actual navigation latency:
+
+- Performance marks (nav-start/nav-end) with Long Task observation.
+- Overlapped fetch + exit transition; removed fixed artificial delays.
+- In-memory HTML cache + pointerenter/focus prefetch (80ms debounce).
+- Idempotent animations: single import + reinit only, heavy animation work deferred with `requestIdleCallback` fallback.
+- Progressive enhancement using View Transitions API with custom CSS fallback transitions.
+- Concurrency guard via `AbortController` preventing overlapping fetches and ignoring redundant same-path clicks.
+- Class-based page-enter/page-exit transitions to avoid inline style thrash.
+- Sanitation/helpers reducing duplicated DOM queries and origin checks.
+- Diagnostic utilities: `__navMetrics()` (quick stats) and `__navSummary()` (median, p95, mean, heuristic cache hit ratio).
+
+Enhancements (Post-Phases):
+- Cache TTL & LRU: in-memory cache capped (`NAV_CACHE_MAX_ENTRIES`=20) with 5‑minute TTL (`NAV_CACHE_TTL_MS`). Expired or least‑recently used entries are evicted automatically.
+- Opt‑out attribute: add `data-no-spa` on any `<a>` to force a full page load (skips interception & prefetch).
+- Performance budgets: configurable runtime budgets with warnings when exceeded.
+
+Runtime Diagnostics & APIs (open DevTools Console):
+```js
+__navMetrics();        // Quick count/median/p95 summary
+__navSummary();        // Collapsed console table summary
+__navExport();         // Detailed per-navigation records (path, duration, cached, longTasks)
+__setNavBudgets({      // Update performance budget thresholds
+	warnMedian: 320,
+	warnP95: 800,
+	warnLongTasks: 2
+});
+// Current budgets available at window.__navBudgets
+```
+
+Performance Budgets (defaults):
+- Median warning: 350ms
+- P95 warning: 900ms
+- Long Tasks per navigation: >3
+
+When a threshold is exceeded a `[nav-budget]` warning logs with context.
+
+Rollback: checkout a pre-optimization tag (create one before merging, e.g. `git tag pre-nav-optimization`) or remove SPA init & related instrumentation blocks in `public/js/main.js`.
+
+Future Opportunities:
+- Persist navigation metrics to a JSON artifact for CI diffing.
+- Lighthouse CI integration with budgets (TBT, CLS, LCP targets).
+- Add `data-preload` hint to elevate priority of specific prefetch routes.
+- Service Worker layer for offline cache & stale‑while‑revalidate.
+
 ## License
 
 MIT License

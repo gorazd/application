@@ -493,3 +493,17 @@ body.view-transition-active main {
   /* Optional styling hook while native view transition active */
   will-change: opacity, transform;
 }
+
+.skills ul {
+  padding: 0;
+  margin: 0;
+}
+.skills ul li{
+
+  list-style: none;
+  padding: 0;
+  margin: .25rem 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: calc(var(--spacing-unit) / 2);
+}

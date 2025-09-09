@@ -30,7 +30,7 @@ Results-driven Front-End Designer with 10+ years of experience creating intuitiv
 
 </section> 
 
-<section>
+<section class="skills">
 
 ## <span id="skills"></span>Skills
 

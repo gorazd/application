@@ -12,18 +12,25 @@ description: A creative front-end designer and developer with a passion for buil
 <p class="introduction">This website was <strong>designed and built from scratch</strong>, and it's a little sample of what I can do. You can find my <a href="/portfolio/">latest works</a>, <a href="/cover-letter/">cover letter</a>, and <a href="/cv/">CV</a>.</p>
 </section>
 
-
 <section>
 
+## Qualifications 
 
-### Guiding Principles
-
-To grow, I learn, update, expand, and edit my identity. Starting with a solid design I subject everything to human review. When writing code I don't vibe code but use the AI as a pair programmer, or a powerful tool in my engineering toolkit.
+With over 20 years of front-end development experience, I have built expertise across the full spectrum of **web technologies** and **user interface design**. I currently serve as a front-end instructor at SPD, where I teach modern development practices while continuing to work on client projects and staying current with evolving industry standards.
 
 </section>
+
 <section>
 
-### Beyond the Pixels
+
+## Guiding Principles
+
+To grow, I learn, update, expand, and edit my identity. Starting with a solid design I subject everything to human review. When writing code I don't vibe code but use the AI as a pair programmer, or a powerful tool in my engineering toolkit.
+</section>
+
+<section>
+
+## Beyond the Pixels
 
 Art and design, nature and science. There is a wide range of things that fascinate and appeal to me.
 

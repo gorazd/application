@@ -26,7 +26,7 @@ description: Results-driven Front-End Designer with 10+ years of experience crea
 
 ## <span id="professional-summary"></span>Professional Summary
 
-Results-driven Front-End Designer with 10+ years of experience creating intuitive and engaging experiences for mobile and desktop applications. Developing projects from start to finish and collaborating effectively with various teams.
+Front-end Designer & Developer with over 20 years of front-end development experience. Developing projects from first pixel to production while  collaborating effectively with various teams.
 
 </section> 
 
@@ -35,7 +35,7 @@ Results-driven Front-End Designer with 10+ years of experience creating intuitiv
 ## <span id="skills"></span>Skills
 
 *   **Front-end:** HTML, CSS, JavaScript
-*   **Front-end Libraries:** GSAP, ThreeJS
+*   **JavaScript Libraries:** GSAP, ThreeJS
 *   **UX/UI Design:** Wireframing, Prototyping, Interaction Design, User Research, User Flows, Visual Design, Usability Testing
 *   **Design Tools:** Photoshop, After Effects, Figma, Sketch, Illustrator, Blender, InDesign, Qgis
 *   **Prototyping Tools:** Framer, HTML and JS

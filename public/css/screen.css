@@ -97,8 +97,14 @@ h6 {
 }
 
 .signature {
-  width: 300px;
+  max-width: 600px;
   height: auto;
+}
+
+.cls-1{
+  fill: none;
+  stroke: var(--text-color);
+  stroke-miterlimit: 1
 }
 
 .introduction {

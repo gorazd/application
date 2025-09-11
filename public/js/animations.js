@@ -73,14 +73,14 @@ function animateSignature() {
       start: "top 90%",
       end: "50% 80%",
       toggleActions: "play none none reverse",
-      scrub: 3
+      scrub: 2
     }
   });
   paths.forEach(path => {
     signatureTimeline.to(path, {
       drawSVG: "100%",
       duration: 1,
-      ease: "power4.out"
+      ease: "none"
     });
   });
 }

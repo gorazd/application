@@ -4,8 +4,8 @@
 
 :root {
   color-scheme: light dark;
-  --font-body: 'PPSupplyMono', sans-serif;
-  --font-sans: 'PPSupplySans', sans-serif;
+  --font-body: 'PPSupplyMono', monospace;;
+  --font-sans: 'PPSupplySans', monospace;
 
   --background-color: #e3e5e2;
   --text-color: #333;
@@ -26,7 +26,7 @@
 
 html.dark {
   color-scheme: dark;
-  --background-color: #1a1a1a;
+  --background-color: #2b2222;
   --text-color: #f0f0f0;
   --link-color: #8ab4f8;
   --border-color: #444;
@@ -51,6 +51,8 @@ html.dark {
 }
 
 body {
+
+    font-family: ui-monospace, 'Cascadia Code', 'Source Code Pro', Menlo, Consolas, 'DejaVu Sans Mono', monospace;
   font-family: var(--font-body);
   font-size: var(--font-size-base);
   line-height: 1.6;

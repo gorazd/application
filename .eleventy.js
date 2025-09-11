@@ -7,7 +7,8 @@ export default function(eleventyConfig) {
   eleventyConfig.addPassthroughCopy({
     "public/css": "/css",
     "public/fonts": "/fonts",
-    "public/images": "/images"
+    "public/images": "/images",
+    "public/images/icons": "/"
   });
 
   eleventyConfig.ignores.add("public/js/");

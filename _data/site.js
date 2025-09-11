@@ -1,4 +1,5 @@
 export default {
-  title: "Gorazd Guštin",
-  author: "Gorazd Guštin"
+  title: "Gorazd Guštin - Front-end Designer & Developer",
+  author: "Gorazd Guštin",
+  url: "https://application.qua.si",
 };

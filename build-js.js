@@ -57,7 +57,23 @@ async function build() {
     console.log(`📦 Building JavaScript (${isProd ? 'production' : 'development'})...`);
     
     if (isWatch) {
-        const context = await esbuild.context(buildOptions);
+        const context = await esbuild.context({
+          ...buildOptions,
+          plugins: [{
+            name: 'stable-alias-watch',
+            setup(build) {
+              build.onEnd(async (result) => {
+                try {
+                  if (result.metafile) {
+                    await writeStableAlias(result.metafile);
+                  }
+                } catch (e) {
+                  console.warn('[alias] watch alias failed', e);
+                }
+              });
+            }
+          }]
+        });
         await context.watch();
         console.log('👀 Watching JavaScript files...');
     } else {

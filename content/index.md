@@ -48,3 +48,5 @@ To grow, I learn, update, expand, and edit my identity. Starting with a solid de
 Art and design, nature and science. There is a wide range of things that fascinate and appeal to me.
 
 </section>
+
+<div id="three-root"></div>

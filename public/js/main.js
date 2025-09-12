@@ -27,12 +27,13 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ScrollToPlugin } from "gsap/ScrollToPlugin";
 import { SplitText } from "gsap/SplitText";
 import { DrawSVGPlugin } from "gsap/DrawSVGPlugin";
+// Removed maybeInitThree in favor of dedicated loader module
+// async function maybeInitThree() { ... }
 
-// Helper to lazy load three scene only if needed
-async function maybeInitThree() {
+async function setupThreeLoaderIfNeeded() {
   if (document.getElementById('three-root')) {
-    const mod = await import('./three-init.js');
-    mod.initThreeScene && mod.initThreeScene();
+    const mod = await import('./three-loader.js');
+    mod.setupThreeLoader && mod.setupThreeLoader();
   }
 }
 
@@ -219,7 +220,7 @@ document.addEventListener('DOMContentLoaded', () => {
     mod.initAnimationsOnce && mod.initAnimationsOnce();
     mod.reinitAnimations && mod.reinitAnimations();
   });
-  maybeInitThree();
+  setupThreeLoaderIfNeeded();
 
   const body = document.querySelector('body');
   const header = document.querySelector('header');
@@ -586,7 +587,7 @@ function updatePageContent(doc) {
   import("./animations.js").then(mod => {
     mod.reinitAnimations ? mod.reinitAnimations() : (mod.animations && mod.animations());
   });
-  maybeInitThree();
+  setupThreeLoaderIfNeeded();
 }
 
 function initSmoothScrolling() {

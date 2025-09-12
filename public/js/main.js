@@ -27,6 +27,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ScrollToPlugin } from "gsap/ScrollToPlugin";
 import { SplitText } from "gsap/SplitText";
 import { DrawSVGPlugin } from "gsap/DrawSVGPlugin";
+import { initThreeScene } from './three-init.js';
 
 // Navigation performance instrumentation (Phase 0)
 // ------------------------------------------------
@@ -211,6 +212,7 @@ document.addEventListener('DOMContentLoaded', () => {
     mod.initAnimationsOnce && mod.initAnimationsOnce();
     mod.reinitAnimations && mod.reinitAnimations();
   });
+  initThreeScene();
 
   const body = document.querySelector('body');
   const header = document.querySelector('header');
@@ -577,6 +579,7 @@ function updatePageContent(doc) {
   import("./animations.js").then(mod => {
     mod.reinitAnimations ? mod.reinitAnimations() : (mod.animations && mod.animations());
   });
+  initThreeScene();
 }
 
 function initSmoothScrolling() {

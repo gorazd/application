@@ -26,5 +26,8 @@
     "esbuild": "^0.25.9",
     "gsap": "^3.13.0",
     "html-minifier-terser": "^7.2.0"
+  },
+  "dependencies": {
+    "three": "^0.180.0"
   }
 }

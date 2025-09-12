@@ -6,8 +6,13 @@ const isProd = process.env.ELEVENTY_ENV === 'production';
 
 const buildOptions = {
   entryPoints: ['public/js/main.js'],
-  outfile: '_site/js/main.bundle.js',
+  // Use outdir + code splitting (esbuild will create a main bundle + shared chunks)
+  outdir: '_site/js',
+  entryNames: '[name]-[hash]',
+  assetNames: 'assets/[name]-[hash]',
+  chunkNames: 'chunks/[name]-[hash]',
   bundle: true,
+  splitting: true,
   minify: isProd,
   sourcemap: isProd ? 'external' : 'inline',
   target: ['es2020'],

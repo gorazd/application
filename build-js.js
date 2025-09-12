@@ -1,5 +1,6 @@
 import * as esbuild from 'esbuild';
 import path from 'path';
+import { promises as fs } from 'fs';
 
 const isWatch = process.argv.includes('--watch');
 const isProd = process.env.ELEVENTY_ENV === 'production';
@@ -32,6 +33,25 @@ const buildOptions = {
   drop: isProd ? [] : [],
 };
 
+async function writeStableAlias(metafile) {
+  // Find the emitted main entry file and copy to main.bundle.js for template stability.
+  const outputs = Object.keys(metafile.outputs || {});
+  const mainOut = outputs.find(o => /\/main-[A-Z0-9]{8}\.js$/i.test(o) || /\/main-[A-Z0-9]{6,}\.js$/i.test(o));
+  if (!mainOut) {
+    console.warn('[alias] Could not locate hashed main output for aliasing.');
+    return;
+  }
+  const absOut = path.resolve(mainOut);
+  const stablePath = path.resolve('_site/js/main.bundle.js');
+  try {
+    const code = await fs.readFile(absOut);
+    await fs.writeFile(stablePath, code);
+    console.log(`[alias] Wrote stable alias: ${stablePath}`);
+  } catch (e) {
+    console.warn('[alias] Failed to write stable alias:', e);
+  }
+}
+
 async function build() {
   try {
     console.log(`📦 Building JavaScript (${isProd ? 'production' : 'development'})...`);
@@ -46,6 +66,7 @@ async function build() {
         if (result.metafile) {
           const analysis = await esbuild.analyzeMetafile(result.metafile, { color: true });
           console.log('📊 Bundle analysis:\n', analysis);
+          await writeStableAlias(result.metafile);
         }
         
         console.log('✅ JavaScript build complete');

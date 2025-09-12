@@ -26,7 +26,7 @@ description: Results-driven Front-End Designer with 10+ years of experience crea
 
 ## <span id="professional-summary"></span>Professional Summary
 
-Front-end Designer & Developer with over 20 years of front-end development experience. Developing projects from first pixel to production while  collaborating effectively with various teams.
+Front-end Designer & Developer with over 20 years of front-end development experience. Developing projects from pixels to production while collaborating effectively with various studios and agencies.
 
 </section> 
 

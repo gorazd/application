@@ -28,6 +28,7 @@ description: A creative front-end designer and developer with a passion for buil
 
 ## Qualifications 
 
+Developing projects from pixels to production while collaborating effectively with various studios and agencies.
 With over 20 years of front-end development experience, I have built expertise across the full spectrum of **web technologies** and **user interface design**. I currently serve as a front-end instructor at SPD, where I teach modern development practices while continuing to work on client projects and staying current with evolving industry standards.
 
 </section>

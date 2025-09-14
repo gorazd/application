@@ -5,15 +5,17 @@ import {
   Scene,
   PerspectiveCamera,
   WebGLRenderer,
-  CylinderGeometry,
-  MeshStandardMaterial,
-  MeshPhysicalMaterial,
-  Mesh,
   HemisphereLight,
   DirectionalLight,
   SRGBColorSpace,
-  Group
+  Group,
+  Box3,
+  Vector3,
+  PMREMGenerator,
+  ACESFilmicToneMapping
 } from 'three';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment.js';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
@@ -21,10 +23,19 @@ gsap.registerPlugin(ScrollTrigger);
 
 let __threeMounted = false;
 let __resizeHandler = null;
+let __rafId = 0;
+let __renderer = null;
+let __spinTween = null;
 
 export function initThreeScene() {
-  const container = document.getElementById('three-root') || document.body;
-  if (!container || __threeMounted) return; // Prevent duplicate init
+  const container = document.getElementById('three-root');
+  if (!container) return; // Only initialize on pages with #three-root
+
+  // If previously mounted but canvas got removed (due to SPA swap), allow re-init
+  if (__threeMounted && (!__renderer || !__renderer.domElement || !document.contains(__renderer.domElement))) {
+    __threeMounted = false;
+  }
+  if (__threeMounted) return; // still active and attached, don't duplicate
 
   const scene = new Scene();
   // Transparent background so underlying page shows through
@@ -34,13 +45,22 @@ export function initThreeScene() {
   camera.position.set(0, 0, 3);
   camera.lookAt(0, 0, 0);
 
+  // (guard handled above)
+
   const renderer = new WebGLRenderer({ antialias: true, alpha: true, preserveDrawingBuffer: false });
   renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
   renderer.setSize(400, 400, false);
   renderer.outputColorSpace = SRGBColorSpace;
   renderer.physicallyCorrectLights = true;
   renderer.toneMappingExposure = 1.1;
+  renderer.toneMapping = ACESFilmicToneMapping;
   container.appendChild(renderer.domElement);
+  __renderer = renderer;
+  // Lightweight environment for proper metal reflections
+  const pmrem = new PMREMGenerator(renderer);
+  const envTex = pmrem.fromScene(new RoomEnvironment(renderer), 0.04).texture;
+  scene.environment = envTex;
+  pmrem.dispose();
 
   // Style canvas as fixed overlay top-right
   Object.assign(renderer.domElement.style, {
@@ -50,66 +70,41 @@ export function initThreeScene() {
     width: '400px',
     height: '400px',
     pointerEvents: 'none', // allow clicks to pass through
-    zIndex: '9999'
+  zIndex: '-1'
   });
 
-  // Golden coin: thin cylinder with high metalness and low roughness
+  // Load coin GLB and center/scale
   const coinGroup = new Group();
-  const radiusTop = 0.9;
-  const radiusBottom = 0.9;
-  const height = 0.22;
-  const radialSegments = 96;
-  const heightSegments = 1;
-  const openEnded = false;
-  const coinGeo = new CylinderGeometry(radiusTop, radiusBottom, height, radialSegments, heightSegments, openEnded);
-  // Add reeded (grooved) edge by alternating slight radial offsets on side vertices
-  (function addEdgeGrooves(g, segments) {
-    const pos = g.getAttribute('position');
-    const normal = g.getAttribute('normal');
-    const sideVertexCount = (segments + 1) * 2; // side section only (top & bottom rings)
-    const ampOut = 0.012; // outward ridge
-    const ampIn = -0.008; // inward groove
-    for (let i = 0; i < sideVertexCount; i++) {
-      // normals of side vertices have ~0 y component
-      const ny = normal.getY(i);
-      if (Math.abs(ny) < 0.25) { // ensure it's a side vertex
-        const radialIndex = i % (segments + 1);
-        const sx = pos.getX(i);
-        const sz = pos.getZ(i);
-        const r = Math.sqrt(sx * sx + sz * sz) || 1;
-        const dirX = sx / r;
-        const dirZ = sz / r;
-        const delta = (radialIndex % 2 === 0) ? ampOut : ampIn;
-        pos.setX(i, sx + dirX * delta);
-        pos.setZ(i, sz + dirZ * delta);
-      }
-    }
-    pos.needsUpdate = true;
-    g.computeVertexNormals();
-    g.computeBoundingSphere();
-  })(coinGeo, radialSegments);
-  // Slight normal tweak: scale in Y to emphasize thinness visually
-  const goldMaterial = new MeshPhysicalMaterial({
-    color: 0xE6C200, // slightly warmer than pure FF
-    metalness: 1.0,
-    roughness: 0.15,
-    clearcoat: 0.55,
-    clearcoatRoughness: 0.2,
-    sheen: 0.0,
-    reflectivity: 1.0
-  });
-  const coinMesh = new Mesh(coinGeo, goldMaterial);
-  coinMesh.rotation.x = Math.PI * 0.5; // face camera initially
-  coinGroup.add(coinMesh);
-
-  // Add a subtle rim detail by duplicating slightly scaled geometry with darker tone
-  const rimMaterial = new MeshStandardMaterial({ color: 0xB8860B, metalness: 0.9, roughness: 0.35 });
-  const rim = new Mesh(coinGeo.clone(), rimMaterial);
-  rim.scale.set(1.01, 1.0, 1.01); // slight outward to avoid z-fighting
-  rim.rotation.x = Math.PI * 0.5; // match coin face orientation
-  coinGroup.add(rim);
-
   scene.add(coinGroup);
+  const loader = new GLTFLoader();
+  loader.load('/model/cyl.glb', (gltf) => {
+    const root = gltf.scene || gltf.scenes[0];
+    if (!root) return;
+    // Normalize pivot to center
+    const box = new Box3().setFromObject(root);
+    const size = new Vector3();
+    const center = new Vector3();
+    box.getSize(size);
+    box.getCenter(center);
+    root.position.sub(center);
+    // Scale to fit roughly into unit radius
+    const maxDim = Math.max(size.x, size.y, size.z) || 1;
+    const target = 1.8; // desired overall diameter in our 400x400 frame
+    const s = target / maxDim;
+    root.scale.setScalar(s);
+    // Face camera initially (X+90deg)
+    root.rotation.x = Math.PI * 0.5;
+    // Ensure materials leverage environment reflections
+    root.traverse((obj) => {
+      if (obj.isMesh && obj.material) {
+        const apply = (m) => { if (m) { m.envMapIntensity = 1.2; m.needsUpdate = true; } };
+        if (Array.isArray(obj.material)) obj.material.forEach(apply); else apply(obj.material);
+      }
+    });
+    coinGroup.add(root);
+  }, undefined, (err) => {
+    console.error('[three] Failed to load coin.glb', err);
+  });
 
   const hemi = new HemisphereLight(0xffffff, 0x3a2a14, 0.9); // subtle warm ground tint
   scene.add(hemi);
@@ -134,9 +129,9 @@ export function initThreeScene() {
 
   // Scroll-driven rotation with GSAP ScrollTrigger
   // Spin coin around vertical axis while giving slight tumble
-  gsap.to(coinGroup.rotation, {
-    y: Math.PI * 6,
-    x: '+=' + (Math.PI * 0.25),
+  __spinTween = gsap.to(coinGroup.rotation, {
+    y: Math.PI * 16,
+    x: '+=' + (Math.PI * 3.25),
     ease: 'none',
     scrollTrigger: {
       trigger: document.body,
@@ -148,7 +143,7 @@ export function initThreeScene() {
 
   function render() {
     renderer.render(scene, camera);
-    requestAnimationFrame(render); // keep lightweight loop so gsap-updated values display
+    __rafId = requestAnimationFrame(render); // keep lightweight loop so gsap-updated values display
   }
   render();
 
@@ -161,6 +156,8 @@ export function initThreeScene() {
   window.addEventListener('resize', handleResize);
 
   __threeMounted = true;
+  // Expose disposer for SPA lifecycle
+  window.__disposeThree = disposeThreeScene;
   if (import.meta && import.meta.env && import.meta.env.DEV) {
     console.info('[three] scene initialized');
   } else {
@@ -170,7 +167,13 @@ export function initThreeScene() {
 
 // Optional cleanup if needed in the future
 export function disposeThreeScene() {
-  if (!__threeMounted) return;
-  window.removeEventListener('resize', __resizeHandler);
+  if (!__threeMounted && !__renderer) return;
+  try { window.removeEventListener('resize', __resizeHandler); } catch(e) {}
+  try { if (__spinTween) { __spinTween.scrollTrigger && __spinTween.scrollTrigger.kill(); __spinTween.kill(); } } catch(e) {}
+  try { if (__rafId) cancelAnimationFrame(__rafId); } catch(e) {}
+  try { if (__renderer && __renderer.domElement && __renderer.domElement.parentNode) __renderer.domElement.parentNode.removeChild(__renderer.domElement); } catch(e) {}
+  __spinTween = null;
+  __renderer = null;
+  __rafId = 0;
   __threeMounted = false;
 }

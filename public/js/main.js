@@ -566,6 +566,8 @@ async function customPageTransition(doc) {
   // Wait for end of exit transition using a timeout aligned with CSS (140ms)
   await new Promise(resolve => setTimeout(resolve, 140));
 
+  // Dispose Three scene before DOM swap if present (prevents orphaned canvas)
+  try { if (window.__disposeThree) window.__disposeThree(); } catch(e) {}
   updatePageContent(doc);
 
   // Force starting state for enter (handled via CSS class)

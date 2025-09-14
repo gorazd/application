@@ -9,13 +9,18 @@
 let loadStarted = false;
 let loadCompleted = false;
 let pendingPromise = null;
+let cachedModule = null; // keep reference to call init again on revisit
 
 function dynamicImport() {
-  if (loadCompleted) return Promise.resolve();
+  if (loadCompleted) {
+    try { cachedModule && cachedModule.initThreeScene && cachedModule.initThreeScene(); } catch(e) {}
+    return Promise.resolve();
+  }
   if (pendingPromise) return pendingPromise;
   loadStarted = true;
   pendingPromise = import('./three-init.js')
     .then(mod => {
+      cachedModule = mod;
       if (mod.initThreeScene) mod.initThreeScene();
       loadCompleted = true;
     })
@@ -28,7 +33,12 @@ function dynamicImport() {
 export function setupThreeLoader(options = {}) {
   const root = document.getElementById('three-root');
   if (!root) return; // Page doesn't need Three.
-  if (loadCompleted || loadStarted) return;
+  // If already loaded previously, just (re)init immediately
+  if (loadCompleted) {
+    try { cachedModule && cachedModule.initThreeScene && cachedModule.initThreeScene(); } catch(e) {}
+    return;
+  }
+  if (loadStarted) return;
 
   const margin = options.rootMargin || '300px';
   const prefetchDelay = options.prefetchDelay || 2500; // ms

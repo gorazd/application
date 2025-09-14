@@ -8,7 +8,8 @@ export default function(eleventyConfig) {
     "public/css": "/css",
     "public/fonts": "/fonts",
     "public/images": "/images",
-    "public/images/icons": "/"
+    "public/images/icons": "/",
+    "public/model": "/model"
   });
 
   eleventyConfig.ignores.add("public/js/");

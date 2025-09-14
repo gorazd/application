@@ -120,3 +120,6 @@ SPD Master's Graduate (Web Design, 2005) | Industry experience in interactive we
 - 2008 | Flash on the Beach, Brighton (Papervision 3D Workshop)
 
 </section>
+
+
+<div id="three-root"></div>

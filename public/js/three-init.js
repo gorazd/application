@@ -4,18 +4,20 @@
 import {
   Scene,
   PerspectiveCamera,
-  WebGLRenderer,
   HemisphereLight,
   DirectionalLight,
   SRGBColorSpace,
   Group,
   Box3,
   Vector3,
-  PMREMGenerator,
   ACESFilmicToneMapping
 } from 'three';
+import { WebGPURenderer } from 'three/webgpu';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
-import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment.js';
+// TSL (Three Shader Language) utilities for halftone effect
+import { color as tslColor, mix, normalWorld, output, Fn, uniform, vec4, rotate, screenCoordinate, screenSize } from 'three/tsl';
+// Node-based material compatible with TSL (exported from three/webgpu build)
+import { MeshStandardNodeMaterial } from 'three/webgpu';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
@@ -26,8 +28,13 @@ let __resizeHandler = null;
 let __rafId = 0;
 let __renderer = null;
 let __spinTween = null;
+let __clockStart = 0;
 
-export function initThreeScene() {
+// Halftone configuration (adapted from three.js WebGPU TSL example)
+let __halftoneSettings = null;
+let __halftonesFn = null;
+
+export async function initThreeScene() {
   const container = document.getElementById('three-root');
   if (!container) return; // Only initialize on pages with #three-root
 
@@ -47,7 +54,8 @@ export function initThreeScene() {
 
   // (guard handled above)
 
-  const renderer = new WebGLRenderer({ antialias: true, alpha: true, preserveDrawingBuffer: false });
+  // Use WebGPU renderer (auto-fallback to WebGL2 if not supported)
+  const renderer = new WebGPURenderer({ antialias: true, alpha: true });
   renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
   renderer.setSize(400, 400, false);
   renderer.outputColorSpace = SRGBColorSpace;
@@ -56,11 +64,16 @@ export function initThreeScene() {
   renderer.toneMapping = ACESFilmicToneMapping;
   container.appendChild(renderer.domElement);
   __renderer = renderer;
-  // Lightweight environment for proper metal reflections
-  const pmrem = new PMREMGenerator(renderer);
-  const envTex = pmrem.fromScene(new RoomEnvironment(renderer), 0.04).texture;
-  scene.environment = envTex;
-  pmrem.dispose();
+  // Ensure WebGPU backend is initialized before PMREM or rendering
+  try {
+    if (typeof renderer.init === 'function') {
+      await renderer.init();
+    }
+  } catch (e) {
+    console.warn('[three] renderer.init failed (falling back if possible):', e);
+  }
+  __clockStart = performance.now();
+  // (IBL environment disabled to ensure compatibility across WebGPU/WebGL backends.)
 
   // Style canvas as fixed overlay top-right
   Object.assign(renderer.domElement.style, {
@@ -94,11 +107,42 @@ export function initThreeScene() {
     root.scale.setScalar(s);
     // Face camera initially (X+90deg)
     root.rotation.x = Math.PI * 0.5;
-    // Ensure materials leverage environment reflections
+    // Ensure materials leverage environment reflections and apply halftone TSL output
+    ensureHalftoneSetup();
     root.traverse((obj) => {
       if (obj.isMesh && obj.material) {
-        const apply = (m) => { if (m) { m.envMapIntensity = 1.2; m.needsUpdate = true; } };
-        if (Array.isArray(obj.material)) obj.material.forEach(apply); else apply(obj.material);
+        const convertMaterial = (m) => {
+          if (!m) return m;
+          // Preserve basic PBR params if present
+          const baseParams = {
+            color: (m.color && m.color.clone) ? m.color.clone() : undefined,
+            roughness: typeof m.roughness === 'number' ? m.roughness : 0.5,
+            metalness: typeof m.metalness === 'number' ? m.metalness : 0.0,
+            map: m.map || null,
+            normalMap: m.normalMap || null,
+            roughnessMap: m.roughnessMap || null,
+            metalnessMap: m.metalnessMap || null,
+            envMapIntensity: typeof m.envMapIntensity === 'number' ? m.envMapIntensity : 1.2,
+          };
+          let nodeMat;
+          try {
+            nodeMat = new MeshStandardNodeMaterial(baseParams);
+          } catch (e) {
+            // Fallback to original material if node material unavailable
+            m.envMapIntensity = baseParams.envMapIntensity;
+            m.needsUpdate = true;
+            return m;
+          }
+          nodeMat.envMapIntensity = baseParams.envMapIntensity;
+          if (__halftonesFn) nodeMat.outputNode = __halftonesFn(output);
+          nodeMat.needsUpdate = true;
+          return nodeMat;
+        };
+        if (Array.isArray(obj.material)) {
+          obj.material = obj.material.map(convertMaterial);
+        } else {
+          obj.material = convertMaterial(obj.material);
+        }
       }
     });
     coinGroup.add(root);
@@ -142,6 +186,15 @@ export function initThreeScene() {
   });
 
   function render() {
+    // Animate one of the halftone directions for subtle motion
+    if (__halftoneSettings && __halftoneSettings[1]) {
+      const t = (performance.now() - __clockStart) * 0.001;
+      const u = __halftoneSettings[1].uniforms;
+      if (u && u.direction && u.direction.value) {
+        u.direction.value.x = Math.cos(t);
+        u.direction.value.y = Math.sin(t);
+      }
+    }
     renderer.render(scene, camera);
     __rafId = requestAnimationFrame(render); // keep lightweight loop so gsap-updated values display
   }
@@ -176,4 +229,98 @@ export function disposeThreeScene() {
   __renderer = null;
   __rafId = 0;
   __threeMounted = false;
+}
+
+// Create halftone settings and shader graph once
+function ensureHalftoneSetup() {
+  if (__halftoneSettings && __halftonesFn) return;
+
+  // Settings array (colors and layers inspired by the official example)
+  __halftoneSettings = [
+    // purple shade
+    {
+      count: 140,
+      color: '#fb00ff',
+      direction: new Vector3(-0.4, -1.0, 0.5),
+      start: 1.0,
+      end: 0.0,
+      mixLow: 0.0,
+      mixHigh: 0.5,
+      radius: 0.8,
+    },
+    // orange shade
+    {
+      count: 120,
+      color: '#ff622e',
+      direction: new Vector3(0.5, -1.0, 0.2),
+      start: 0.8,
+      end: -0.1,
+      mixLow: 0.0,
+      mixHigh: 0.6,
+      radius: 0.8,
+    },
+    // cyan highlight
+    {
+      count: 180,
+      color: '#94ffd1',
+      direction: new Vector3(0.5, 0.5, -0.2),
+      start: 0.55,
+      end: 0.2,
+      mixLow: 0.5,
+      mixHigh: 1.0,
+      radius: 0.8,
+    },
+  ];
+
+  // Attach TSL uniforms per settings
+  for (const s of __halftoneSettings) {
+    const uniforms = {};
+    uniforms.count = uniform(s.count);
+    uniforms.color = uniform(tslColor(s.color));
+    uniforms.direction = uniform(s.direction);
+    uniforms.start = uniform(s.start);
+    uniforms.end = uniform(s.end);
+    uniforms.mixLow = uniform(s.mixLow);
+    uniforms.mixHigh = uniform(s.mixHigh);
+    uniforms.radius = uniform(s.radius);
+    s.uniforms = uniforms;
+  }
+
+  // Single halftone layer
+  const halftone = Fn(([count, col, direction, start, end, radius, mixLow, mixHigh]) => {
+    // Grid in screen space
+    let gridUv = screenCoordinate.xy.div(screenSize.yy).mul(count);
+    gridUv = rotate(gridUv, Math.PI * 0.25).mod(1);
+
+    // Orientation based on world normal vs direction
+    const orientationStrength = normalWorld
+      .dot(direction.normalize())
+      .remapClamp(end, start, 0, 1);
+
+    // Circular mask per cell with falloff/mix
+    const mask = orientationStrength.mul(radius).mul(0.5)
+      .step(gridUv.sub(0.5).length())
+      .mul(mix(mixLow, mixHigh, orientationStrength));
+
+    return vec4(col, mask);
+  });
+
+  // Blend all halftone layers into the current fragment output
+  __halftonesFn = Fn(([input]) => {
+    const outCol = input;
+    for (const s of __halftoneSettings) {
+      const h = halftone(
+        s.uniforms.count,
+        s.uniforms.color,
+        s.uniforms.direction,
+        s.uniforms.start,
+        s.uniforms.end,
+        s.uniforms.radius,
+        s.uniforms.mixLow,
+        s.uniforms.mixHigh,
+      );
+      outCol.rgb.assign(mix(outCol.rgb, h.rgb, h.a));
+    }
+    return outCol;
+  });
 }

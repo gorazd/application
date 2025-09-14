@@ -2,13 +2,14 @@
 layout: layouts/base.njk
 title: Gorazd Guštin - Front-end Designer & Developer
 description: A creative front-end designer and developer with a passion for building beautiful and intuitive user experiences.
+class: homepage
 ---
 
 <section>
-
 <p class="title">Front-end Designer & Developer</p>
 
 # Gorazd Guštin
+
 <p class="introduction">This website was <strong>designed and built from scratch</strong>, and it's a little sample of what I can do. You can find my <a href="/portfolio/">latest works</a>, <a href="/cover-letter/">cover letter</a>, and <a href="/cv/">CV</a>.</p>
 </section>
 

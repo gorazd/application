@@ -22,6 +22,10 @@
   --font-size-lg: clamp(1.3rem, 1vw + 1rem, 1.8rem);
   --font-size-xl: clamp(1.5rem, 1.56vw + 1.2rem, 2.2rem);
   --font-size-xxl: clamp(1.8rem, 2.38vw + 1.5rem, 2.8rem);
+  
+  --font-size-xxl: clamp(2.5rem, calc(100svw / 7.8), 8.75rem);
+  /* Subtitle (Front-end Designer & Developer) fluid size */
+  --font-size-subtitle: clamp(1.1rem, calc(100svw / 27.3), 2rem);
 }
 
 html.dark {
@@ -88,6 +92,7 @@ h6 {
 
 .title {
   font-family: var(--font-mono);
+  font-size: var(--font-size-subtitle);
   margin-top: var(--spacing-unit);
   margin-bottom: calc(-1 * var(--spacing-unit));
   line-height: 1;
@@ -129,8 +134,20 @@ li h4 {
   margin: 0;
 }
 
+.h1-title {
+  font-size: var(--font-size-xxxl);
+}
+
 h1 {
   font-size: var(--font-size-xxl);
+  margin: 1rem -.05em;
+}
+
+@media screen and (min-width: 900px) {
+  h1 {
+    margin: 0 -.5rem;
+  }
+
 }
 
 h2 {

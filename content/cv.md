@@ -8,7 +8,7 @@ description: Results-driven Front-End Designer with 10+ years of experience crea
 
 <p class="title">Curriculum Vitae</p>
 
-# Biographical & Professional Summary
+# Summary
 
 </section>
 

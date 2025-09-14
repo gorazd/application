@@ -19,7 +19,6 @@
  Rollback Instructions:
  - To revert optimizations: checkout previous git tag (e.g., `git checkout pre-nav-optimization`) or remove SPA init call & all instrumentation blocks.
 */
-console.log("Less goo");
 import { gsap } from "gsap";
 import { Draggable } from "gsap/Draggable";
 import { Flip } from "gsap/Flip";

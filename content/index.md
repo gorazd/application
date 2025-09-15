@@ -10,7 +10,7 @@ class: homepage
 
 # Gorazd Guštin
 
-<p class="introduction">This website was <strong>designed and built from scratch</strong>, and it's a little sample of what I can do. You can find my <a href="/portfolio/">latest works</a>, <a href="/cover-letter/">cover letter</a>, and <a href="/cv/">CV</a>.</p>
+<p class="introduction">End-to-end product development from user research and interface design through frontend implementation and deployment. You can find my <a href="/portfolio/">selected works</a>, <a href="/cover-letter/">cover letter</a>, and <a href="/cv/">CV</a>.</p>
 </section>
 
 <section class="works">

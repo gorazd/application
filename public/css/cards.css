@@ -97,6 +97,13 @@
   .portfolio__description  {
     display: none;
   }
+  @media (hover: hover) {
+    .portfolio__card:hover {
+      transform: translateY(0);
+      box-shadow: 0 4px 2px rgba(0, 0, 0, 0.15);
+      text-decoration: none;
+    }
+  }
 }
 
 .pills ul {

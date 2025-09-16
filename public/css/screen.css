@@ -627,6 +627,8 @@ body.view-transition-active main {
 @media (max-width: 520px) {
   .works-grid  .works-link {
     grid-template-columns: 1fr;
+    gap: 0;
+    border-bottom: var(--border-color) 1px solid;
   }
   .works-title,
   .works-role,
@@ -655,7 +657,7 @@ body.view-transition-active main {
   top: 0;
   left: 0;
   width: 540px;
-  aspect-ratio: 19 / 10;
+  aspect-ratio: 18.5 / 10;
   pointer-events: none;
   z-index: 20;
   transform-origin: 50% 60%;

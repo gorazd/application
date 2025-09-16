@@ -106,7 +106,7 @@ h6 {
 }
 
 h1 {
-  visibility: hidden; /* Hide initially to prevent flash */
+  /* visibility: hidden; Hide initially to prevent flash */
 }
 
 .signature {
@@ -623,4 +623,49 @@ body.view-transition-active main {
     justify-self: start;
     text-align: left;
   }
+}
+
+/* Hover preview image effect */
+.works-link .works-image {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 180px;
+  height: auto;
+  transform: translate(-9999px, -9999px); /* keep out of layout / a11y still reads alt */
+  opacity: 0;
+  pointer-events: none;
+}
+
+.works-hover-preview {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 440px;
+  aspect-ratio: 20 / 10;
+  pointer-events: none;
+  z-index: 20;
+  transform-origin: 50% 60%;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px var(--shadow-color);
+  background: var(--background-bright-color);
+  opacity: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  will-change: transform;
+}
+
+.works-hover-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+@media (max-width: 720px) {
+  .works-hover-preview { display: none; }
 }

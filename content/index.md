@@ -16,36 +16,36 @@ class: homepage
 <section class="works">
   <h2 class="works-h2">Recent Work</h2>
   <ul class="works-grid">
-    <a class="works-link" href="https://coltelli-giapponesi.it/">
+    <li><a class="works-link" href="https://coltelli-giapponesi.it/">
       <img src="/images/coltelli-giapponesi-it.jpg" alt="Coltelli Giapponesi screenshot" class="works-image">
       <h3 class="works-title">Coltelli Giapponesi</h3>
       <p class="works-role">Design, Developement</p>
       <p class="works-year">2025</p>
-    </a>
-    <a class="works-link" href="https://federicoboriani.it/risorse/">
+    </a></li>
+    <li><a class="works-link" href="https://federicoboriani.it/risorse/">
       <img src="/images/federicoboriani-it.jpg" alt="Federico Boriani screenshot" class="works-image">
       <h3 class="works-title">Federico Boriani</h3>
       <p class="works-role">Developement</p>
       <p class="works-year">2025</p>
-    </a>
-    <a class="works-link" href="https://tempestagallery.com/en/">
+    </a></li>
+    <li><a class="works-link" href="https://tempestagallery.com/en/">
       <img src="/images/tempesta-it.jpg" alt="Tempesta Galleryscreenshot" class="works-image">
       <h3 class="works-title">Tempesta Gallery</h3>
       <p class="works-role">Art direction, Developement</p>
       <p class="works-year">2024</p>
-    </a>
-    <a class="works-link" href="https://farinaluca.com/scrivania/">
+    </a></li>
+    <li><a class="works-link" href="https://farinaluca.com/scrivania/">
       <img src="/images/farinaluca.jpg" alt="Luca Farina screenshot" class="works-image">
       <h3 class="works-title">Luca Farina</h3>
       <p class="works-role">Design, Developement</p>
       <p class="works-year">2024</p>
-    </a>
-    <a class="works-link" href="https://www.castellodiuviglie.it/it/">
+    </a></li>
+    <li><a class="works-link" href="https://www.castellodiuviglie.it/it/">
       <img src="/images/castello-it.jpg" alt="Castello Di Uviglie screenshot" class="works-image">
       <h3 class="works-title">Castello Di Uviglie</h3>
       <p class="works-role">Art direction, Developement</p>
       <p class="works-year">2024</p>
-    </a>
+    </a></li>
   </ul>
 </section>
 

@@ -19,7 +19,7 @@ const WORKS_PREVIEW_CONFIG = {
   rotationMax: 5,       // deg max tilt
   rotationEase: 0.25,
   fadeDuration: 0.25,
-  swingAmplitude: 12.5,   // deg small idle swing
+  swingAmplitude: 2.5,   // deg small idle swing
   swingDuration: 2.4,    // seconds for full sway cycle
   yOffset: -40,          // vertical offset from cursor
   xOffset: 40            // baseline horizontal offset
@@ -208,7 +208,7 @@ function attachWorksPreviewListeners(){
 
   // Attach to existing & future links (simple approach: query each reinit)
   function bindLinks(){
-    const links = document.querySelectorAll('.works-grid > .works-link');
+    const links = document.querySelectorAll('.works-grid  .works-link');
     links.forEach(link => {
       if (link.__previewBound) return;
       link.__previewBound = true;

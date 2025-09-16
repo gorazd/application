@@ -16,7 +16,7 @@ let __worksListenersAttached = false;
 // Configurable motion parameters
 const WORKS_PREVIEW_CONFIG = {
   followEase: 0.12,      // lower = snappier following
-  rotationMax: 5,       // deg max tilt
+  rotationMax: 2,       // deg max tilt
   rotationEase: 0.25,
   fadeDuration: 0.25,
   swingAmplitude: 2.5,   // deg small idle swing
@@ -135,6 +135,10 @@ function attachWorksPreviewListeners(){
   let targetY = 0;
   let velocityX = 0;
   let idleTween = null;
+  // Relative horizontal position of cursor within current link (0..1)
+  let relX = 0.5;
+  // Smoothed velocity for rotation (low-pass filtered)
+  let smoothVel = 0;
 
   function killIdle(){
     if (idleTween) { idleTween.kill(); idleTween = null; }
@@ -167,6 +171,11 @@ function attachWorksPreviewListeners(){
     velocityX = 0;
     gsap.killTweensOf(__worksPreviewEl);
     gsap.to(__worksPreviewEl, { autoAlpha: 1, duration: WORKS_PREVIEW_CONFIG.fadeDuration, ease: 'power2.out' });
+    // Initialize relX based on entry point
+    try {
+      const rect = currentLink.getBoundingClientRect();
+      relX = gsap.utils.clamp(0,1,(e.clientX - rect.left)/rect.width);
+    } catch(_) { relX = 0.5; }
     loop();
   }
 
@@ -182,7 +191,13 @@ function attachWorksPreviewListeners(){
     targetY = e.clientY + WORKS_PREVIEW_CONFIG.yOffset;
     const dx = e.clientX - lastX;
     lastX = e.clientX;
-    velocityX = gsap.utils.clamp(-50, 50, dx * 10); // scaled velocity
+  // Raw instantaneous velocity
+  velocityX = gsap.utils.clamp(-50, 50, dx * 60); // reduce gain to lessen jitter
+    // Update relX for dynamic anchoring
+    try {
+      const rect = currentLink.getBoundingClientRect();
+      relX = gsap.utils.clamp(0,1,(e.clientX - rect.left)/rect.width);
+    } catch(_) {}
   }
 
   function loop(){
@@ -197,10 +212,14 @@ function attachWorksPreviewListeners(){
     const currentYPos = gsap.getProperty(__worksPreviewEl, 'y');
     const nextX = current + (targetX - current) * WORKS_PREVIEW_CONFIG.followEase;
     const nextY = currentYPos + (targetY - currentYPos) * WORKS_PREVIEW_CONFIG.followEase;
-    const tilt = (velocityX / 50) * WORKS_PREVIEW_CONFIG.rotationMax; // map velocity to tilt
-    gsap.set(__worksPreviewEl, { x: nextX, y: nextY, rotate: tilt });
+  // Exponential smoothing to avoid jagged rotation
+  smoothVel += (velocityX - smoothVel) * 0.1; // smoothing factor (0.1-0.25 reasonable)
+  const tilt = (smoothVel / 10) * WORKS_PREVIEW_CONFIG.rotationMax; // map smoothed velocity to tilt
+  // Dynamic xPercent: 0 (anchor left) at relX=0, -50 (center) at .5, -100 (anchor right) at 1
+  const dynamicXPercent = -relX * 100;
+  gsap.set(__worksPreviewEl, { x: nextX, y: nextY, rotate: tilt, xPercent: dynamicXPercent });
 
-    velocityX *= (1 - WORKS_PREVIEW_CONFIG.rotationEase); // decay velocity for tilt smoothing
+  velocityX *= (1 - WORKS_PREVIEW_CONFIG.rotationEase); // decay raw velocity
     rafId = requestAnimationFrame(loop);
   }
 

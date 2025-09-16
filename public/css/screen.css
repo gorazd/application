@@ -589,6 +589,8 @@ body.view-transition-active main {
     transition: background-color 150ms ease-out;
     background-color: var(--background-bright-color);
     box-shadow: 0 2px 1px var(--shadow-color);
+
+    cursor: move;
   }
 }
 
@@ -613,6 +615,12 @@ body.view-transition-active main {
   margin: 0.25rem 0 0 0;
   grid-column: 1;
   grid-row: 1;
+}
+
+.works-year,
+.works-role {
+  font-family: var(--font-mono);
+  font-size: 0.9em;
 }
 
 /* Stack on narrow screens */
@@ -646,20 +654,22 @@ body.view-transition-active main {
   position: fixed;
   top: 0;
   left: 0;
-  width: 440px;
-  aspect-ratio: 20 / 10;
+  width: 540px;
+  aspect-ratio: 19 / 10;
   pointer-events: none;
   z-index: 20;
   transform-origin: 50% 60%;
   border-radius: 8px;
   overflow: hidden;
-  box-shadow: 0 4px 12px var(--shadow-color);
+  box-shadow: 0 4px 5px var(--shadow-color);
   background: var(--background-bright-color);
   opacity: 0;
   display: flex;
   align-items: center;
   justify-content: center;
   will-change: transform;
+
+  border: 20px solid;
 }
 
 .works-hover-preview img {

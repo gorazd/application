@@ -17,7 +17,7 @@ class: homepage
   <h2 class="works-h2">Recent Work</h2>
   <ul class="works-grid">
     <li><a class="works-link" href="https://coltelli-giapponesi.it/">
-      <img src="/images/coltelli-giapponesi-it.jpg" alt="Coltelli Giapponesi screenshot" class="works-image" sizes="(min-width:900px) 640px, 100vw" loading="eager">
+      <img src="/images/coltelli-giapponesi-it.jpg" alt="Coltelli Giapponesi screenshot" class="works-image" sizes="(min-width:900px) 640px, 100vw" loading="eager" fetchpriority="high">
       <h3 class="works-title">Coltelli Giapponesi</h3>
       <p class="works-role">Design, Development</p>
       <p class="works-year">2025</p>

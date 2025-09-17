@@ -2,17 +2,18 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <link rel="preload" href="/fonts/subset-PPSupplySans-Regular.woff2" as="font" type="font/woff2" crossorigin fetchpriority="high">
+  <link rel="preload" href="/fonts/subset-PPSupplyMono-Regular.woff2" as="font" type="font/woff2" crossorigin fetchpriority="high">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="view-transition" content="same-origin" />
   <title>{{ title }} | Gorazd Guštin</title>
   <meta name="description" content="{{ description | default('') }}">
-  <link rel="preload" href="/fonts/subset-PPSupplyMono-Regular.woff2" as="font" type="font/woff2" crossorigin="anonymous">
-  <link rel="preload" href="/fonts/subset-PPSupplySans-Regular.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <meta name="language" content="en">
   {%- css %}{% include "public/css/screen.css" %}{% endcss %}
   {%- css %}{% include "public/css/cards.css" %}{% endcss %}
   <style>{% getBundle "css" %}</style>
   {%- cssprint %}{% include "public/css/print.css" %}{% endcssprint %}
-  <style media="print">{% getBundle "cssprint" %}</style>
+  <link rel="stylesheet" media="print" href="{% getBundleFileUrl "cssprint" %}">
   <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   <link rel="shortcut icon" href="/favicon.ico" />

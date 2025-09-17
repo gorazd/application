@@ -1,6 +1,6 @@
 ---
 layout: layouts/base.njk
-title: Gorazd Guštin - Front-end Designer & Developer
+title: Front-end Designer & Developer
 description: A creative front-end designer and developer with a passion for building beautiful and intuitive user experiences.
 class: homepage
 ---
@@ -10,40 +10,40 @@ class: homepage
 
 # Gorazd Guštin
 
-<p class="introduction">End-to-end product development from user research and interface design through frontend implementation and deployment. You can find my <a href="/portfolio/">selected works</a>, <a href="/cover-letter/">cover letter</a>, and <a href="/cv/">CV</a>.</p>
+<p class="introduction">End-to-end <strong>product development</strong> from user research and interface design through frontend implementation and deployment. You can find my <a href="/portfolio/">selected works</a>, <a href="/cover-letter/">cover letter</a>, and <a href="/cv/">CV</a>.</p>
 </section>
 
 <section class="works">
   <h2 class="works-h2">Recent Work</h2>
   <ul class="works-grid">
     <li><a class="works-link" href="https://coltelli-giapponesi.it/">
-      <img src="/images/coltelli-giapponesi-it.jpg" alt="Coltelli Giapponesi screenshot" class="works-image" sizes="(min-width:900px) 640px, 100vw">
+      <img src="/images/coltelli-giapponesi-it.jpg" alt="Coltelli Giapponesi screenshot" class="works-image" sizes="(min-width:900px) 640px, 100vw" loading="eager">
       <h3 class="works-title">Coltelli Giapponesi</h3>
-      <p class="works-role">Design, Developement</p>
+      <p class="works-role">Design, Development</p>
       <p class="works-year">2025</p>
     </a></li>
     <li><a class="works-link" href="https://federicoboriani.it/risorse/">
-      <img src="/images/federicoboriani-it.jpg" alt="Federico Boriani screenshot" class="works-image" sizes="(min-width:900px) 640px, 100vw">
+      <img src="/images/federicoboriani-it.jpg" alt="Federico Boriani screenshot" class="works-image" sizes="(min-width:900px) 640px, 100vw" loading="lazy">
       <h3 class="works-title">Federico Boriani</h3>
-      <p class="works-role">Developement</p>
+      <p class="works-role">Development</p>
       <p class="works-year">2025</p>
     </a></li>
     <li><a class="works-link" href="https://tempestagallery.com/en/">
-      <img src="/images/tempesta-it.jpg" alt="Tempesta Galleryscreenshot" class="works-image" sizes="(min-width:900px) 640px, 100vw">
+      <img src="/images/tempesta-it.jpg" alt="Tempesta Gallery screenshot" class="works-image" sizes="(min-width:900px) 640px, 100vw" loading="lazy">
       <h3 class="works-title">Tempesta Gallery</h3>
-      <p class="works-role">Art direction, Developement</p>
+      <p class="works-role">Art Direction, Development</p>
       <p class="works-year">2024</p>
     </a></li>
     <li><a class="works-link" href="https://farinaluca.com/scrivania/">
-      <img src="/images/farinaluca.jpg" alt="Luca Farina screenshot" class="works-image" sizes="(min-width:900px) 640px, 100vw">
+      <img src="/images/farinaluca.jpg" alt="Luca Farina screenshot" class="works-image" sizes="(min-width:900px) 640px, 100vw" loading="lazy">
       <h3 class="works-title">Luca Farina</h3>
-      <p class="works-role">Design, Developement</p>
+      <p class="works-role">Design, Development</p>
       <p class="works-year">2024</p>
     </a></li>
     <li><a class="works-link" href="https://www.castellodiuviglie.it/it/">
-      <img src="/images/castello-it.jpg" alt="Castello Di Uviglie screenshot" class="works-image" sizes="(min-width:900px) 640px, 100vw">
+      <img src="/images/castello-it.jpg" alt="Castello Di Uviglie screenshot" class="works-image" sizes="(min-width:900px) 640px, 100vw" loading="lazy">
       <h3 class="works-title">Castello Di Uviglie</h3>
-      <p class="works-role">Art direction, Developement</p>
+      <p class="works-role">Art Direction, Development</p>
       <p class="works-year">2024</p>
     </a></li>
   </ul>

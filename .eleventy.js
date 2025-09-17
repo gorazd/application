@@ -16,20 +16,23 @@ export default function(eleventyConfig) {
 
   // Image plugin configuration
   eleventyConfig.addPlugin(eleventyImageTransformPlugin, {
-  extensions: 'html',
-  formats: ['avif', 'webp', 'jpeg'], 
-  widths: [480, 720, 900, 1200, 'auto'],
-  defaultAttributes: {
-    loading: 'lazy',
-    decoding: 'async',
-    sizes: '90vw',
-  },
-  outputDir: './_site/img/optimized/',
-  urlPath: '/img/optimized/',
-  filenameFormat: (id, src, width, format) => {
-    const { name } = path.parse(src);
-    return `${name}-${width}w.${format}`;
-  },
+    extensions: 'html',
+    formats: ['avif', 'webp', 'jpeg'], 
+    widths: [480, 720, 900, 1200, 'auto'],
+    defaultAttributes: {
+      loading: 'lazy',
+      decoding: 'async',
+      sizes: '90vw',
+    },
+    outputDir: './_site/img/optimized/',
+    urlPath: '/img/optimized/',
+    filenameFormat: (id, src, width, format) => {
+      const { name } = path.parse(src);
+      return `${name}-${width}w.${format}`;
+    },
+    sharpJpegOptions: { quality: 82, progressive: true },
+    sharpWebpOptions: { quality: 75 },
+    sharpAvifOptions: { quality: 45 }, // lower = smaller, watch for banding
   });
   // Minify HTML output
   eleventyConfig.addTransform("htmlmin", async function(content) {

@@ -691,6 +691,10 @@ body.view-transition-active main {
     margin: 0;
     padding: 1.2rem 0;
   }
+}
+
+/* Stack on narrow screens */
+@media (max-width: 520px) {
   .works-link .works-image {
     position: static;
     width: 100%;

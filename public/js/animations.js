@@ -161,9 +161,20 @@ function attachWorksPreviewListeners(){
     killIdle();
     const imgEl = link.querySelector('.works-image');
     if (!imgEl) return;
-    const src = imgEl.getAttribute('src');
+
+    // Prefer the actually chosen responsive candidate
+    const chosen = imgEl.currentSrc || imgEl.src || imgEl.getAttribute('src');
+
+    __worksPreviewImg.src = chosen;
+    // Also propagate srcset/sizes so future resizes or DPR differences can upgrade quality
+    if (imgEl.srcset) {
+      __worksPreviewImg.srcset = imgEl.srcset;
+    }
+    if (imgEl.sizes) {
+      __worksPreviewImg.sizes = imgEl.sizes;
+    }
+
     const alt = imgEl.getAttribute('alt') || '';
-    __worksPreviewImg.src = src;
     __worksPreviewImg.alt = alt;
     targetX = e.clientX + WORKS_PREVIEW_CONFIG.xOffset;
     targetY = e.clientY + WORKS_PREVIEW_CONFIG.yOffset;

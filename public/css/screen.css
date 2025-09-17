@@ -684,5 +684,19 @@ body.view-transition-active main {
 }
 
 @media (max-width: 720px) {
-  .works-hover-preview { display: none; }
+  .works-hover-preview { 
+    display: none; 
+  }
+  .works-link .works-link {
+    margin: 0;
+    padding: 1.2rem 0;
+  }
+  .works-link .works-image {
+    position: static;
+    width: 100%;
+    transform: none;
+    opacity: 1;
+    margin-bottom: 1rem;
+    border: 4px solid var(--background-bright-color);
+  }
 }

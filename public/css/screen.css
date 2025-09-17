@@ -586,7 +586,7 @@ body.view-transition-active main {
     background-color: var(--background-bright-color);
     box-shadow: 0 2px 1px var(--shadow-color);
 
-    cursor: move;
+    cursor: ne-resize;
   }
 }
 

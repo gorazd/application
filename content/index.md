@@ -10,11 +10,11 @@ class: homepage
 
 # Gorazd Guštin
 
-<p class="introduction">End-to-end <strong>product development</strong> from user research and interface design through frontend implementation and deployment. You can find my <a href="/portfolio/">selected works</a>, <a href="/cover-letter/">cover letter</a>, and <a href="/cv/">CV</a>.</p>
+<p class="introduction">I do end-to-end <strong>product development</strong> from user research and interface design <strong>through</strong> frontend implementation and deployment. You can also find my <a href="/cv/">CV</a>, some <a href="/portfolio/">selected works</a>, and my <a href="/cover-letter/">cover letter</a>.</p>
 </section>
 
 <section class="works">
-  <h2 class="works-h2">Recent Work</h2>
+  <h2 class="works-h2">Selected Work</h2>
   <ul class="works-grid">
     <li><a class="works-link" href="https://coltelli-giapponesi.it/">
       <img src="/images/coltelli-giapponesi-it.jpg" alt="Coltelli Giapponesi screenshot" class="works-image" sizes="(min-width:900px) 640px, 100vw" loading="eager" fetchpriority="high">
@@ -70,7 +70,7 @@ With over 20 years of front-end development experience, I have built expertise a
 
 ## Guiding Principles
 
-To grow, I learn, update, expand, and edit my identity. Starting with a solid design I subject everything to human review. When writing code I don't vibe code but use the AI as a pair programmer, or a powerful tool in my engineering toolkit.
+To grow, I learn, update, expand, and edit my identity. Starting with a solid design I subject everything to human review. When writing code I don't just vibe code but use the AI as a pair programmer, or a powerful tool in my engineering toolkit.
 </section>
 
 <section>

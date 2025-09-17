@@ -12,6 +12,13 @@ let __worksPreviewSetup = false;
 let __worksPreviewEl = null;
 let __worksPreviewImg = null;
 let __worksListenersAttached = false;
+let __worksPreviewPicture = null;
+let __worksPreviewSourceAvif = null;
+// AVIF preload/cache state
+let __worksImageCache = new Map(); // key -> { status, url, srcset, sizes, imgEl }
+let __preloadQueue = []; // [{ key, srcset, sizes }]
+let __preloading = false;
+let __avifSupported = null;
 
 // Configurable motion parameters
 const WORKS_PREVIEW_CONFIG = {
@@ -80,6 +87,8 @@ function runPerPageAnimations(){
   }
 
   setupWorksHoverPreview();
+  // Kick off preloading of AVIF previews lazily
+  scheduleWorksAvifPreload();
 }
 
 function animateSignature() {
@@ -113,16 +122,122 @@ function setupWorksHoverPreview(){
   const el = document.createElement('div');
   el.className = 'works-hover-preview';
   el.setAttribute('aria-hidden', 'true');
+  // Use <picture> so the browser can choose AVIF or fallback without us forcing JPEG
+  const picture = document.createElement('picture');
+  const sourceAvif = document.createElement('source');
+  sourceAvif.type = 'image/avif';
   const img = document.createElement('img');
-  el.appendChild(img);
+  // Keep attributes simple; we will set srcset/sizes dynamically on hover
+  img.decoding = 'async';
+  img.loading = 'eager';
+  picture.appendChild(sourceAvif);
+  picture.appendChild(img);
+  el.appendChild(picture);
   document.body.appendChild(el);
   __worksPreviewEl = el;
   __worksPreviewImg = img;
+  __worksPreviewPicture = picture;
+  __worksPreviewSourceAvif = sourceAvif;
 
   // Pre-allocate GSAP state
   gsap.set(el, { autoAlpha: 0, rotate: 0, xPercent: -50, yPercent: -50 });
 
   attachWorksPreviewListeners();
+}
+
+// ---- AVIF preload & cache utilities ----
+function isAvifSupported(){
+  if (__avifSupported !== null) return __avifSupported;
+  try {
+    __avifSupported = typeof CSS !== 'undefined' && CSS.supports && CSS.supports('image-type(avif)');
+  } catch(e) {
+    __avifSupported = false;
+  }
+  return __avifSupported;
+}
+
+function computeLinkKey(link){
+  if (link.id) return link.id;
+  if (link.dataset && (link.dataset.workId || link.dataset.id)) return link.dataset.workId || link.dataset.id;
+  const img = link.querySelector('img.works-image');
+  const avif = link.querySelector('source[type="image/avif"]');
+  // Use first URL in avif srcset or fallback to img src
+  const avifSet = avif && avif.getAttribute('srcset');
+  if (avifSet) {
+    const first = avifSet.split(',')[0].trim();
+    const url = first.split(' ')[0];
+    return url || (img && (img.currentSrc || img.src)) || link.href || Math.random().toString(36).slice(2);
+  }
+  return (img && (img.currentSrc || img.src)) || link.href || Math.random().toString(36).slice(2);
+}
+
+function enqueueAvifForLink(link){
+  if (!isAvifSupported()) return; // no-op if unsupported
+  const picture = link.querySelector('picture');
+  if (!picture) return;
+  const avif = picture.querySelector('source[type="image/avif"]');
+  const img = picture.querySelector('img.works-image');
+  if (!avif || !img) return;
+  const key = computeLinkKey(link);
+  link.__previewKey = key;
+  if (__worksImageCache.has(key)) return;
+  const srcset = avif.getAttribute('srcset');
+  if (!srcset) return;
+  const sizes = avif.getAttribute('sizes') || img.getAttribute('sizes') || '100vw';
+  __worksImageCache.set(key, { status: 'queued', url: null, srcset, sizes, imgEl: null });
+  __preloadQueue.push({ key, srcset, sizes });
+}
+
+function scheduleWorksAvifPreload(){
+  const run = () => {
+    try {
+      const links = document.querySelectorAll('.works-grid  .works-link');
+      links.forEach(enqueueAvifForLink);
+      processPreloadQueue();
+    } catch(e) {}
+  };
+  if ('requestIdleCallback' in window) {
+    requestIdleCallback(run, { timeout: 1500 });
+  } else {
+    setTimeout(run, 300);
+  }
+}
+
+function processPreloadQueue(){
+  if (__preloading) return;
+  __preloading = true;
+  const next = () => {
+    if (!__preloadQueue.length) { __preloading = false; return; }
+    const { key, srcset, sizes } = __preloadQueue.shift();
+    const cache = __worksImageCache.get(key);
+    if (!cache) { next(); return; }
+    cache.status = 'loading';
+    const preImg = new Image();
+    try { preImg.decoding = 'async'; } catch(_) {}
+    try { preImg.loading = 'eager'; } catch(_) {}
+    preImg.sizes = sizes;
+    preImg.srcset = srcset;
+  // Intentionally avoid setting a fallback src to prevent double fetches
+    preImg.onload = () => {
+      cache.status = 'loaded';
+      cache.imgEl = preImg;
+      cache.url = preImg.currentSrc || null;
+      if ('requestIdleCallback' in window) {
+        requestIdleCallback(next, { timeout: 100 });
+      } else {
+        setTimeout(next, 0);
+      }
+    };
+    preImg.onerror = () => {
+      cache.status = 'error';
+      if ('requestIdleCallback' in window) {
+        requestIdleCallback(next, { timeout: 100 });
+      } else {
+        setTimeout(next, 0);
+      }
+    };
+  };
+  next();
 }
 
 function attachWorksPreviewListeners(){
@@ -140,6 +255,8 @@ function attachWorksPreviewListeners(){
   let relX = 0.5;
   // Smoothed velocity for rotation (low-pass filtered)
   let smoothVel = 0;
+  // Track which key is currently shown to avoid resetting sources on repeated hover
+  let currentPreviewKeyShown = null;
 
   function killIdle(){
     if (idleTween) { idleTween.kill(); idleTween = null; }
@@ -163,16 +280,36 @@ function attachWorksPreviewListeners(){
     const imgEl = link.querySelector('.works-image');
     if (!imgEl) return;
 
-    // Prefer the actually chosen responsive candidate
-    const chosen = imgEl.currentSrc || imgEl.src || imgEl.getAttribute('src');
-
-    __worksPreviewImg.src = chosen;
-    // Also propagate srcset/sizes so future resizes or DPR differences can upgrade quality
-    if (imgEl.srcset) {
-      __worksPreviewImg.srcset = imgEl.srcset;
+    // Try AVIF cache first
+    let key = link.__previewKey || computeLinkKey(link);
+    link.__previewKey = key;
+    // Skip resetting sources if it's the same item already shown
+    if (currentPreviewKeyShown === key) {
+      // still update positions/anim but don't touch src/srcset
+    } else {
+    const cache = __worksImageCache.get(key);
+    const avifSource = link.querySelector('source[type="image/avif"]');
+    // Always reflect the hovered link's fallback JPEG/WebP srcset on the <img> element
+    __worksPreviewImg.srcset = imgEl.getAttribute('srcset') || '';
+    __worksPreviewImg.sizes = imgEl.getAttribute('sizes') || '100vw';
+    // If we have a cached AVIF (loaded), populate the <source> with it
+    if (cache && cache.status === 'loaded' && cache.srcset) {
+      __worksPreviewSourceAvif.srcset = cache.srcset;
+      __worksPreviewSourceAvif.sizes = cache.sizes || '100vw';
+      // Do not set img.src explicitly; picture will prefer AVIF and not fetch JPEG
+    } else if (avifSource) {
+      // Mirror the link's AVIF srcset/sizes onto the preview's <source>
+      __worksPreviewSourceAvif.srcset = avifSource.getAttribute('srcset') || '';
+      __worksPreviewSourceAvif.sizes = avifSource.getAttribute('sizes') || imgEl.getAttribute('sizes') || '100vw';
+      // Enqueue for preload so subsequent hovers will hit cache
+      enqueueAvifForLink(link);
+      processPreloadQueue();
+    } else {
+      // No AVIF source present; ensure preview source is cleared
+      __worksPreviewSourceAvif.srcset = '';
+      __worksPreviewSourceAvif.sizes = '';
     }
-    if (imgEl.sizes) {
-      __worksPreviewImg.sizes = imgEl.sizes;
+    currentPreviewKeyShown = key;
     }
 
     const alt = imgEl.getAttribute('alt') || '';
@@ -247,12 +384,14 @@ function attachWorksPreviewListeners(){
       link.addEventListener('mouseleave', onLeave);
       link.addEventListener('focus', onEnter);
       link.addEventListener('blur', onLeave);
+    // Prepare cache key immediately and enqueue preload
+    try { enqueueAvifForLink(link); } catch(_) {}
     });
   }
   bindLinks();
 
   // Re-bind after each SPA navigation reinit (exposed hook via observer pattern)
-  document.addEventListener('works-links-rebind', bindLinks);
+  document.addEventListener('works-links-rebind', () => { bindLinks(); processPreloadQueue(); });
 }
 
 // Public hook for SPA updates to request rebinding (called externally if needed)

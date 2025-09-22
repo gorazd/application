@@ -60,8 +60,7 @@ class: homepage
 
 ## Qualifications 
 
-Developing projects from pixels to production while collaborating effectively with various studios and agencies.
-With over 20 years of front-end development experience, I have built expertise across the full spectrum of **web technologies** and **user interface design**. I currently serve as a front-end instructor at SPD, where I teach modern development practices while continuing to work on client projects and staying current with evolving industry standards.
+With over 20 years of front-end development experience, I have built expertise across the full spectrum of **web technologies** and **user interface design**. I develop projects from pixels to production while collaborating effectively with various studios and agencies. Currently serving as a front-end instructor at SPD, I teach modern development practices while continuing to work on client projects and staying current with evolving industry standards.
 
 </section>
 
@@ -70,19 +69,19 @@ With over 20 years of front-end development experience, I have built expertise a
 
 ## Guiding Principles
 
-To grow, I learn, update, expand, and edit my identity. Starting with a solid design I subject everything to human review. When writing code I don't just vibe code but use the AI as a pair programmer, or a powerful tool in my engineering toolkit.
+To grow, I learn, update, expand, and edit my identity. Every design begins with a solid foundation and undergoes rigorous human review. In development, I leverage AI as a collaborative tool and pair programmer.
 </section>
 
 <section>
 
 ## Beyond the Pixels
 
-Art and design, nature and science. There is a wide range of things that fascinate and appeal to me.
+My interests span art and design, nature and science, and a diverse range of subjects that continually inspire and inform my work.
 
 </section>
 <section class="pills">
 <ul>
-<li><a href="/portfolio/">Browse my Portfolio</a> Showcase of my work</li>
-<li><a href="/cover-letter/">Read my Cover Letter</a> Introduction and motivation</li>
-<li><a href="/cv/">View my CV</a> My professional experience and qualifications</li>
+<li><a href="/portfolio/">Browse my Portfolio</a> Showcase of selected projects</li>
+<li><a href="/cover-letter/">Read my Cover Letter</a> My approach and motivation</li>
+<li><a href="/cv/">View my CV</a> Professional experience and qualifications</li>
 </ul>

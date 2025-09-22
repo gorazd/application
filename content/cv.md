@@ -1,7 +1,7 @@
 ---
 layout: layouts/base.njk
 title: CV
-description: Results-driven Front-End Designer with 10+ years of experience creating intuitive and engaging experiences for mobile and desktop applications. Developing projects from start to finish and collaborating effectively with various teams.
+description: Results-driven Front-end Designer with 20 years of experience creating intuitive and engaging experiences for mobile and desktop applications.
 ---
 
 <section>
@@ -56,10 +56,12 @@ Website design and development with a focus on performance and accessibility.
 *Designer & Flash Developer*  
 Design and coding of projects in HTML, CSS, and JavaScript. Responsible for Flash projects based on corporate CMS. 
 
-### **2005 | Art Design, Ljubljana**  
+### **2005 | Art Design, Ljubljana** 
+*Web Designer*
 Designing and developing various web projects.
 
-### **2004 | BMW, Ljubljana**  
+### **2004 | BMW, Ljubljana**
+*Web Designer*
 Designing and maintaining the BMW Mini website.
 
 </section>
@@ -107,7 +109,7 @@ SPD Master's Graduate (Web Design, 2005) | Industry experience in interactive we
 #### **Scuola Politecnica di Design, Milano**
   2005-2006 - *Master in Web Design*
 
-#### **Istituto e Academia per Multimedia, Ljubljana**
+#### **Inštitut in akademija za multimedije, Ljubljana**
   2003-2005 - *Multimedia*
 
 ### Professional Development:

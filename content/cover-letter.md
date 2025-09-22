@@ -6,7 +6,7 @@ description: With over a decade of experience shaping user-centric mobile applic
 
 <p class="title">To whom it may concern</p>
 
-# Dear Team,
+# Greetings,
 
 *Milano, 28.08.2025*
 
@@ -14,13 +14,13 @@ description: With over a decade of experience shaping user-centric mobile applic
 
 Dear Hiring Team,
 
-With over a decade of experience in the field, I was immediately intrigued by the UX/UI Designer opening. Your company's exceptional work aligns closely with my passion for data-driven design and high-growth environments. My extensive background in UX/UI design and front-end development, combined with my on-site and off-site work in Milan, makes me confident that I possess the skills and perspective to contribute significantly to your team from day one.
+With over a decade of experience in UX/UI design and Front-end, I was immediately intrigued by the opening. Your company's exceptional work aligns closely with my passion for data-driven design and high-growth environments. My extensive background in UX/UI design and front-end development, combined with my on-site and off-site work in Milan, makes me confident that I possess the skills and perspective to contribute significantly to your team from day one.
 
-Throughout my career, I have had the opportunity to thrive in cross-functional teams, finding the optimal balance between user value and implementation feasibility. For instance, at Scola Politecnica di Design, I had the opportunity to collaborate closely with students from various master's courses. In addition, I have had the privilege of hosting four students as part of their mandatory internship program.
+Throughout my career, I have thrived in cross-functional teams, finding the optimal balance between user value and implementation feasibility. For instance, at Scuola Politecnica di Design, I collaborated closely with students from various master's courses. In addition, I have had the privilege of hosting four students as part of their mandatory internship program.
 
-The aspect of your company that I find most stimulating is the opportunity to apply my skills across a diverse portfolio of products. I am driven by the challenge of solving complex problems from first principles and am eager to contribute to a culture that values ambition, collaboration, and continuous learning. The opportunity to work in your environment is appealing, and I believe it is an environment in which I can contribute my best work. I am eager to leverage my proficiency in prototyping, design adaptation, and animation to contribute to your team's success. I am committed to embracing the challenges and learning opportunities that accompany your ambitious mission.
+What excites me most about your company is the opportunity to apply my skills across a diverse portfolio of products while solving complex problems from first principles. Your culture of ambition, collaboration, and continuous learning aligns perfectly with my approach, and I am eager to contribute my proficiency in prototyping, design adaptation, and animation to your team's ambitious mission.
 
-Thank you for your consideration of my application. I am enthusiastic about the possibility of discussing how my experience could benefit you in continuing to innovate and grow its impressive portfolio of digital products.
+Thank you for your consideration of my application. I am enthusiastic about the possibility of discussing how my experience could benefit your team as you continue to innovate and grow its impressive portfolio of digital products.
 
 Sincerely,
 Gorazd Guštin

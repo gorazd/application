@@ -581,12 +581,14 @@ body.view-transition-active main {
 }
 
 @media (hover : hover) {
-  .works-grid  .works-link:hover {
-    transition: background-color 150ms ease-out;
-    background-color: var(--background-bright-color);
-    box-shadow: 0 2px 1px var(--shadow-color);
+  @media (min-width: 521px) {
+    .works-grid  .works-link:hover {
+      transition: background-color 150ms ease-out;
+      background-color: var(--background-bright-color);
+      box-shadow: 0 2px 1px var(--shadow-color);
 
-    cursor: ne-resize;
+      cursor: ne-resize;
+    }
   }
 }
 
@@ -646,7 +648,6 @@ body.view-transition-active main {
   left: 0;
   width: 180px;
   height: auto;
-  transform: translate(-9999px, -9999px); /* keep out of layout / a11y still reads alt */
   opacity: 0;
   pointer-events: none;
 }
@@ -697,9 +698,34 @@ body.view-transition-active main {
   .works-link .works-image {
     position: static;
     width: 100%;
-    transform: none;
+    /* transform: none; */
     opacity: 1;
     margin-bottom: 1rem;
     border: 4px solid var(--background-bright-color);
   }
+}
+
+/* getPlaiceholder */
+picture {
+  overflow: hidden;
+  flex-shrink: 0;
+  display: block;
+}
+
+img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.image-placeholder {
+  margin-bottom: 1rem !important;
+  filter: blur(3px);
+  transform: scale(1);
+  transition: filter .25s ease-out .5s, transform .1s ease-out, .5s;
+}
+
+.image-placeholder.loaded {
+  filter: blur(0px);
+  transform: scale(1);
 }

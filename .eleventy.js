@@ -1,6 +1,8 @@
 import { minify } from 'html-minifier-terser';
 import { eleventyImageTransformPlugin } from '@11ty/eleventy-img'
 import path from 'path';
+import { getPlaiceholder } from 'plaiceholder';
+import * as cheerio from 'cheerio';
 
 export default function(eleventyConfig) {
   eleventyConfig.addBundle("css");
@@ -18,7 +20,7 @@ export default function(eleventyConfig) {
   eleventyConfig.addPlugin(eleventyImageTransformPlugin, {
     extensions: 'html',
     formats: ['avif', 'webp', 'jpeg'], 
-    widths: [480, 720, 900, 1200, 'auto'],
+    widths: [100, 480, 720, 900, 1200, 'auto'],
     defaultAttributes: {
       loading: 'lazy',
       decoding: 'async',
@@ -32,8 +34,49 @@ export default function(eleventyConfig) {
     },
     sharpJpegOptions: { quality: 82, progressive: true },
     sharpWebpOptions: { quality: 75 },
-    sharpAvifOptions: { quality: 45 }, // lower = smaller, watch for banding
+    sharpAvifOptions: { quality: 45 },
   });
+
+  // Add transform to extract dominant colors from images
+  eleventyConfig.addTransform("imageColors", async function(content, outputPath) {
+    if (outputPath && outputPath.endsWith(".html")) {
+      const $ = cheerio.load(content);
+      const images = $("img[src]");
+      
+      for (let i = 0; i < images.length; i++) {
+        const img = $(images[i]);
+        let src = img.attr("src");
+        
+        if (src && src.includes("/.11ty/image/")) {
+          try {
+            // Parse the original path from the /.11ty/image/ URL
+            const urlParams = new URLSearchParams(src.split('?')[1]);
+            const originalSrc = decodeURIComponent(urlParams.get('src') || '');
+            const imagePath = `./${originalSrc}`;
+            
+            // Check if file exists
+            const fs = await import('fs');
+            if (!fs.existsSync(imagePath)) continue;
+            
+            const result = await getPlaiceholder(imagePath);
+            const { color } = await getPlaiceholder(imagePath);
+
+            console.log(color);
+            // Add class and background, remove inline blur
+            img.addClass("image-placeholder");
+            img.attr("style", `background-color: ${color.hex}; background-size: cover; background-position: center; ${img.attr("style") || ""}`);
+            img.attr("onload", "this.classList.add('loaded')");
+          } catch (error) {
+            console.error(`Color extraction failed for ${src}:`, error.message);
+          }
+        }
+      }
+      
+      return $.html();
+    }
+    return content;
+  });
+
   // Minify HTML output
   eleventyConfig.addTransform("htmlmin", async function(content) {
     if ( this.page.outputPath && this.page.outputPath.endsWith(".html") ) {
@@ -48,7 +91,7 @@ export default function(eleventyConfig) {
     }
     return content;
   });
-
+  
   return {
     dir: {
       input: "content",

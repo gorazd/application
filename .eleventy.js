@@ -3,6 +3,7 @@ import { eleventyImageTransformPlugin } from '@11ty/eleventy-img'
 import path from 'path';
 import { getPlaiceholder } from 'plaiceholder';
 import * as cheerio from 'cheerio';
+import fs from "fs";
 
 export default function(eleventyConfig) {
   eleventyConfig.addBundle("css");
@@ -26,7 +27,7 @@ export default function(eleventyConfig) {
       decoding: 'async',
       sizes: '90vw',
     },
-    outputDir: './_site/img/optimized/',
+		outputDir: ".cache/@11ty/img/",
     urlPath: '/img/optimized/',
     filenameFormat: (id, src, width, format) => {
       const { name } = path.parse(src);
@@ -35,6 +36,18 @@ export default function(eleventyConfig) {
     sharpJpegOptions: { quality: 82, progressive: true },
     sharpWebpOptions: { quality: 75 },
     sharpAvifOptions: { quality: 45 },
+  });
+
+  eleventyConfig.on("eleventy.after", () => {
+    const sourceDir = ".cache/@11ty/img/";
+    const targetDir = path.join(eleventyConfig.directories.output, "./_site/img/optimized");
+    
+    // Check if source directory exists before copying
+    if (fs.existsSync(sourceDir)) {
+      fs.cpSync(sourceDir, targetDir, {
+        recursive: true
+      });
+    }
   });
 
   // Add transform to extract dominant colors from images

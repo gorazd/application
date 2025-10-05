@@ -7,7 +7,7 @@
   
 # Node.js version (specify a stable version)
 [build.environment]
-  NODE_VERSION = "18"
+  NODE_VERSION = "22"
 
 # Headers for better performance and security
 [[headers]]

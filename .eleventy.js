@@ -17,7 +17,7 @@ export default function(eleventyConfig) {
 
   eleventyConfig.ignores.add("public/js/");
 
-  // Image plugin configuration
+  // Simplified image plugin configuration
   eleventyConfig.addPlugin(eleventyImageTransformPlugin, {
     extensions: 'html',
     formats: ['avif', 'webp', 'jpeg'], 
@@ -28,7 +28,7 @@ export default function(eleventyConfig) {
       sizes: '90vw',
     },
     urlPath: '/img/optimized/',
-		outputDir: ".cache/@11ty/img/",
+    outputDir: ".cache/@11ty/img/",
     filenameFormat: (id, src, width, format) => {
       const { name } = path.parse(src);
       return `${name}-${width}w.${format}`;
@@ -38,43 +38,51 @@ export default function(eleventyConfig) {
     sharpAvifOptions: { quality: 45 },
   });
 
-  eleventyConfig.on("eleventy.after", () => {
-		fs.cpSync(".cache/@11ty/img/", path.join(eleventyConfig.directories.output, "/img/optimized/"), {
-			recursive: true
-		});
-	});
-
-  // Add transform to extract dominant colors from images
-  eleventyConfig.addTransform("imageColors", async function(content, outputPath) {
+  // Add color extraction transform that runs after image processing
+  eleventyConfig.addTransform("addImageColors", async function(content, outputPath) {
     if (outputPath && outputPath.endsWith(".html")) {
       const $ = cheerio.load(content);
       const images = $("img[src]");
       
       for (let i = 0; i < images.length; i++) {
         const img = $(images[i]);
-        let src = img.attr("src");
+        const src = img.attr("src");
         
-        if (src && src.includes("/.11ty/image/")) {
+        // Check if this is a processed image URL
+        if (src && src.includes("/img/optimized/")) {
           try {
-            // Parse the original path from the /.11ty/image/ URL
-            const urlParams = new URLSearchParams(src.split('?')[1]);
-            const originalSrc = decodeURIComponent(urlParams.get('src') || '');
-            const imagePath = `./${originalSrc}`;
+            // For the new image plugin, we need to reconstruct the original path
+            // from the filename pattern: /img/optimized/filename-width.format
+            const filename = src.split('/').pop(); // Get just the filename
+            const baseName = filename.replace(/-\d+w\.(jpeg|webp|avif)$/, ''); // Remove width and extension
             
-            // Check if file exists
-            const fs = await import('fs');
-            if (!fs.existsSync(imagePath)) continue;
+            // Try different extensions since we have both .jpg and .png files
+            const possiblePaths = [
+              `./content/images/${baseName}.jpg`,
+              `./content/images/${baseName}.png`,
+              `./content/images/${baseName}.jpeg`
+            ];
             
-            const result = await getPlaiceholder(imagePath);
-            const { color } = await getPlaiceholder(imagePath);
-
-            console.log(color);
-            // Add class and background, remove inline blur
-            img.addClass("image-placeholder");
-            img.attr("style", `background-color: ${color.hex}; background-size: cover; background-position: center; ${img.attr("style") || ""}`);
-            img.attr("onload", "this.classList.add('loaded')");
+            let originalSrc = null;
+            for (const path of possiblePaths) {
+              if (fs.existsSync(path)) {
+                originalSrc = path;
+                break;
+              }
+            }
+            
+            // Check if the original file exists
+            if (originalSrc && fs.existsSync(originalSrc)) {
+              const { color } = await getPlaiceholder(originalSrc);
+              
+              // Add placeholder class and background color
+              img.addClass("image-placeholder");
+              const existingStyle = img.attr("style") || "";
+              img.attr("style", `background-color: ${color.hex}; background-size: cover; background-position: center; ${existingStyle}`);
+              img.attr("onload", "this.classList.add('loaded')");
+            }
           } catch (error) {
-            console.error(`Color extraction failed for ${src}:`, error.message);
+            console.warn(`Color extraction failed for ${src}:`, error.message);
           }
         }
       }
@@ -82,6 +90,17 @@ export default function(eleventyConfig) {
       return $.html();
     }
     return content;
+  });
+
+  eleventyConfig.on("eleventy.after", () => {
+    const sourceDir = ".cache/@11ty/img/";
+    const targetDir = path.join(eleventyConfig.directories.output, "/img/optimized/");
+    
+    if (fs.existsSync(sourceDir)) {
+      fs.cpSync(sourceDir, targetDir, {
+        recursive: true
+      });
+    }
   });
 
   // Minify HTML output

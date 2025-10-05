@@ -27,8 +27,8 @@ export default function(eleventyConfig) {
       decoding: 'async',
       sizes: '90vw',
     },
-		outputDir: ".cache/@11ty/img/",
     urlPath: '/img/optimized/',
+		outputDir: ".cache/@11ty/img/",
     filenameFormat: (id, src, width, format) => {
       const { name } = path.parse(src);
       return `${name}-${width}w.${format}`;
@@ -39,16 +39,10 @@ export default function(eleventyConfig) {
   });
 
   eleventyConfig.on("eleventy.after", () => {
-    const sourceDir = ".cache/@11ty/img/";
-    const targetDir = path.join(eleventyConfig.directories.output, "./_site/img/optimized");
-    
-    // Check if source directory exists before copying
-    if (fs.existsSync(sourceDir)) {
-      fs.cpSync(sourceDir, targetDir, {
-        recursive: true
-      });
-    }
-  });
+		fs.cpSync(".cache/@11ty/img/", path.join(eleventyConfig.directories.output, "/img/optimized/"), {
+			recursive: true
+		});
+	});
 
   // Add transform to extract dominant colors from images
   eleventyConfig.addTransform("imageColors", async function(content, outputPath) {

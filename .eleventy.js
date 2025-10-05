@@ -21,7 +21,7 @@ export default function(eleventyConfig) {
   eleventyConfig.addPlugin(eleventyImageTransformPlugin, {
     extensions: 'html',
     formats: ['avif', 'webp', 'jpeg'], 
-    widths: [100, 480, 720, 900, 1200, 'auto'],
+    widths: [480, 720, 900, 1200, 'auto'],
     defaultAttributes: {
       loading: 'lazy',
       decoding: 'async',

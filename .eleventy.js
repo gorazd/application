@@ -5,12 +5,6 @@ import { getPlaiceholder } from 'plaiceholder';
 import * as cheerio from 'cheerio';
 import fs from "fs";
 
-import Cache from "@11ty/eleventy-cache-assets";
-
-Cache("https://…", {
-	directory: ".cache"
-});
-
 export default function(eleventyConfig) {
   eleventyConfig.addBundle("css");
   eleventyConfig.addBundle("cssprint");

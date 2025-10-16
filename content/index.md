@@ -17,31 +17,31 @@ class: homepage
   <h2 class="works-h2">Selected Work</h2>
   <ul class="works-grid">
     <li><a class="works-link" href="https://coltelli-giapponesi.it/">
-      <img src="/images/coltelli-giapponesi-it.jpg" alt="Coltelli Giapponesi screenshot" class="works-image" sizes="(min-width:900px) 640px, 100vw" loading="eager" fetchpriority="high">
+      <img src="./images/coltelli-giapponesi-it.jpg" alt="Coltelli Giapponesi screenshot" class="works-image" sizes="(min-width:900px) 640px, 100vw" loading="eager" fetchpriority="high">
       <h3 class="works-title">Coltelli Giapponesi</h3>
       <p class="works-role">Design, Development</p>
       <p class="works-year">2025</p>
     </a></li>
     <li><a class="works-link" href="https://federicoboriani.it/risorse/">
-      <img src="/images/federicoboriani-it.jpg" alt="Federico Boriani screenshot" class="works-image" sizes="(min-width:900px) 640px, 100vw" loading="lazy">
+      <img src="/images/federicoboriani-it.jpg" alt="Federico Boriani screenshot" class="works-image" sizes="(min-width:900px) 640px, 100vw" loading="eager" fetchpriority="high">
       <h3 class="works-title">Federico Boriani</h3>
       <p class="works-role">Development</p>
       <p class="works-year">2025</p>
     </a></li>
     <li><a class="works-link" href="https://tempestagallery.com/en/">
-      <img src="/images/tempesta-it.jpg" alt="Tempesta Gallery screenshot" class="works-image" sizes="(min-width:900px) 640px, 100vw" loading="lazy">
+      <img src="/images/tempesta-it.jpg" alt="Tempesta Gallery screenshot" class="works-image" sizes="(min-width:900px) 640px, 100vw" loading="eager" fetchpriority="low">
       <h3 class="works-title">Tempesta Gallery</h3>
       <p class="works-role">Art Direction, Development</p>
       <p class="works-year">2024</p>
     </a></li>
     <li><a class="works-link" href="https://farinaluca.com/scrivania/">
-      <img src="/images/farinaluca.jpg" alt="Luca Farina screenshot" class="works-image" sizes="(min-width:900px) 640px, 100vw" loading="lazy">
+      <img src="/images/farinaluca.jpg" alt="Luca Farina screenshot" class="works-image" sizes="(min-width:900px) 640px, 100vw" loading="eager" fetchpriority="low">
       <h3 class="works-title">Luca Farina</h3>
       <p class="works-role">Design, Development</p>
       <p class="works-year">2024</p>
     </a></li>
     <li><a class="works-link" href="https://www.castellodiuviglie.it/it/">
-      <img src="/images/castello-it.jpg" alt="Castello Di Uviglie screenshot" class="works-image" sizes="(min-width:900px) 640px, 100vw" loading="lazy">
+      <img src="/images/castello-it.jpg" alt="Castello Di Uviglie screenshot" class="works-image" sizes="(min-width:900px) 640px, 100vw" loading="eager" fetchpriority="low">
       <h3 class="works-title">Castello Di Uviglie</h3>
       <p class="works-role">Art Direction, Development</p>
       <p class="works-year">2024</p>

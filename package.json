@@ -6,6 +6,8 @@
   "scripts": {
     "start": "npm run build:js -- --watch & eleventy --serve",
     "build": "npm run build:js:prod && eleventy",
+    "startp": "ELEVENTY_ENV=production npm run build:js:prod && eleventy --serve --incremental",
+    "clean": "rm -rf _site && rm -rf .cache",
     "build:js": "node build-js.js",
     "build:js:prod": "ELEVENTY_ENV=production node build-js.js"
   },
@@ -28,7 +30,11 @@
     "html-minifier-terser": "^7.2.0"
   },
   "dependencies": {
+    "@11ty/eleventy-cache-assets": "^2.3.0",
     "@11ty/eleventy-img": "^6.0.4",
-    "path": "^0.12.7"
+    "cheerio": "^1.1.2",
+    "netlify-plugin-cache": "^1.0.3",
+    "path": "^0.12.7",
+    "plaiceholder": "^3.0.0"
   }
 }

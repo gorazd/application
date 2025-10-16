@@ -4,10 +4,16 @@
   command = "npm run build"
   # Directory containing the built site
   publish = "_site"
+
+[[plugins]]
+package = "netlify-plugin-cache"
+
+  [plugins.inputs]
+  paths = [ ".cache" ]
   
 # Node.js version (specify a stable version)
 [build.environment]
-  NODE_VERSION = "18"
+  NODE_VERSION = "22"
 
 # Headers for better performance and security
 [[headers]]

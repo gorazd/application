@@ -20,6 +20,10 @@
   cursor: pointer;
 }
 
+.portfolio__card picture {
+  flex-shrink: 0;
+}
+
 @media (hover: hover) {
   .portfolio__card:hover {
     transform: translateY(-4px);

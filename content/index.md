@@ -6,7 +6,7 @@ class: homepage
 ---
 
 <section>
-<p class="title">Front-end Designer & Developer</p>
+<div class="title">Front-end Designer & Developer</div>
 
 # Gorazd Guštin
 

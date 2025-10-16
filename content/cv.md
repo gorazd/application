@@ -6,7 +6,7 @@ description: Results-driven Front-end Designer with 20 years of experience creat
 
 <section>
 
-<p class="title">Curriculum Vitae</p>
+<div class="title">Curriculum Vitae</div>
 
 # Summary
 

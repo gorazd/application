@@ -4,7 +4,7 @@ title: Cover Letter for Open position
 description: With over a decade of experience shaping user-centric mobile applications from concept to launch, I was immediately drawn to the UX/UI Designer opening.
 ---
 
-<p class="title">To whom it may concern</p>
+<div class="title">To whom it may concern</div>
 
 # Greetings,
 

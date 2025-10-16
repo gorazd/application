@@ -6,8 +6,12 @@ const isProd = process.env.ELEVENTY_ENV === 'production';
 
 const buildOptions = {
   entryPoints: ['public/js/main.js'],
-  outfile: '_site/js/main.bundle.js',
+  outdir: '_site/js',
   bundle: true,
+  splitting: true,
+  format: 'esm',
+  chunkNames: 'chunks/[name]-[hash]',
+  entryNames: '[name]-[hash]',
   minify: isProd,
   sourcemap: isProd ? 'external' : 'inline',
   target: ['es2020'],

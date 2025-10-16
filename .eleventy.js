@@ -1,6 +1,7 @@
 import { minify } from 'html-minifier-terser';
 import { eleventyImageTransformPlugin } from '@11ty/eleventy-img'
 import path from 'path';
+import glob from 'fast-glob';
 import { getPlaiceholder } from 'plaiceholder';
 import * as cheerio from 'cheerio';
 import fs from "fs";
@@ -36,6 +37,14 @@ export default function(eleventyConfig) {
     sharpJpegOptions: { quality: 82, progressive: true },
     sharpWebpOptions: { quality: 75 },
     sharpAvifOptions: { quality: 45 },
+  });
+
+  // Split the JS
+  eleventyConfig.addShortcode('jsBundle', () => {
+    const files = glob.sync('_site/js/main-*.js');
+    if (!files.length) return '';
+    const url = `/${path.relative('_site', files[0]).replace(/\\/g, '/')}`;
+    return `<script type="module" src="${url}"></script>`;
   });
 
   // Add color extraction transform that runs after image processing

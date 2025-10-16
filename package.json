@@ -33,6 +33,7 @@
     "@11ty/eleventy-cache-assets": "^2.3.0",
     "@11ty/eleventy-img": "^6.0.4",
     "cheerio": "^1.1.2",
+    "fast-glob": "^3.3.3",
     "netlify-plugin-cache": "^1.0.3",
     "path": "^0.12.7",
     "plaiceholder": "^3.0.0"

@@ -6,6 +6,8 @@
   "scripts": {
     "start": "npm run build:js -- --watch & eleventy --serve",
     "build": "npm run build:js:prod && eleventy",
+    "startp": "ELEVENTY_ENV=production npm run build:js:prod && eleventy --serve --incremental",
+    "clean": "rm -rf _site && rm -rf .cache",
     "build:js": "node build-js.js",
     "build:js:prod": "ELEVENTY_ENV=production node build-js.js"
   },

@@ -17,7 +17,7 @@ class: homepage
   <h2 class="works-h2">Selected Work</h2>
   <ul class="works-grid">
     <li><a class="works-link" href="https://coltelli-giapponesi.it/">
-      <img src="/images/coltelli-giapponesi-it.jpg" alt="Coltelli Giapponesi screenshot" class="works-image" sizes="(min-width:900px) 640px, 100vw" loading="eager" fetchpriority="high">
+      <img src="./images/coltelli-giapponesi-it.jpg" alt="Coltelli Giapponesi screenshot" class="works-image" sizes="(min-width:900px) 640px, 100vw" loading="eager" fetchpriority="high">
       <h3 class="works-title">Coltelli Giapponesi</h3>
       <p class="works-role">Design, Development</p>
       <p class="works-year">2025</p>
@@ -41,7 +41,7 @@ class: homepage
       <p class="works-year">2024</p>
     </a></li>
     <li><a class="works-link" href="https://www.castellodiuviglie.it/it/">
-      <img src="/images/castello-it.jpg" alt="Castello Di Uviglie screenshot" class="works-image" sizes="(min-width:900px) 640px, 100vw" loading="eager" fetchpriority="high">
+      <img src="/images/castello-it.jpg" alt="Castello Di Uviglie screenshot" class="works-image" sizes="(min-width:900px) 640px, 100vw" loading="eager" fetchpriority="low">
       <h3 class="works-title">Castello Di Uviglie</h3>
       <p class="works-role">Art Direction, Development</p>
       <p class="works-year">2024</p>

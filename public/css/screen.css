@@ -98,11 +98,11 @@ h6 {
   margin-bottom: calc(-1 * var(--spacing-unit));
   line-height: 1;
   text-transform: uppercase;
-  opacity: 1; /* Hide initially to prevent flash */
+  opacity: 0; /* Hide initially to prevent flash */
 }
 
 h1 {
-  opacity: 1;
+  opacity: 0;
 }
 
 .signature {
@@ -673,6 +673,7 @@ body.view-transition-active main {
   will-change: transform;
 
   border: 20px solid;
+
 }
 
 .works-hover-preview img {
@@ -684,7 +685,7 @@ body.view-transition-active main {
   -webkit-user-drag: none;
 }
 
-@media (max-width: 720px) {
+@media (max-width: 520px) {
   .works-hover-preview { 
     display: none; 
   }

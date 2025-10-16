@@ -20,8 +20,6 @@
  - To revert optimizations: checkout previous git tag (e.g., `git checkout pre-nav-optimization`) or remove SPA init call & all instrumentation blocks.
 */
 import { gsap } from "gsap";
-import { Draggable } from "gsap/Draggable";
-import { Flip } from "gsap/Flip";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ScrollToPlugin } from "gsap/ScrollToPlugin";
 import { SplitText } from "gsap/SplitText";
@@ -141,7 +139,7 @@ if (typeof window !== 'undefined') {
   }
 }
 
-gsap.registerPlugin(Draggable, Flip, ScrollTrigger, ScrollToPlugin, SplitText, DrawSVGPlugin);
+gsap.registerPlugin(ScrollTrigger, ScrollToPlugin, SplitText, DrawSVGPlugin);
 
 function updateActiveNav() {
   const navLinks = document.querySelectorAll('header nav a');

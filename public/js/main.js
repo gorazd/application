@@ -19,11 +19,81 @@
  Rollback Instructions:
  - To revert optimizations: checkout previous git tag (e.g., `git checkout pre-nav-optimization`) or remove SPA init call & all instrumentation blocks.
 */
-import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { ScrollToPlugin } from "gsap/ScrollToPlugin";
-import { SplitText } from "gsap/SplitText";
-import { DrawSVGPlugin } from "gsap/DrawSVGPlugin";
+import { loadGsap, getGsapCached } from "./gsap-loader.js";
+
+const cachedGsapModules = getGsapCached();
+let gsapInstance = (typeof window !== 'undefined' && window.gsap) || (cachedGsapModules?.gsap ?? null);
+let ScrollTriggerInstance = cachedGsapModules?.ScrollTrigger ?? null;
+let ScrollToPluginInstance = cachedGsapModules?.ScrollToPlugin ?? null;
+let SplitTextInstance = cachedGsapModules?.SplitText ?? null;
+let DrawSVGPluginInstance = cachedGsapModules?.DrawSVGPlugin ?? null;
+let gsapLoadPromise = null;
+let animationsModulePromise = null;
+
+function ensureGsapModules() {
+  if (gsapInstance && ScrollTriggerInstance && ScrollToPluginInstance && SplitTextInstance && DrawSVGPluginInstance) {
+    return Promise.resolve({
+      gsap: gsapInstance,
+      ScrollTrigger: ScrollTriggerInstance,
+      ScrollToPlugin: ScrollToPluginInstance,
+      SplitText: SplitTextInstance,
+      DrawSVGPlugin: DrawSVGPluginInstance,
+    });
+  }
+
+  if (!gsapLoadPromise) {
+    gsapLoadPromise = loadGsap()
+      .then((modules) => {
+        gsapInstance = modules.gsap;
+        ScrollTriggerInstance = modules.ScrollTrigger;
+        ScrollToPluginInstance = modules.ScrollToPlugin;
+        SplitTextInstance = modules.SplitText;
+        DrawSVGPluginInstance = modules.DrawSVGPlugin;
+
+        if (typeof window !== 'undefined' && gsapInstance) {
+          window.gsap = gsapInstance;
+        }
+
+        return modules;
+      })
+      .catch((error) => {
+        gsapLoadPromise = null;
+        console.error('Failed to load GSAP', error);
+        throw error;
+      });
+  }
+
+  return gsapLoadPromise;
+}
+
+function getGsap() {
+  return gsapInstance || (typeof window !== 'undefined' ? window.gsap : null);
+}
+
+function ensureAnimationsModule() {
+  if (!animationsModulePromise) {
+    animationsModulePromise = Promise.all([ensureGsapModules(), import("./animations.js")])
+      .then(([, mod]) => mod)
+      .catch((error) => {
+        animationsModulePromise = null;
+        console.error('Failed to load animations module', error);
+        throw error;
+      });
+  }
+  return animationsModulePromise;
+}
+
+function warmGsapAfterIdle() {
+  if (typeof window === 'undefined') return;
+  const triggerLoad = () => {
+    ensureGsapModules().catch(() => {});
+  };
+  if ('requestIdleCallback' in window) {
+    window.requestIdleCallback(triggerLoad, { timeout: 1500 });
+  } else {
+    window.setTimeout(triggerLoad, 1200);
+  }
+}
 
 // Navigation performance instrumentation (Phase 0)
 // ------------------------------------------------
@@ -131,16 +201,6 @@ import { DrawSVGPlugin } from "gsap/DrawSVGPlugin";
 })();
 // ------------------------------------------------
 
-if (typeof window !== 'undefined') {
-  if (!window.gsap) {
-    window.gsap = gsap;
-  } else if (window.gsap !== gsap) {
-    window.gsap = gsap;
-  }
-}
-
-gsap.registerPlugin(ScrollTrigger, ScrollToPlugin, SplitText, DrawSVGPlugin);
-
 function updateActiveNav() {
   const navLinks = document.querySelectorAll('header nav a');
   navLinks.forEach(link => {
@@ -204,10 +264,31 @@ document.addEventListener('DOMContentLoaded', () => {
   initSmoothScrolling();
   // Initialize SPA link interception (re-added)
   initSinglePageNavigation();
-  import("./animations.js").then(mod => {
-    mod.initAnimationsOnce && mod.initAnimationsOnce();
-    mod.reinitAnimations && mod.reinitAnimations();
-  });
+
+  const bootAnimations = () => {
+    ensureAnimationsModule()
+      .then(mod => {
+        if (typeof mod.initAnimationsOnce === 'function') {
+          mod.initAnimationsOnce();
+        }
+        if (typeof mod.reinitAnimations === 'function') {
+          mod.reinitAnimations();
+        } else if (typeof mod.animations === 'function') {
+          mod.animations();
+        }
+      })
+      .catch(error => {
+        console.error('Failed to initialise animations', error);
+      });
+  };
+
+  if ('requestIdleCallback' in window) {
+    window.requestIdleCallback(() => bootAnimations());
+  } else {
+    window.setTimeout(() => bootAnimations(), 150);
+  }
+
+  warmGsapAfterIdle();
 
   const body = document.querySelector('body');
   const header = document.querySelector('header');
@@ -571,9 +652,17 @@ function updatePageContent(doc) {
   document.documentElement.scrollTop = 0;
   updateActiveNav();
   initSmoothScrolling();
-  import("./animations.js").then(mod => {
-    mod.reinitAnimations ? mod.reinitAnimations() : (mod.animations && mod.animations());
-  });
+  ensureAnimationsModule()
+    .then(mod => {
+      if (typeof mod.reinitAnimations === 'function') {
+        mod.reinitAnimations();
+      } else if (typeof mod.animations === 'function') {
+        mod.animations();
+      }
+    })
+    .catch(error => {
+      console.error('Failed to reinitialise animations', error);
+    });
 }
 
 function initSmoothScrolling() {
@@ -581,35 +670,26 @@ function initSmoothScrolling() {
   const anchorLinks = document.querySelectorAll('a[href^="#"]');
 
   function safeScrollTo(targetY, duration = 1) {
-    try {
-      const plugins = gsap && gsap._plugins;
-      const hasScrollTo = !!(plugins && plugins.scrollTo && typeof plugins.scrollTo.get === 'function');
-      if (hasScrollTo) {
-        gsap.to(window, {
+    const core = getGsap();
+    if (core && ScrollToPluginInstance) {
+      try {
+        core.to(window, {
           duration,
           scrollTo: { y: targetY },
           ease: 'power2.inOut'
         });
         return;
+      } catch (error) {
+        console.warn('GSAP scrollTo animation failed, falling back to native scrolling', error);
       }
-    } catch (e) {}
+    } else {
+      ensureGsapModules().catch(() => {});
+    }
 
     try {
-      const startY = window.scrollY || document.documentElement.scrollTop || 0;
-      const obj = { y: startY };
-      gsap.to(obj, {
-        duration,
-        y: targetY,
-        ease: 'power4.inOut',
-        onUpdate: () => window.scrollTo(0, Math.round(obj.y))
-      });
-      return;
-    } catch (err) {
-      try {
-        window.scrollTo({ top: targetY, behavior: 'smooth' });
-      } catch (e) {
-        window.scrollTo(0, targetY);
-      }
+      window.scrollTo({ top: targetY, behavior: 'smooth' });
+    } catch (fallbackError) {
+      window.scrollTo(0, targetY);
     }
   }
 

@@ -1,10 +1,45 @@
-import { SplitText } from "gsap/SplitText";
-import { DrawSVGPlugin } from "gsap/DrawSVGPlugin";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { getGsapCached, loadGsap } from "./gsap-loader.js";
 
-// Idempotent plugin registration
-if (!gsap.core.globals().DrawSVGPlugin) {
-  try { gsap.registerPlugin(DrawSVGPlugin, ScrollTrigger); } catch(e) {}
+let gsap = (typeof window !== 'undefined' && window.gsap) || null;
+let SplitText = null;
+let DrawSVGPlugin = null;
+let ScrollTrigger = null;
+
+function assignModules(modules) {
+  if (!modules) return;
+  gsap = modules.gsap || gsap || (typeof window !== 'undefined' ? window.gsap : null);
+  SplitText = modules.SplitText || SplitText;
+  DrawSVGPlugin = modules.DrawSVGPlugin || DrawSVGPlugin;
+  ScrollTrigger = modules.ScrollTrigger || ScrollTrigger;
+
+  if (gsap && DrawSVGPlugin && ScrollTrigger) {
+    try {
+      const registered = gsap.core && gsap.core.globals && gsap.core.globals().DrawSVGPlugin;
+      if (!registered) {
+        gsap.registerPlugin(DrawSVGPlugin, ScrollTrigger);
+      }
+    } catch (error) {}
+  }
+}
+
+const cached = getGsapCached();
+if (cached) {
+  assignModules(cached);
+} else {
+  loadGsap()
+    .then(assignModules)
+    .catch(error => {
+      console.error('Failed to warm GSAP for animations', error);
+    });
+}
+
+function ensureGsapReady() {
+  if (gsap && SplitText && DrawSVGPlugin && ScrollTrigger) return true;
+  const fresh = getGsapCached();
+  if (fresh) {
+    assignModules(fresh);
+  }
+  return !!(gsap && SplitText && DrawSVGPlugin && ScrollTrigger);
 }
 
 let __animationsInitialized = false;
@@ -34,11 +69,13 @@ const WORKS_PREVIEW_CONFIG = {
 
 export function initAnimationsOnce() {
   if (__animationsInitialized) return;
+  if (!ensureGsapReady()) return;
   __animationsInitialized = true;
   // Any one-time setup could go here (e.g., global timelines)
 }
 
 export function reinitAnimations() {
+  if (!ensureGsapReady()) return;
   // Run per-navigation animations
   schedulePerPageAnimations();
   // Rebind works links if already initialized
@@ -51,6 +88,7 @@ export function animations() { // backward compat (deprecated)
 }
 
 function schedulePerPageAnimations(){
+  if (!ensureGsapReady()) return;
   const runner = () => runPerPageAnimations();
   if ('requestIdleCallback' in window) {
     requestIdleCallback(runner, { timeout: 500 });
@@ -60,6 +98,7 @@ function schedulePerPageAnimations(){
 }
 
 function runPerPageAnimations(){
+  if (!ensureGsapReady()) return;
   const targets = document.querySelectorAll(".animate-me");
   if (targets.length === 0) {
     // Quietly ignore on pages without targets
@@ -92,6 +131,7 @@ function runPerPageAnimations(){
 }
 
 function animateSignature() {
+  if (!ensureGsapReady()) return;
   const signatureSVG = document.querySelector('#signature');
   if (!signatureSVG) return;
   const paths = signatureSVG.querySelectorAll('path');
@@ -116,6 +156,7 @@ function animateSignature() {
 }
 
 function setupWorksHoverPreview(){
+  if (!ensureGsapReady()) return;
   if (__worksPreviewSetup) return; // one-time DOM creation
   __worksPreviewSetup = true;
   // Create floating preview container
@@ -396,6 +437,7 @@ function attachWorksPreviewListeners(){
 
 // Public hook for SPA updates to request rebinding (called externally if needed)
 export function rebindWorksLinks(){
+  if (!ensureGsapReady()) return;
   const evt = new CustomEvent('works-links-rebind');
   document.dispatchEvent(evt);
 }

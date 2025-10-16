@@ -5,7 +5,7 @@ description: A selection of my work as a UX/UI Designer.
 ---
 
 <section>
-<div class="title">A short presentation of</div>
+<p role="text" class="title">A short presentation of</p>
 
 # Selected Works
 

@@ -49,13 +49,19 @@ export function animations() { // backward compat (deprecated)
   initAnimationsOnce();
   reinitAnimations();
 }
-
 function schedulePerPageAnimations(){
   const runner = () => runPerPageAnimations();
-  if ('requestIdleCallback' in window) {
-    requestIdleCallback(runner, { timeout: 500 });
+  const start = () => {
+    if ('requestIdleCallback' in window) {
+      requestIdleCallback(runner, { timeout: 500 });
+    } else {
+      requestAnimationFrame(runner);
+    }
+  };
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', start, { once: true });
   } else {
-    setTimeout(runner, 50); // fallback quick defer
+    start();
   }
 }
 

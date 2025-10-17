@@ -144,7 +144,18 @@ gsap.registerPlugin(ScrollTrigger, ScrollToPlugin, SplitText, DrawSVGPlugin);
 function updateActiveNav() {
   const navLinks = document.querySelectorAll('header nav a');
   navLinks.forEach(link => {
-    if (link.getAttribute('href') === window.location.pathname) {
+    const linkHref = link.getAttribute('href');
+    console.log('Current Path:', window.location.pathname); // Debugging log
+    console.log('Link Href:', linkHref); // Debugging log
+
+    // Normalize paths to ensure consistent comparison
+    const currentPath = window.location.pathname.endsWith('/') ? window.location.pathname : window.location.pathname + '/';
+    const normalizedLinkHref = linkHref.endsWith('/') ? linkHref : linkHref + '/';
+
+    // Check if the current pathname matches the link or starts with the link followed by a '/'
+    const isActive = (currentPath === normalizedLinkHref || currentPath.startsWith(normalizedLinkHref)) && !(linkHref === '/' && currentPath !== '/');
+
+    if (isActive) {
       link.classList.add('active');
     } else {
       link.classList.remove('active');

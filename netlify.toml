@@ -50,3 +50,9 @@ package = "netlify-plugin-cache"
   from = "/*"
   to = "/404.html"
   status = 404
+
+[[redirects]]
+  from = "/portfolio"
+  to = "/works"
+  status = 301
+  force = false

@@ -1,0 +1,25 @@
+.error-page {
+  position: relative;
+  z-index: 1;
+  pointer-events: none;
+}
+.error-page main {
+  min-height: 60vh;
+}
+.error-page canvas,
+.error-page a {
+  pointer-events: auto;
+}
+
+canvas {
+  pointer-events: auto;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: -1;
+}

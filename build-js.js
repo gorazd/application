@@ -5,8 +5,12 @@ const isWatch = process.argv.includes('--watch');
 const isProd = process.env.ELEVENTY_ENV === 'production';
 
 const buildOptions = {
-  entryPoints: ['public/js/main.js'],
-  outfile: '_site/js/main.bundle.js',
+  entryPoints: [
+    'public/js/main.js',
+    'public/js/matter.js'
+  ],
+  outdir: '_site/js',
+  entryNames: '[name].bundle',
   bundle: true,
   minify: isProd,
   sourcemap: isProd ? 'external' : 'inline',

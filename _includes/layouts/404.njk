@@ -1,0 +1,9 @@
+---
+layout: layouts/base.njk
+class: error-page
+---
+{%- css %}{% include "public/css/404.css" %}{% endcss %}
+
+{{ content | safe }}
+
+<script type="module" rel="modulepreload" src="/js/matter.bundle.js"></script>

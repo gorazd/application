@@ -42,7 +42,7 @@ html.dark {
 
 @font-face {
   font-family: 'PPSupplySans';
-  src: url('../fonts/subset-PPSupplySans-Regular.woff2') format('woff2');
+  src: url('/fonts/subset-PPSupplySans-Regular.woff2') format('woff2');
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -50,7 +50,7 @@ html.dark {
 
 @font-face {
   font-family: 'PPSupplyMono';
-  src: url('../fonts/subset-PPSupplyMono-Regular.woff2') format('woff2');
+  src: url('/fonts/subset-PPSupplyMono-Regular.woff2') format('woff2');
   font-weight: normal;
   font-style: normal;
   font-display: swap;

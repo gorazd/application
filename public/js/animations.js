@@ -66,8 +66,19 @@ function runPerPageAnimations(){
   } else {
     gsap.from(targets, { duration: .6, y: 100, ease: "power1.out", stagger: .4 });
   }
-  gsap.set('h1', { opacity: 1 });
-  gsap.from('h1', { duration: .6, y: 10, autoAlpha: 0, filter: 'blur(12px)', ease: "power1.out", delay: 0.1 });
+  gsap.set('h1', { opacity: 1, visibility: 'visible' });
+  gsap.fromTo('h1',
+    { opacity: 0, y: 10, filter: 'blur(12px)', webkitFilter: 'blur(12px)' },
+    {
+      opacity: 1,
+      y: 0,
+      filter: 'blur(0px)',
+      webkitFilter: 'blur(0px)',
+      duration: 0.6,
+      ease: 'power1.out',
+      delay: 0.1
+    }
+  );
   const introElement = document.querySelector('.title');
   if (introElement) {
     gsap.set(introElement, { opacity: 1 });

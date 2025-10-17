@@ -10,7 +10,7 @@ class: homepage
 
 # Gorazd Guštin
 
-<p class="introduction">I do end-to-end <strong>product development</strong> from user research and interface design <strong>through</strong> frontend implementation and deployment. You can also find my <a href="/cv/">CV</a>, some <a href="/portfolio/">selected works</a>, and my <a href="/cover-letter/">cover letter</a>.</p>
+<p class="introduction">I do end-to-end <strong>product development</strong> from user research and interface design <strong>through</strong> frontend implementation and deployment. You can also find my <a href="/cv/">CV</a>, some <a href="/works/">selected works</a>, and my <a href="/cover-letter/">cover letter</a>.</p>
 </section>
 
 <section class="works">

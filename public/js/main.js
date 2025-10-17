@@ -145,8 +145,6 @@ function updateActiveNav() {
   const navLinks = document.querySelectorAll('header nav a');
   navLinks.forEach(link => {
     const linkHref = link.getAttribute('href');
-    console.log('Current Path:', window.location.pathname); // Debugging log
-    console.log('Link Href:', linkHref); // Debugging log
 
     // Normalize paths to ensure consistent comparison
     const currentPath = window.location.pathname.endsWith('/') ? window.location.pathname : window.location.pathname + '/';

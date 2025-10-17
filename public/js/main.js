@@ -368,10 +368,10 @@ function captureNavRecord(path, cached) {
       const median = durations[Math.floor(durations.length/2)];
       const p95 = durations[Math.max(0, Math.ceil(durations.length*0.95)-1)];
       if (median > b.warnMedian) {
-        console.warn('[nav-budget] median nav > %dms (%.1fms)', b.warnMedian, median);
+        console.warn(`[nav-budget] median nav > ${b.warnMedian}ms (${median.toFixed(1)}ms)`);
       }
       if (p95 > b.warnP95) {
-        console.warn('[nav-budget] p95 nav > %dms (%.1fms)', b.warnP95, p95);
+        console.warn(`[nav-budget] p95 nav > ${b.warnP95}ms (${p95.toFixed(1)}ms)`);
       }
     } catch(e) {}
   } catch (e) {}
@@ -387,6 +387,10 @@ function initSinglePageNavigation() {
     const href = link.getAttribute('href');
     if (!isInternalLink(href)) return;
     const url = new URL(href, location.href);
+    if (url.pathname === location.pathname) {
+      event.preventDefault();
+      return;
+    }
     if (window.__currentNav && window.__currentNav.inFlight && window.__currentNav.pathname === url.pathname) {
       event.preventDefault();
       return;
@@ -471,6 +475,30 @@ function setupPrefetch(){
 
 setupPrefetch();
 
+function startPageExit() {
+  const main = document.querySelector('main');
+  if (!main) return Promise.resolve();
+  main.classList.remove('page-enter');
+  main.classList.add('page-exit');
+
+  return new Promise(resolve => {
+    let settled = false;
+    const settle = () => {
+      if (settled) return;
+      settled = true;
+      resolve();
+    };
+    const timeout = setTimeout(settle, 200);
+    const onTransitionEnd = (event) => {
+      if (event.target !== main) return;
+      main.removeEventListener('transitionend', onTransitionEnd);
+      clearTimeout(timeout);
+      settle();
+    };
+    main.addEventListener('transitionend', onTransitionEnd, { once: true });
+  });
+}
+
 async function navigateToPage(pathname, pushState = true) {
   // Phase 6: concurrency guard and cancellation
   if (!window.__currentNav) {
@@ -487,28 +515,27 @@ async function navigateToPage(pathname, pushState = true) {
 
   if (window.__navPerf) window.__navPerf.markNavStart();
   try {
-    let html;
-    const cached = cacheGet(pathname);
-    if (cached) {
-      html = cached;
-    } else {
-      // Kick off fetch immediately
-      html = await fetch(pathname, { signal: controller.signal }).then(r => r.text());
+    const cachedHTML = cacheGet(pathname);
+    const wasCached = !!cachedHTML;
+    const htmlPromise = cachedHTML ? Promise.resolve(cachedHTML) : fetch(pathname, { signal: controller.signal }).then(r => r.text()).then(html => {
       cacheSet(pathname, html);
-    }
+      return html;
+    });
 
     if (pushState) {
       history.pushState(null, '', pathname);
     }
 
     const parser = new DOMParser();
+    if (typeof window.__vtInProgress === 'undefined') window.__vtInProgress = false;
+    const canUseVT = typeof document.startViewTransition === 'function' && !window.__vtInProgress;
+    const exitPromise = canUseVT ? Promise.resolve() : startPageExit();
+
+    const html = await htmlPromise;
     const doc = parser.parseFromString(html, 'text/html');
     document.title = doc.title;
 
     // View Transitions API enhancement (Phase 5)
-    if (typeof window.__vtInProgress === 'undefined') window.__vtInProgress = false;
-    const canUseVT = typeof document.startViewTransition === 'function' && !window.__vtInProgress;
-
     if (canUseVT) {
       window.__vtInProgress = true;
       document.body.classList.add('view-transition-active');
@@ -520,19 +547,19 @@ async function navigateToPage(pathname, pushState = true) {
           window.__vtInProgress = false;
           document.body.classList.remove('view-transition-active');
           if (window.__navPerf) window.__navPerf.markNavEnd();
-          captureNavRecord(pathname, !!cached);
+          captureNavRecord(pathname, wasCached);
         });
       } catch (e) {
         window.__vtInProgress = false;
         document.body.classList.remove('view-transition-active');
-        await customPageTransition(doc);
+        await customPageTransition(doc, startPageExit());
         if (window.__navPerf) window.__navPerf.markNavEnd();
-        captureNavRecord(pathname, !!cached);
+        captureNavRecord(pathname, wasCached);
       }
     } else {
-      await customPageTransition(doc);
+      await customPageTransition(doc, exitPromise);
       if (window.__navPerf) window.__navPerf.markNavEnd();
-      captureNavRecord(pathname, !!cached);
+      captureNavRecord(pathname, wasCached);
     }
   } catch (error) {
     if (window.__navPerf) window.__navPerf.markNavEnd();
@@ -548,27 +575,24 @@ async function navigateToPage(pathname, pushState = true) {
 }
 
 // Revised customPageTransition for Phase 1
-async function customPageTransition(doc) {
+async function customPageTransition(doc, exitPromise) {
+  if (exitPromise) {
+    try {
+      await exitPromise;
+    } catch (e) {}
+  }
+
   const main = document.querySelector('main');
   if (!main) {
     updatePageContent(doc);
     return;
   }
 
-  // Phase 7: class-based exit/enter transitions without inline style thrash
-  main.classList.remove('page-enter'); // ensure clean state
-  main.classList.add('page-exit');
-
-  // Wait for end of exit transition using a timeout aligned with CSS (140ms)
-  await new Promise(resolve => setTimeout(resolve, 140));
-
   updatePageContent(doc);
 
-  // Force starting state for enter (handled via CSS class)
   requestAnimationFrame(() => {
     main.classList.remove('page-exit');
     main.classList.add('page-enter');
-    // Remove the enter class after its transition (~260ms)
     setTimeout(() => main.classList.remove('page-enter'), 300);
   });
 }
@@ -579,10 +603,17 @@ function updatePageContent(doc) {
   if (mainEl && docMain) mainEl.innerHTML = docMain.innerHTML;
   document.documentElement.scrollTop = 0;
   updateActiveNav();
-  initSmoothScrolling();
-  import("./animations.js").then(mod => {
-    mod.reinitAnimations ? mod.reinitAnimations() : (mod.animations && mod.animations());
-  });
+  const runPostSwap = () => {
+    initSmoothScrolling();
+    import("./animations.js").then(mod => {
+      mod.reinitAnimations ? mod.reinitAnimations() : (mod.animations && mod.animations());
+    });
+  };
+  if ('requestIdleCallback' in window) {
+    requestIdleCallback(runPostSwap, { timeout: 120 });
+  } else {
+    setTimeout(runPostSwap, 0);
+  }
 }
 
 function initSmoothScrolling() {

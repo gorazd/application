@@ -141,6 +141,8 @@ if (typeof window !== 'undefined') {
 
 gsap.registerPlugin(ScrollTrigger, ScrollToPlugin, SplitText, DrawSVGPlugin);
 
+let lastKnownPathname = window.location.pathname;
+
 function updateActiveNav() {
   const navLinks = document.querySelectorAll('header nav a');
   navLinks.forEach(link => {
@@ -522,6 +524,8 @@ async function navigateToPage(pathname, pushState = true) {
       return html;
     });
 
+    const navDetail = { from: lastKnownPathname, to: pathname };
+
     if (pushState) {
       history.pushState(null, '', pathname);
     }
@@ -541,23 +545,27 @@ async function navigateToPage(pathname, pushState = true) {
       document.body.classList.add('view-transition-active');
       try {
         const vt = document.startViewTransition(() => {
+          window.dispatchEvent(new CustomEvent('spa:page-leave', { detail: navDetail }));
           updatePageContent(doc);
+          window.dispatchEvent(new CustomEvent('spa:page-enter', { detail: navDetail }));
+          lastKnownPathname = navDetail.to;
         });
         vt.finished.finally(() => {
           window.__vtInProgress = false;
           document.body.classList.remove('view-transition-active');
           if (window.__navPerf) window.__navPerf.markNavEnd();
+          lastKnownPathname = pathname;
           captureNavRecord(pathname, wasCached);
         });
       } catch (e) {
         window.__vtInProgress = false;
         document.body.classList.remove('view-transition-active');
-        await customPageTransition(doc, startPageExit());
+        await customPageTransition(doc, startPageExit(), navDetail);
         if (window.__navPerf) window.__navPerf.markNavEnd();
         captureNavRecord(pathname, wasCached);
       }
     } else {
-      await customPageTransition(doc, exitPromise);
+      await customPageTransition(doc, exitPromise, navDetail);
       if (window.__navPerf) window.__navPerf.markNavEnd();
       captureNavRecord(pathname, wasCached);
     }
@@ -575,20 +583,38 @@ async function navigateToPage(pathname, pushState = true) {
 }
 
 // Revised customPageTransition for Phase 1
-async function customPageTransition(doc, exitPromise) {
+async function customPageTransition(doc, exitPromise, navDetail) {
   if (exitPromise) {
     try {
       await exitPromise;
     } catch (e) {}
   }
 
+  if (navDetail) {
+    window.dispatchEvent(new CustomEvent('spa:page-leave', { detail: navDetail }));
+  }
+
   const main = document.querySelector('main');
   if (!main) {
     updatePageContent(doc);
+    if (navDetail) {
+      window.dispatchEvent(new CustomEvent('spa:page-enter', { detail: navDetail }));
+    }
+    if (navDetail?.to) {
+      lastKnownPathname = navDetail.to;
+    }
     return;
   }
 
   updatePageContent(doc);
+
+  if (navDetail) {
+    window.dispatchEvent(new CustomEvent('spa:page-enter', { detail: navDetail }));
+  }
+
+  if (navDetail?.to) {
+    lastKnownPathname = navDetail.to;
+  }
 
   requestAnimationFrame(() => {
     main.classList.remove('page-exit');
@@ -598,6 +624,15 @@ async function customPageTransition(doc, exitPromise) {
 }
 
 function updatePageContent(doc) {
+  const docBody = doc.body;
+  if (docBody) {
+    const preserve = [];
+    if (document.body.classList.contains('view-transition-active')) {
+      preserve.push('view-transition-active');
+    }
+    document.body.className = docBody.className || '';
+    preserve.forEach(cls => document.body.classList.add(cls));
+  }
   const mainEl = getMain();
   const docMain = doc.querySelector('main');
   if (mainEl && docMain) mainEl.innerHTML = docMain.innerHTML;

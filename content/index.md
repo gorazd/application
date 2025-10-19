@@ -5,6 +5,7 @@ description: A creative front-end designer and developer with a passion for buil
 class: homepage
 ---
 
+
 <section>
 <p role="text" class="title">Front-end Designer & Developer</p>
 
@@ -16,19 +17,19 @@ class: homepage
 <section class="works">
   <h2 class="works-h2">Selected Work</h2>
   <ul class="works-grid">
-    <li><a class="works-link" href="https://coltelli-giapponesi.it/">
+    <li><a class="works-link" href="/works/coltelli-giapponesi/">
       <img src="./images/coltelli-giapponesi-it.jpg" alt="Coltelli Giapponesi screenshot" class="works-image" sizes="(min-width:900px) 640px, 100vw" loading="eager" fetchpriority="high">
       <h3 class="works-title">Coltelli Giapponesi</h3>
       <p class="works-role">Design, Development</p>
       <p class="works-year">2025</p>
     </a></li>
-    <li><a class="works-link" href="https://federicoboriani.it/risorse/">
+    <li><a class="works-link" href="/works/federico-boriani/">
       <img src="/images/federicoboriani-it.jpg" alt="Federico Boriani screenshot" class="works-image" sizes="(min-width:900px) 640px, 100vw" loading="eager" fetchpriority="high">
       <h3 class="works-title">Federico Boriani</h3>
       <p class="works-role">Development</p>
       <p class="works-year">2025</p>
     </a></li>
-    <li><a class="works-link" href="https://tempestagallery.com/en/">
+    <li><a class="works-link" href="/works/tempesta-gallery/">
       <img src="/images/tempesta-it.jpg" alt="Tempesta Gallery screenshot" class="works-image" sizes="(min-width:900px) 640px, 100vw" loading="eager" fetchpriority="low">
       <h3 class="works-title">Tempesta Gallery</h3>
       <p class="works-role">Art Direction, Development</p>

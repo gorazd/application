@@ -24,6 +24,7 @@
   --font-size-lg: clamp(1.3rem, 1vw + 1rem, 1.8rem);
   --font-size-xl: clamp(1.5rem, 1.56vw + 1.2rem, 2.2rem);
   --font-size-xxl: clamp(2.5rem, calc(100svw / 7.8), 8.75rem);
+  --font-size-project: clamp(2.2rem, calc(100svw / 6.8), 6.75rem);
   /* Subtitle (Front-end Designer & Developer) fluid size */
   --font-size-subtitle: clamp(1.1rem, calc(100svw / 27.3), 2rem);
 }
@@ -111,10 +112,6 @@ h6 {
   opacity: 0; /* Hide initially to prevent flash */
 }
 
-h1 {
-  opacity: 0;
-}
-
 .signature {
   max-width: 600px;
   height: auto;
@@ -154,13 +151,17 @@ li h4 {
 }
 
 h1 {
+  opacity: 0;
   font-size: var(--font-size-xxl);
   margin: 1rem -.05em;
+  line-height: .8;
+
+    font-family: 'pp right gothic';
 }
 
 @media screen and (min-width: 900px) {
   h1 {
-    margin: 0 -.5rem;
+    margin: 2rem -.5rem;
   }
 
 }

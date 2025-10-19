@@ -155,8 +155,6 @@ h1 {
   font-size: var(--font-size-xxl);
   margin: 1rem -.05em;
   line-height: .8;
-
-    font-family: 'pp right gothic';
 }
 
 @media screen and (min-width: 900px) {
@@ -731,7 +729,7 @@ img {
 }
 
 .image-placeholder {
-  margin-bottom: 1rem !important;
+  /* margin-bottom: 1rem !important; */
   filter: blur(3px);
   transition: filter .25s ease-out .5s;
 }

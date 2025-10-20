@@ -8,7 +8,7 @@ description: With over a decade of experience shaping user-centric mobile applic
 
 # Greetings,
 
-*Milano, 17.10.2025*
+*Milano, 20.10.2025*
 
 **Subject: Job Application**
 

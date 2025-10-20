@@ -10,9 +10,7 @@ class: work coltelli
 
 # Coltelli Giapponesi
 
-The project, "Coltelli Giapponesi," is an **e-commerce website** dedicated to Japanese knives and accessories.
-
-<a href="https://coltelli-giapponesi.it/" class="works-button" target="_blank" rel="noopener">Visit Website</a>
+<!-- The project, "Coltelli Giapponesi," is an **e-commerce website** dedicated to Japanese knives and accessories. -->
 
 <section class="work-metadata">
   <p><strong>Role:</strong> Design, Development</p>
@@ -26,7 +24,7 @@ The project, "Coltelli Giapponesi," is an **e-commerce website** dedicated to Ja
   <img src="/images/coltelli-giapponesi-it.jpg" alt="Coltelli Giapponesi symbol" class="">
 </div>
 
-
+</section>
 <section class="work-section">
 
 ## The Challenge
@@ -66,6 +64,5 @@ As lead designer, developer, and project manager, I designed the**site architect
 The final website boasts a comprehensive product catalog, educational resources, and a streamlined checkout process. The website loads rapidly, achieves high rankings for targeted keywords, and has exhibited a quantifiable increase in organic traffic and sales. For instance, following the implementation of the aforementioned strategy, there was a 40% increase in organic traffic and a 25% improvement in conversion rates.
 An additional website, containing a Japanese glossary, was developed for cross-linking purposes.
 
-
-</section>
+<a href="https://coltelli-giapponesi.it/" class="works-button" target="_blank" rel="noopener">Visit Website</a>
 </section>

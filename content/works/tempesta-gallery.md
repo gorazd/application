@@ -22,15 +22,15 @@ class: work tempesta
   <img src="/images/tempesta-it.jpg" alt="Tempesta Gallery emblem" class="">
 </div>
 
-### The Challenge
+## The Challenge
 
 Tempesta is a multilingual **art gallery website** designed to showcase artists, exhibitions, and artworks to a global audience. The objective was to devise a visually appealing, user-friendly, and content-rich platform that supports **multiple languages** and is optimized for both users and search engines. The implementation of a **customized taxonomy framework** facilitates the organization and categorization of artists, exhibitions, and their respective bodies of work.
 
-### My Role
+## My Role
 
 As the lead developer and designer, I was responsible for the conceptualization, design, and execution of the project's visual identity. The responsibilities of the position entailed requirements gathering, technical architecture, UI/UX design, frontend and backend development, and deployment. In addition, the role encompassed the management of content integration and the assurance of accessibility and performance best practices.
 
-### The Process
+## The Process
 
 - Requirements analysis with stakeholders to define goals and content structure
 - User research to understand the needs of art enthusiasts and gallery visitors
@@ -40,8 +40,9 @@ As the lead developer and designer, I was responsible for the conceptualization,
 - User testing and feedback sessions to refine usability
 - Deployment to Netlify with continuous integration
 
-### The Outcome
+## The Outcome
 
 The final website is a fast, accessible, and visually appealing platform that increased online engagement by 40% within the first three months. The gallery's multilingual support expanded its reach to international audiences, and the modular content structure facilitated the team's ability to update exhibitions and artist profiles.
 
+<a href="https://tempestagallery.com/en/" class="works-button" target="_blank" rel="noopener">Visit Website</a>
 </section>

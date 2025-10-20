@@ -3,8 +3,8 @@
 }
 
 .coltelli {
-  --work-color: rgb(39 109 181);
   --work-color: rgb(46, 46, 46);
+  --work-color: rgb(39 109 181);
 }
 
 html.dark .coltelli {
@@ -13,6 +13,10 @@ html.dark .coltelli {
 
 .tempesta {
   --work-color: rgb(57, 57, 133);
+}
+
+html.dark .tempesta {
+  --work-color: var(--link-hover-bg);
 }
 
 .federico {
@@ -35,10 +39,11 @@ html.dark .federico {
 }
 
 .work-image {
+  margin-bottom: 2rem;
   background-color: var(--background-bright-color);
   border: 2px solid var(--background-bright-color);
   border-radius: 6px;
-  box-shadow:  5px 7px 1px var(--shadow-color);
+  box-shadow: 5px 7px 1px var(--shadow-color);
 }
 
 .work picture {
@@ -63,7 +68,7 @@ html.dark .federico {
   font-size: 16px;
   border-radius: 6px;
   overflow: hidden;
-  box-shadow:  5px 7px 1px var(--shadow-color);
+  box-shadow: 5px 7px 1px var(--shadow-color);
 }
 
 .work-metadata p strong {
@@ -81,7 +86,7 @@ html.dark .federico {
   color: var(--color);
 }
 
-.work-section {
+/* .work-section {
   width: 50vw;
   background-color: var(--background-bright-color);
   padding: 2rem;
@@ -96,7 +101,7 @@ html.dark .federico {
     padding: .5rem;
     width: 100vw;
   }
-}
+} */
 
 .work-section:nth-child(even) {
   margin-left: auto;
@@ -110,6 +115,7 @@ html.dark .federico {
   .work-image {
     box-shadow: none;
   }
+
   .work-metadata {
     grid-template-columns: 1fr;
     grid-template-rows: auto auto auto;
@@ -119,7 +125,7 @@ html.dark .federico {
 
   .work-metadata p {
     padding: 0;
-    margin:auto 0 1rem;
+    margin: auto 0 1rem;
     border: none;
     border-radius: 0;
     box-shadow: none;
@@ -150,4 +156,10 @@ html.dark .federico {
   text-align: center;
   border-radius: 26px;
   box-shadow: 5px 7px 1px var(--shadow-color);
+}
+.works-button:hover {
+  color: var(--background-bright-color);
+  background-color: var(--work-color);
+  box-shadow: 5px 7px 1px var(--shadow-color);
+  text-decoration: none;
 }

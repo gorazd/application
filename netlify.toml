@@ -40,6 +40,13 @@ package = "netlify-plugin-cache"
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
 
+# Old portfolio link
+[[redirects]]
+  from = "/portfolio"
+  to = "/works"
+  status = 301
+  force = false
+
 # Redirect all not-found pages to the generated 404.html
 [[redirects]]
   from = "/404.html"
@@ -50,3 +57,4 @@ package = "netlify-plugin-cache"
   from = "/*"
   to = "/404.html"
   status = 404
+

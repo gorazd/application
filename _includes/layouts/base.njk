@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <link rel="preload" href="/fonts/subset-PPSupplySans-Regular.woff2" as="font" type="font/woff2" crossorigin fetchpriority="high">
   <link rel="preload" href="/fonts/subset-PPSupplyMono-Regular.woff2" as="font" type="font/woff2" crossorigin fetchpriority="high">
-  <link rel="preload" href="/js/main.bundle.js" as="script">
+  <link rel="preload" href="/js/main.bundle.js" as="script" crossorigin fetchpriority="high">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="view-transition" content="same-origin" />
   <title>{{ title }} | Gorazd Guštin</title>
@@ -12,6 +12,7 @@
   <meta name="language" content="en">
   {%- css %}{% include "public/css/screen.css" %}{% endcss %}
   {%- css %}{% include "public/css/cards.css" %}{% endcss %}
+  {%- css %}{% include "css/works.css" %}{% endcss %}
   <style>{% getBundle "css" %}</style>
   <link rel="stylesheet" media="print" href="/css/print.css" defer async>
   <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />

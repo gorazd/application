@@ -24,6 +24,7 @@
   --font-size-lg: clamp(1.3rem, 1vw + 1rem, 1.8rem);
   --font-size-xl: clamp(1.5rem, 1.56vw + 1.2rem, 2.2rem);
   --font-size-xxl: clamp(2.5rem, calc(100svw / 7.8), 8.75rem);
+  --font-size-project: clamp(2.2rem, calc(100svw / 6.8), 6.75rem);
   /* Subtitle (Front-end Designer & Developer) fluid size */
   --font-size-subtitle: clamp(1.1rem, calc(100svw / 27.3), 2rem);
 }
@@ -42,7 +43,7 @@ html.dark {
 
 @font-face {
   font-family: 'PPSupplySans';
-  src: url('../fonts/subset-PPSupplySans-Regular.woff2') format('woff2');
+  src: url('/fonts/subset-PPSupplySans-Regular.woff2') format('woff2');
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -50,7 +51,7 @@ html.dark {
 
 @font-face {
   font-family: 'PPSupplyMono';
-  src: url('../fonts/subset-PPSupplyMono-Regular.woff2') format('woff2');
+  src: url('/fonts/subset-PPSupplyMono-Regular.woff2') format('woff2');
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -111,10 +112,6 @@ h6 {
   opacity: 0; /* Hide initially to prevent flash */
 }
 
-h1 {
-  opacity: 0;
-}
-
 .signature {
   max-width: 600px;
   height: auto;
@@ -154,13 +151,15 @@ li h4 {
 }
 
 h1 {
+  opacity: 0;
   font-size: var(--font-size-xxl);
   margin: 1rem -.05em;
+  line-height: .8;
 }
 
 @media screen and (min-width: 900px) {
   h1 {
-    margin: 0 -.5rem;
+    margin: 2rem -.5rem;
   }
 
 }
@@ -730,7 +729,7 @@ img {
 }
 
 .image-placeholder {
-  margin-bottom: 1rem !important;
+  /* margin-bottom: 1rem !important; */
   filter: blur(3px);
   transition: filter .25s ease-out .5s;
 }

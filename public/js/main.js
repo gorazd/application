@@ -141,10 +141,21 @@ if (typeof window !== 'undefined') {
 
 gsap.registerPlugin(ScrollTrigger, ScrollToPlugin, SplitText, DrawSVGPlugin);
 
+let lastKnownPathname = window.location.pathname;
+
 function updateActiveNav() {
   const navLinks = document.querySelectorAll('header nav a');
   navLinks.forEach(link => {
-    if (link.getAttribute('href') === window.location.pathname) {
+    const linkHref = link.getAttribute('href');
+
+    // Normalize paths to ensure consistent comparison
+    const currentPath = window.location.pathname.endsWith('/') ? window.location.pathname : window.location.pathname + '/';
+    const normalizedLinkHref = linkHref.endsWith('/') ? linkHref : linkHref + '/';
+
+    // Check if the current pathname matches the link or starts with the link followed by a '/'
+    const isActive = (currentPath === normalizedLinkHref || currentPath.startsWith(normalizedLinkHref)) && !(linkHref === '/' && currentPath !== '/');
+
+    if (isActive) {
       link.classList.add('active');
     } else {
       link.classList.remove('active');
@@ -359,10 +370,10 @@ function captureNavRecord(path, cached) {
       const median = durations[Math.floor(durations.length/2)];
       const p95 = durations[Math.max(0, Math.ceil(durations.length*0.95)-1)];
       if (median > b.warnMedian) {
-        console.warn('[nav-budget] median nav > %dms (%.1fms)', b.warnMedian, median);
+        console.warn(`[nav-budget] median nav > ${b.warnMedian}ms (${median.toFixed(1)}ms)`);
       }
       if (p95 > b.warnP95) {
-        console.warn('[nav-budget] p95 nav > %dms (%.1fms)', b.warnP95, p95);
+        console.warn(`[nav-budget] p95 nav > ${b.warnP95}ms (${p95.toFixed(1)}ms)`);
       }
     } catch(e) {}
   } catch (e) {}
@@ -378,6 +389,10 @@ function initSinglePageNavigation() {
     const href = link.getAttribute('href');
     if (!isInternalLink(href)) return;
     const url = new URL(href, location.href);
+    if (url.pathname === location.pathname) {
+      event.preventDefault();
+      return;
+    }
     if (window.__currentNav && window.__currentNav.inFlight && window.__currentNav.pathname === url.pathname) {
       event.preventDefault();
       return;
@@ -462,6 +477,30 @@ function setupPrefetch(){
 
 setupPrefetch();
 
+function startPageExit() {
+  const main = document.querySelector('main');
+  if (!main) return Promise.resolve();
+  main.classList.remove('page-enter');
+  main.classList.add('page-exit');
+
+  return new Promise(resolve => {
+    let settled = false;
+    const settle = () => {
+      if (settled) return;
+      settled = true;
+      resolve();
+    };
+    const timeout = setTimeout(settle, 200);
+    const onTransitionEnd = (event) => {
+      if (event.target !== main) return;
+      main.removeEventListener('transitionend', onTransitionEnd);
+      clearTimeout(timeout);
+      settle();
+    };
+    main.addEventListener('transitionend', onTransitionEnd, { once: true });
+  });
+}
+
 async function navigateToPage(pathname, pushState = true) {
   // Phase 6: concurrency guard and cancellation
   if (!window.__currentNav) {
@@ -478,52 +517,57 @@ async function navigateToPage(pathname, pushState = true) {
 
   if (window.__navPerf) window.__navPerf.markNavStart();
   try {
-    let html;
-    const cached = cacheGet(pathname);
-    if (cached) {
-      html = cached;
-    } else {
-      // Kick off fetch immediately
-      html = await fetch(pathname, { signal: controller.signal }).then(r => r.text());
+    const cachedHTML = cacheGet(pathname);
+    const wasCached = !!cachedHTML;
+    const htmlPromise = cachedHTML ? Promise.resolve(cachedHTML) : fetch(pathname, { signal: controller.signal }).then(r => r.text()).then(html => {
       cacheSet(pathname, html);
-    }
+      return html;
+    });
+
+    const navDetail = { from: lastKnownPathname, to: pathname };
 
     if (pushState) {
       history.pushState(null, '', pathname);
     }
 
     const parser = new DOMParser();
+    if (typeof window.__vtInProgress === 'undefined') window.__vtInProgress = false;
+    const canUseVT = typeof document.startViewTransition === 'function' && !window.__vtInProgress;
+    const exitPromise = canUseVT ? Promise.resolve() : startPageExit();
+
+    const html = await htmlPromise;
     const doc = parser.parseFromString(html, 'text/html');
     document.title = doc.title;
 
     // View Transitions API enhancement (Phase 5)
-    if (typeof window.__vtInProgress === 'undefined') window.__vtInProgress = false;
-    const canUseVT = typeof document.startViewTransition === 'function' && !window.__vtInProgress;
-
     if (canUseVT) {
       window.__vtInProgress = true;
       document.body.classList.add('view-transition-active');
       try {
         const vt = document.startViewTransition(() => {
+          window.dispatchEvent(new CustomEvent('spa:page-leave', { detail: navDetail }));
           updatePageContent(doc);
+          window.dispatchEvent(new CustomEvent('spa:page-enter', { detail: navDetail }));
+          lastKnownPathname = navDetail.to;
         });
         vt.finished.finally(() => {
           window.__vtInProgress = false;
           document.body.classList.remove('view-transition-active');
           if (window.__navPerf) window.__navPerf.markNavEnd();
-          captureNavRecord(pathname, !!cached);
+          lastKnownPathname = pathname;
+          captureNavRecord(pathname, wasCached);
         });
       } catch (e) {
         window.__vtInProgress = false;
         document.body.classList.remove('view-transition-active');
-        await customPageTransition(doc);
+        await customPageTransition(doc, startPageExit(), navDetail);
         if (window.__navPerf) window.__navPerf.markNavEnd();
-        captureNavRecord(pathname, !!cached);
+        captureNavRecord(pathname, wasCached);
       }
     } else {
-      await customPageTransition(doc);
+      await customPageTransition(doc, exitPromise, navDetail);
       if (window.__navPerf) window.__navPerf.markNavEnd();
-      captureNavRecord(pathname, !!cached);
+      captureNavRecord(pathname, wasCached);
     }
   } catch (error) {
     if (window.__navPerf) window.__navPerf.markNavEnd();
@@ -539,41 +583,72 @@ async function navigateToPage(pathname, pushState = true) {
 }
 
 // Revised customPageTransition for Phase 1
-async function customPageTransition(doc) {
+async function customPageTransition(doc, exitPromise, navDetail) {
+  if (exitPromise) {
+    try {
+      await exitPromise;
+    } catch (e) {}
+  }
+
+  if (navDetail) {
+    window.dispatchEvent(new CustomEvent('spa:page-leave', { detail: navDetail }));
+  }
+
   const main = document.querySelector('main');
   if (!main) {
     updatePageContent(doc);
+    if (navDetail) {
+      window.dispatchEvent(new CustomEvent('spa:page-enter', { detail: navDetail }));
+    }
+    if (navDetail?.to) {
+      lastKnownPathname = navDetail.to;
+    }
     return;
   }
 
-  // Phase 7: class-based exit/enter transitions without inline style thrash
-  main.classList.remove('page-enter'); // ensure clean state
-  main.classList.add('page-exit');
-
-  // Wait for end of exit transition using a timeout aligned with CSS (140ms)
-  await new Promise(resolve => setTimeout(resolve, 140));
-
   updatePageContent(doc);
 
-  // Force starting state for enter (handled via CSS class)
+  if (navDetail) {
+    window.dispatchEvent(new CustomEvent('spa:page-enter', { detail: navDetail }));
+  }
+
+  if (navDetail?.to) {
+    lastKnownPathname = navDetail.to;
+  }
+
   requestAnimationFrame(() => {
     main.classList.remove('page-exit');
     main.classList.add('page-enter');
-    // Remove the enter class after its transition (~260ms)
     setTimeout(() => main.classList.remove('page-enter'), 300);
   });
 }
 
 function updatePageContent(doc) {
+  const docBody = doc.body;
+  if (docBody) {
+    const preserve = [];
+    if (document.body.classList.contains('view-transition-active')) {
+      preserve.push('view-transition-active');
+    }
+    document.body.className = docBody.className || '';
+    preserve.forEach(cls => document.body.classList.add(cls));
+  }
   const mainEl = getMain();
   const docMain = doc.querySelector('main');
   if (mainEl && docMain) mainEl.innerHTML = docMain.innerHTML;
   document.documentElement.scrollTop = 0;
   updateActiveNav();
-  initSmoothScrolling();
-  import("./animations.js").then(mod => {
-    mod.reinitAnimations ? mod.reinitAnimations() : (mod.animations && mod.animations());
-  });
+  const runPostSwap = () => {
+    initSmoothScrolling();
+    import("./animations.js").then(mod => {
+      mod.reinitAnimations ? mod.reinitAnimations() : (mod.animations && mod.animations());
+    });
+  };
+  if ('requestIdleCallback' in window) {
+    requestIdleCallback(runPostSwap, { timeout: 120 });
+  } else {
+    setTimeout(runPostSwap, 0);
+  }
 }
 
 function initSmoothScrolling() {

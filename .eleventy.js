@@ -14,6 +14,7 @@ export default function(eleventyConfig) {
     "public/fonts": "/fonts",
     "public/images/icons": "/"
   });
+  eleventyConfig.addWatchTarget("public/css");
 
   eleventyConfig.ignores.add("public/js/");
 
@@ -21,7 +22,7 @@ export default function(eleventyConfig) {
   eleventyConfig.addPlugin(eleventyImageTransformPlugin, {
     extensions: 'html',
     formats: ['avif', 'webp', 'jpeg'], 
-    widths: [ 720, 900, 1200],
+    widths: [ 720, 900, 1200, 'auto'],
     defaultAttributes: {
       loading: 'lazy',
       decoding: 'async',

@@ -4,7 +4,7 @@
   "description": "A job application.",
   "main": "index.js",
   "scripts": {
-    "start": "npm run build:js -- --watch & eleventy --serve",
+    "start": "npm run build:js -- --watch & eleventy --serve --port=8090 --incremental",
     "build": "npm run build:js:prod && eleventy",
     "startp": "ELEVENTY_ENV=production npm run build:js:prod && eleventy --serve --incremental",
     "clean": "rm -rf _site && rm -rf .cache",

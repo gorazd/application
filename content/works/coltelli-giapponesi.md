@@ -3,6 +3,7 @@ title: "Coltelli Giapponesi"
 description: "E-commerce website for Japanese knives. Modern, content-rich, and optimized for performance and SEO."
 layout: layouts/work.njk
 class: work coltelli
+image: /images/coltelli-giapponesi-it.jpg
 ---
 <section>
 

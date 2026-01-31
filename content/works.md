@@ -2,6 +2,7 @@
 layout: layouts/base.njk
 title: Works
 description: A selection of my work as a UX/UI Designer.
+image: /images/coltelli-giapponesi.jpg
 ---
 
 <section>

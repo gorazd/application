@@ -3,6 +3,7 @@ layout: layouts/base.njk
 title: Front-end Designer & Developer
 description: A creative front-end designer and developer with a passion for building beautiful and intuitive user experiences.
 class: homepage
+image: /images/coltelli-giapponesi-it.jpg
 ---
 
 

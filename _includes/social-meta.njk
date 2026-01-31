@@ -1,4 +1,7 @@
 {% set pageTitle = title | default(site.siteName) %}
+{% if title %}
+  {% set pageTitle = title ~ ' | ' ~ site.siteName %}
+{% endif %}
 {% set pageDescription = description | default('') %}
 {% set siteUrl = site.url | replace(r/\/+$/, '') %}
 {% set canonicalUrl = siteUrl ~ page.url %}

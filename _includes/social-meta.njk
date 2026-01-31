@@ -1,14 +1,18 @@
 {% set pageTitle = title | default(site.siteName) %}
 {% set pageDescription = description | default('') %}
-{% set canonicalUrl = site.url ~ page.url %}
+{% set siteUrl = site.url %}
+{% if siteUrl | slice(-1) == '/' %}
+  {% set siteUrl = siteUrl | slice(0, -1) %}
+{% endif %}
+{% set canonicalUrl = siteUrl ~ page.url %}
 {% set rawImage = image | default(site.shareImage) %}
 {% if rawImage %}
   {% if rawImage | slice(0,4) == 'http' %}
     {% set socialImage = rawImage %}
   {% elif rawImage | slice(0,1) == '/' %}
-    {% set socialImage = site.url ~ rawImage %}
+    {% set socialImage = siteUrl ~ rawImage %}
   {% else %}
-    {% set socialImage = site.url ~ '/' ~ rawImage %}
+    {% set socialImage = siteUrl ~ '/' ~ rawImage %}
   {% endif %}
 {% endif %}
 

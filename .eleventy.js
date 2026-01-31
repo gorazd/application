@@ -8,6 +8,11 @@ import fs from "fs";
 export default function(eleventyConfig) {
   eleventyConfig.addBundle("css");
   eleventyConfig.addBundle("cssprint");
+
+  // Add date filter for sitemap
+  eleventyConfig.addFilter("dateToRfc3339", (dateObj) => {
+    return new Date(dateObj).toISOString().replace(/\.\d{3}Z$/, 'Z');
+  });
   // Set custom directories for input, output, includes, and data
   eleventyConfig.addPassthroughCopy({
     "public/css": "/css",

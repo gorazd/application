@@ -4,6 +4,6 @@ export default {
   author: "Gorazd Guštin",
   url: "https://application.qua.si",
   locale: "en",
-  shareImage: "/images/coltelli-giapponesi-it.jpg",
+  shareImage: "/images/application.jpg",
   twitterSite: "",
 };

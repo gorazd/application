@@ -12,7 +12,8 @@ export default function(eleventyConfig) {
   eleventyConfig.addPassthroughCopy({
     "public/css": "/css",
     "public/fonts": "/fonts",
-    "public/images/icons": "/"
+    "public/images/icons": "/",
+    "content/images": "/images"
   });
   eleventyConfig.addWatchTarget("public/css");
 

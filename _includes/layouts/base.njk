@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ site.locale }}">
 <head>
   <meta charset="UTF-8">
   <link rel="preload" href="/fonts/subset-PPSupplySans-Regular.woff2" as="font" type="font/woff2" crossorigin fetchpriority="high">
@@ -7,9 +7,10 @@
   <link rel="preload" href="/js/main.bundle.js" as="script" crossorigin fetchpriority="high">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="view-transition" content="same-origin" />
-  <title>{{ title }} | Gorazd Guštin</title>
+  <title>{% if title %}{{ title }} | {{ site.siteName }}{% else %}{{ site.siteName }}{% endif %}</title>
   <meta name="description" content="{{ description | default('') }}">
-  <meta name="language" content="en">
+  <meta name="language" content="{{ site.locale }}">
+  {% include "social-meta.njk" %}
   {%- css %}{% include "public/css/screen.css" %}{% endcss %}
   {%- css %}{% include "public/css/cards.css" %}{% endcss %}
   {%- css %}{% include "css/works.css" %}{% endcss %}

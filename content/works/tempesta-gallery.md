@@ -3,6 +3,7 @@ title: "Tempesta Gallery"
 description: "Art gallery website showcasing contemporary artworks."
 layout: layouts/work.njk
 class: work tempesta
+image: /images/tempesta-it.jpg
 ---
 
 <section>

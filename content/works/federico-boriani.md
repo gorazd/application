@@ -3,6 +3,7 @@ title: "Federico Boriani"
 description: "Studio website highlighting UX methodology and information architecture. Modular components, performance-focused, and client-facing resources."
 layout: layouts/work.njk
 class: work federico
+image: /images/federicoboriani-it.jpg
 ---
 <section> 
 <p role="text" class="title">Studio website</p>

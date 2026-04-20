@@ -82,7 +82,7 @@ My interests span art and design, nature and science, and a diverse range of sub
 </section>
 <section class="pills">
 <ul>
-<li><a href="/portfolio/">Browse my Portfolio</a> Showcase of selected projects</li>
-<li><a href="/cover-letter/">Read my Cover Letter</a> My approach and motivation</li>
-<li><a href="/cv/">View my CV</a> Professional experience and qualifications</li>
+<li><a href="/portfolio/"><h4>Browse</h4> <p>Showcase of selected projects</p></a></li>
+<li><a href="/cover-letter/"><h4>Read</h4> <p>My approach and motivation</p></a></li>
+<li><a href="/cv/"><h4>Evaluate</h4> <p>Professional experience and qualifications</p></a></li>
 </ul>

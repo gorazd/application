@@ -119,15 +119,21 @@
 
 .pills ul li {
   border: 1px solid var(--link-color);
+  padding: 0;
   box-shadow: 0 2px 2px var(--link-color);
-  padding:  calc(var(--spacing-unit) / 2) var(--spacing-unit);
   border-radius: 8px;
+  flex: 1 0 0;
   display: flex;
   flex-flow: column wrap;
 }
 
 .pills ul li a {
+
+  padding:  calc(var(--spacing-unit) / 2) var(--spacing-unit);
   font-size: var(--font-size-base);
   text-decoration: none;
   margin: 0;
+  display: flex;
+  gap: calc(var(--spacing-unit) / 2);
+  flex-flow: column wrap;
 }

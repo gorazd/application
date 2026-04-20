@@ -146,7 +146,7 @@ html.dark .federico {
   display: block;
   padding: 1rem .5rem;
   width: 270px;
-  margin: 0 auto 2rem;
+  margin: 5rem 0 2rem;
   position: relative;
   background-color: var(--background-bright-color);
   /* font-size: 14px; */
@@ -154,7 +154,7 @@ html.dark .federico {
   letter-spacing: 1px;
   text-decoration: none;
   text-align: center;
-  border-radius: 26px;
+  border-radius: 6px;
   box-shadow: 5px 7px 1px var(--shadow-color);
 }
 .works-button:hover {

@@ -23,7 +23,7 @@
   --font-size-md: clamp(1.25rem, 0.61vw + 1.1rem, 1.67rem);
   --font-size-lg: clamp(1.3rem, 1vw + 1rem, 1.8rem);
   --font-size-xl: clamp(1.5rem, 1.56vw + 1.2rem, 2.2rem);
-  --font-size-xxl: clamp(2.5rem, calc(100svw / 7.8), 8.75rem);
+  --font-size-xxl: clamp(2.5rem, calc(100svw / 7.8), 18.75rem);
   --font-size-project: clamp(2.2rem, calc(100svw / 6.8), 6.75rem);
   /* Subtitle (Front-end Designer & Developer) fluid size */
   --font-size-subtitle: clamp(1.1rem, calc(100svw / 27.3), 2rem);
@@ -159,7 +159,7 @@ h1 {
 
 @media screen and (min-width: 900px) {
   h1 {
-    margin: 2rem -.5rem;
+    margin: calc(var(--spacing-unit) + 3px) -.5rem;
   }
 
 }
@@ -736,4 +736,54 @@ img {
 
 .image-placeholder.loaded {
   filter: blur(0px);
+}
+
+/* Homepage editorial grid (desktop only) */
+@media (min-width: 900px) {
+  body.homepage main {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    column-gap: calc(var(--spacing-unit) * 2);
+    row-gap: calc(var(--spacing-unit) * 3);
+    align-items: start;
+  }
+
+  body.homepage main > section {
+    padding-bottom: 0;
+    min-width: 0;
+  }
+
+  body.homepage main > section:nth-of-type(1) {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    column-gap: calc(var(--spacing-unit) * 2);
+    align-items: end;
+  }
+  body.homepage main > section:nth-of-type(1) > .title,
+  body.homepage main > section:nth-of-type(1) > h1 {
+    grid-column: 1 / span 7;
+  }
+  body.homepage main > section:nth-of-type(1) > .introduction {
+    grid-column: 8 / -1;
+    max-width: none;
+  }
+
+  body.homepage main > section.works {
+    grid-column: 1 / -1;
+  }
+
+  body.homepage main > section:nth-of-type(3) { grid-column: 1 / span 4; }
+  body.homepage main > section:nth-of-type(4) { grid-column: 5 / span 4; }
+  body.homepage main > section:nth-of-type(5) { grid-column: 9 / span 4; }
+
+  body.homepage main > section:nth-of-type(3) p,
+  body.homepage main > section:nth-of-type(4) p,
+  body.homepage main > section:nth-of-type(5) p {
+    max-width: none;
+  }
+
+  body.homepage main > section.pills {
+    grid-column: 1 / -1;
+  }
 }

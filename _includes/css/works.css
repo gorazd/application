@@ -34,8 +34,8 @@ html.dark .federico {
 }
 
 .work h1 {
-  margin-bottom: 3rem;
-  font-size: var(--font-size-project);
+  /* margin-bottom: 3rem;
+  font-size: var(--font-size-project); */
 }
 
 .work-image {
